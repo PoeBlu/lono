@@ -3,6 +3,9 @@ class Lono::Template::Dsl::Builder
   module Helpers
     extend Memoist
     include CoreHelper
+    include FileHelper
     include ParamHelper
+    include S3Helper
+    include TagsHelper
   end
 end
