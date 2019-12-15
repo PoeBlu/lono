@@ -1,5 +1,7 @@
 module Lono::Template::Dsl::Builder::Helpers
   module FileHelper
+    extend Memoist
+
     def content(path)
       render_file(Lono.config.content_path, path)
     end
