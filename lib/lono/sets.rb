@@ -14,6 +14,9 @@ module Lono
       option :template, desc: "override convention and specify the template file to use"
       option :variable, aliases: "v", desc: "override convention and specify the variable file to use"
     end
+    wait_option = Proc.new do
+      option :wait, type: :boolean, desc: "Wait for stack operation to complete.", default: true
+    end
     update_options = Proc.new do
       option :change_set, type: :boolean, default: true, desc: "Uses generated change set to update the stack.  If false, will perform normal update-stack."
       option :codediff_preview, type: :boolean, default: true, desc: "Show codediff changes preview."
@@ -25,9 +28,18 @@ module Lono
     desc "deploy STACK_SET_NAME", "Deploy CloudFormation stack set."
     long_desc Help.text("sets/deploy")
     base_options.call
+    wait_option.call
     update_options.call
     def deploy(stack)
       Deploy.new(options.merge(stack: stack)).run
+    end
+
+    desc "status STACK_SET_NAME", "Show current status of stack set."
+    long_desc Help.text("sets/status")
+    def status(stack)
+      status = Status.new(stack, nil, @options)
+      success = status.run
+      exit 3 unless success
     end
 
     desc "instances SUBCOMMAND", "instances subcommands"

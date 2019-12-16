@@ -32,6 +32,8 @@ class Lono::Sets
     desc "deploy STACK_SET_NAME", "Deploy CloudFormation stack set."
     base_options.call
     update_options.call
+    option :regions, type: :array, desc: "List of regions to apply stack set to. IE: us-west-2 us-east-1"
+    option :accounts, type: :array, desc: "List of accounts to apply stack set to. IE: 112233445566 223344556677"
     def deploy(stack)
       Deploy.new(options.merge(stack: stack)).run
     end

@@ -19,9 +19,6 @@ module Lono
     wait_option = Proc.new do
       option :wait, type: :boolean, desc: "Wait for stack operation to complete.", default: true
     end
-    suffix_option = Proc.new do
-      option :suffix, desc: "Suffix for stack name."
-    end
     update_options = Proc.new do
       option :change_set, type: :boolean, default: true, desc: "Uses generated change set to update the stack.  If false, will perform normal update-stack."
       option :codediff_preview, type: :boolean, default: true, desc: "Show codediff changes preview."
@@ -30,16 +27,15 @@ module Lono
       option :sure, type: :boolean, desc: "Skips are you sure prompt"
     end
 
-    desc "create STACK", "Create a CloudFormation stack using the generated template."
+    desc "create STACK", "Create a CloudFormation stack using the generated template.", hide: true
     base_options.call
-    suffix_option.call
     wait_option.call
     long_desc Lono::Help.text("cfn/create")
     def create(stack)
       Create.new(options.merge(stack: stack)).run
     end
 
-    desc "update STACK", "Update a CloudFormation stack using the generated template."
+    desc "update STACK", "Update a CloudFormation stack using the generated template.", hide: true
     long_desc Lono::Help.text("cfn/update")
     base_options.call
     update_options.call
@@ -51,7 +47,6 @@ module Lono
     desc "deploy STACK", "Create or update a CloudFormation stack using the generated template."
     long_desc Lono::Help.text("cfn/deploy")
     base_options.call
-    suffix_option.call
     update_options.call
     wait_option.call
     def deploy(stack)
@@ -82,7 +77,6 @@ module Lono
     option :codediff_preview, type: :boolean, default: true, desc: "Show codediff changes preview."
     option :changeset_preview, type: :boolean, default: true, desc: "Show ChangeSet changes preview."
     base_options.call
-    suffix_option.call
     def preview(stack)
       Preview::Param.new(options.merge(stack: stack)).run if options[:param_preview]
       Preview::Codediff.new(options.merge(stack: stack)).run if options[:codediff_preview]
@@ -93,7 +87,6 @@ module Lono
     long_desc Lono::Help.text("cfn/download")
     option :name, desc: "Name you want to save the template as. Default: existing stack name."
     base_options.call
-    suffix_option.call
     def download(stack)
       Download.new(options.merge(stack: stack)).run
     end
@@ -102,14 +95,12 @@ module Lono
     long_desc Lono::Help.text("cfn/current")
     option :rm, type: :boolean, desc: "Remove all current settings. Removes `.lono/current`"
     option :name, desc: "Current stack name."
-    suffix_option.call
     def current
       Current.new(options).run
     end
 
-    desc "status", "Shows the current status for the stack."
+    desc "status", "Shows current status of stack."
     long_desc Lono::Help.text("cfn/status")
-    suffix_option.call
     def status(stack)
       status = Lono::Cfn::Status.new(options.merge(stack: stack))
       success = status.run

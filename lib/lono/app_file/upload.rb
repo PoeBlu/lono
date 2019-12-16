@@ -4,6 +4,7 @@ module Lono::AppFile
     extend Memoist
 
     def upload
+      return unless Registry.items.size > 0
       puts "Uploading app/files..."
 
       Registry.items.each do |item|

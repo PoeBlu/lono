@@ -10,10 +10,13 @@ module Lono
     end
 
     def upload_all
-      puts "Uploading app/files..."
+      # pattern = "#{Lono.blueprint_root}/app/files/**/*"
+      # size = Dir.glob(pattern).size
+      # puts "size #{size}"
+      # return unless Dir.glob(pattern).size > 0
+      # puts "Uploading app/files2..."
       load_checksums!
 
-      pattern = "#{Lono.blueprint_root}/app/files/**/*"
       Dir.glob(pattern).each do |path|
         next if ::File.directory?(path)
         s3_upload(path)

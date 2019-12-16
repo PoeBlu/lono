@@ -73,8 +73,9 @@ class Lono::Cfn
     end
 
     def status
-      @status ||= Status.new(@stack)
+      Status.new(@stack)
     end
+    memoize :status
 
     def rerun_with_iam?(e)
       # e.message is "Requires capabilities : [CAPABILITY_IAM]"

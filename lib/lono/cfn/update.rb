@@ -1,12 +1,8 @@
 class Lono::Cfn
   class Update < Base
     # save_stack is the interface method
-    def save_stack(parameters)
-      update_stack(parameters)
-    end
-
     # aws cloudformation update-stack --stack-name prod-hi-123456789 --parameters file://output/params/prod-hi-123456789.json --template-body file://output/prod-hi.json
-    def update_stack(parameters)
+    def save_stack(parameters)
       message = "Updating #{@stack} stack"
       if @options[:noop]
         puts "NOOP #{message}"

@@ -1,5 +1,5 @@
 module Lono::AwsServices
-  module Util
+  module Helper
     include Stack
     include StackSet
 

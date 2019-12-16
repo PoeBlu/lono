@@ -8,7 +8,7 @@ require "aws_mfa_secure/ext/aws" # add MFA support
 module Lono
   module AwsServices
     extend Memoist
-    include Util
+    include Helper
 
     def ec2
       Aws::EC2::Client.new

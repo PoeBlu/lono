@@ -3,12 +3,8 @@ require "yaml"
 class Lono::Cfn
   class Create < Base
     # save_stack is the interface method
-    def save_stack(parameters)
-      create_stack(parameters)
-    end
-
     # aws cloudformation create-stack --stack-name prod-hi-123456789 --parameters file://output/params/prod-hi-123456789.json --template-body file://output/prod-hi.json
-    def create_stack(parameters)
+    def save_stack(parameters)
       message = "Creating #{@stack.color(:green)} stack."
       if @options[:noop]
         puts "NOOP #{message}"
