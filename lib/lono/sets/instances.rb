@@ -1,5 +1,5 @@
-module Lono
-  class Sets < Command
+class Lono::Sets
+  class Instances < Lono::Command
     # TODO: base_options: lots in common with cfn X 3
     base_options = Proc.new do
       # common to create, update and deploy
@@ -22,16 +22,18 @@ module Lono
       option :sure, type: :boolean, desc: "Skips are you sure prompt"
     end
 
+    desc "list STACK_SET_NAME", "Deploy CloudFormation stack set."
+    base_options.call
+    update_options.call
+    def list(stack)
+      List.new(options.merge(stack: stack)).run
+    end
+
     desc "deploy STACK_SET_NAME", "Deploy CloudFormation stack set."
-    long_desc Help.text("sets/deploy")
     base_options.call
     update_options.call
     def deploy(stack)
       Deploy.new(options.merge(stack: stack)).run
     end
-
-    desc "instances SUBCOMMAND", "instances subcommands"
-    long_desc Help.text("sets/instances")
-    subcommand "instances", Instances
   end
 end
