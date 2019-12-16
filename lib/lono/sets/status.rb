@@ -22,6 +22,15 @@ class Lono::Sets
       resp.summaries.first.operation_id
     end
 
+    def stack_set_status
+      @operation_id = latest_operation_id unless @operation_id
+      resp = cfn.describe_stack_set_operation(
+        stack_set_name: @stack,
+        operation_id: @operation_id,
+      )
+      resp.stack_set_operation.status
+    end
+
     def wait
       status = nil
       until completed?(status)

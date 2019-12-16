@@ -18,7 +18,11 @@ class Lono::Sets
         puts "Cannot update a stack set because the #{@stack} does not exists."
         return
       end
-      # exit_unless_updatable!(stack_status(@stack))
+      exit_unless_updatable!
+
+      # TODO: param preview    cfn.describe_stack_set => stack_set.parameters
+      # TODO: codediff preview cfn.describe_stack_set => stack_set.template_body
+      # changeset preview not supported for stack sets
 
       are_you_sure?(@stack, :update)
 

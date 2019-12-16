@@ -19,7 +19,7 @@ class Lono::Cfn
         puts "Cannot update a stack because the #{@stack} does not exists."
         return
       end
-      exit_unless_updatable!(stack_status(@stack))
+      exit_unless_updatable!
 
       options = @options.merge(mute_params: true, mute_using: true, keep: true)
       # create new copy of preview when update_stack is called because of IAM retry logic

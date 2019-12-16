@@ -24,7 +24,7 @@ module Lono::Cfn::Preview
         puts "WARN: Cannot create a change set for the stack because the #{@stack} does not exists.".color(:yellow)
         return false
       end
-      exit_unless_updatable!(stack_status(@stack))
+      exit_unless_updatable!
 
       options = {
         change_set_name: change_set_name,
