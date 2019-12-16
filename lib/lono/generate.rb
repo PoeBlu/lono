@@ -1,9 +1,9 @@
 module Lono
   class Generate < AbstractBase
     # Use class variable to cache this only runs once across all classes. base.rb, diff.rb, preview.rb
-    @@generated = nil
+    @@parameters = nil
     def all
-      return @@generated if @@generated
+      return @@parameters if @@parameters
 
       if @options[:lono]
         ensure_s3_bucket_exist
@@ -21,12 +21,9 @@ module Lono
         end
       end
 
-      # Pass down all options to generate_params because it eventually uses template
-      param_generator.generate  # Writes the json file in CamelCase keys format
-      @@generated = param_generator.params    # Returns Array in underscore keys format
-
+      @@parameters = param_generator.generate  # Writes the json file in CamelCase keys format
       check_for_errors
-      @@generated
+      @@parameters
     end
 
     def param_generator

@@ -25,7 +25,7 @@ module Lono
     # Context for ERB rendering.
     # This is where we control what references get passed to the ERB rendering.
     def context
-      @context ||= Lono::Template::Context.new(@blueprint, @options)
+      @context ||= Lono::Template::Context.new(@options)
     end
   end
 end

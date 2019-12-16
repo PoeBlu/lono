@@ -14,7 +14,7 @@ module Lono
 
     desc "upload", "Uploads templates to configured s3 folder"
     def upload(blueprint)
-      Upload.new(blueprint, options.clone).run
+      Upload.new(blueprint, options).run
     end
 
     desc "bashify URL-OR-PATH", "Convert the UserData section of an existing CloudFormation Template to a starter bash script that is compatiable with lono"

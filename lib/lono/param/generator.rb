@@ -7,15 +7,16 @@ class Lono::Param
 
       @base_path, @env_path = config_locations
 
-      return unless @base_path || @env_path
+      return {} unless @base_path || @env_path
 
       # useful option for lono cfn, since some templates dont require params
-      return if @options[:allow_not_exists] && !params_exist?
+      return {} if @options[:allow_not_exists] && !params_exist?
 
       if params_exist?
         contents = process_erb
         data = convert_to_cfn_format(contents)
-        json = JSON.pretty_generate(data)
+        camel_data = convert_to_cfn_format(contents, :camel)
+        json = JSON.pretty_generate(camel_data)
         write_output(json)
         unless @options[:mute]
           short_output_path = output_path.sub("#{Lono.root}/","")
@@ -25,7 +26,11 @@ class Lono::Param
         puts "#{@base_path} or #{@env_path} could not be found?  Are you sure it exist?"
         exit 1
       end
-      json
+      data
+    end
+
+    def parameters
+      generate
     end
 
     def config_locations
@@ -42,10 +47,7 @@ class Lono::Param
     end
 
     def lookup_config_location(env)
-      options = @options.clone
-      options[:blueprint] = @blueprint
-      options[:stack] ||= @blueprint
-      location = Lono::ConfigLocation.new("params", options, env)
+      location = Lono::ConfigLocation.new("params", @options, env)
       env == "base" ? location.lookup_base : location.lookup
     end
 
@@ -65,17 +67,6 @@ class Lono::Param
     def params_exist?
       @base_path && File.exist?(@base_path) ||
       @env_path && File.exist?(@env_path)
-    end
-
-    # useful for when calling CloudFormation via the aws-sdk gem
-    def params(casing = :underscore)
-      @base_path, @env_path = config_locations
-
-      # useful option for lono cfn
-      return {} if @options[:allow_not_exists] && !params_exist?
-
-      contents = process_erb
-      convert_to_cfn_format(contents, casing)
     end
 
     # Reads both the base source and env source and overlay the two
@@ -115,7 +106,7 @@ class Lono::Param
     # Context for ERB rendering.
     # This is where we control what references get passed to the ERB rendering.
     def context
-      @context ||= Lono::Template::Context.new(@blueprint, @options)
+      @context ||= Lono::Template::Context.new(@options)
     end
 
     def parse_contents(contents)
@@ -129,7 +120,7 @@ class Lono::Param
       lines
     end
 
-    def convert_to_cfn_format(contents, casing=:camel)
+    def convert_to_cfn_format(contents, casing=:underscore)
       lines = parse_contents(contents)
 
       # First use a Hash structure so that overlay env files will override

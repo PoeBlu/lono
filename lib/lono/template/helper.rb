@@ -59,9 +59,9 @@ BASH_CODE
     generator_options["param"] = param_name
     generator = Lono::Param::Generator.new(@blueprint, generator_options)
     # do not generate because lono cfn calling logic already generated it we only need the values
-    params = generator.params    # Returns Array in underscore keys format
+    parameters = generator.parameters    # Returns Array in underscore keys format
     # convert Array to simplified hash structure
-    params.inject({}) do |h, param|
+    parameters.inject({}) do |h, param|
       h.merge(param[:parameter_key] => param[:parameter_value])
     end
   end
