@@ -3,9 +3,8 @@ require "bundler"
 class Lono::Blueprint
   module Root
     # Switch the lono root
-    # TODO: account multimode or only have multimode?
-    # TODO: switch to gem path
     def set_blueprint_root(blueprint)
+      # TODO: remove
       # puts "blueprint #{blueprint}"
       # puts caller[0..2]
 

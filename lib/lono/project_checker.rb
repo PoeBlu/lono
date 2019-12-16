@@ -49,7 +49,7 @@ module Lono
       end
 
       def quit(signal)
-        if ENV['TEST'] == '1'
+        if ENV['LONO_TEST'] == '1'
           signal == 0 || raise("Not in lono project")
         else
           exit(signal)

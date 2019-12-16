@@ -1,17 +1,6 @@
 class Lono::Param
-  class Generator
-    include Lono::Blueprint::Root
-    include Lono::Conventions
-
+  class Generator < Lono::AbstractBase
     attr_reader :env_path, :base_path # set when generate is called
-    def initialize(blueprint, options={})
-      # dup because we're modifying the Thor frozen hash
-      # HashWithIndifferentAccess.new again because .dup changes it to a normal Hash
-      @blueprint, @options = blueprint, ActiveSupport::HashWithIndifferentAccess.new(options.dup)
-      @options[:stack] ||= @blueprint
-      set_blueprint_root(@blueprint)
-      @template, @param = template_param_convention(options)
-    end
 
     def generate
       puts "Generating parameter files for blueprint #{@blueprint.color(:green)}:"

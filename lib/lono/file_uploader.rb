@@ -1,10 +1,10 @@
 module Lono
-  class FileUploader
+  class FileUploader < AbstractBase
     include Lono::Template::AwsService
     extend Memoist
 
-    def initialize(blueprint, options={})
-      @blueprint, @options = blueprint, options
+    def initialize(options={})
+      super
       @checksums = {}
       @prefix = "#{folder_key}/#{Lono.env}/#{blueprint}/files" # s3://s3-bucket/folder/development/files
     end

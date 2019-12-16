@@ -1,28 +1,10 @@
 require "lono"
 
 class Lono::Cfn
-  class Base
+  class Base < Lono::AbstractBase
     extend Memoist
     include Lono::AwsServices
-    include Lono::Blueprint::Root
-    include Lono::Conventions
-    include Suffix
     include Util
-
-    def initialize(stack_name, options={})
-      @options = options # options must be set first because @option used in append_suffix
-
-      stack_name = switch_current(stack_name)
-      @stack_name = append_suffix(stack_name)
-      Lono::ProjectChecker.check
-
-      @blueprint = options[:blueprint] || remove_suffix(@stack_name)
-      @template, @param = template_param_convention(options)
-
-      set_blueprint_root(@blueprint)
-
-      @template_path = "#{Lono.config.output_path}/#{@blueprint}/templates/#{@template}.yml"
-    end
 
     def starting_message
       action = self.class.to_s.split('::').last
@@ -121,77 +103,8 @@ class Lono::Cfn
       "#{File.basename($0)} #{ARGV.join(' ')} --capabilities #{capabilities}"
     end
 
-    # Use class variable to cache this only runs once across all classes. base.rb, diff.rb, preview.rb
-    @@generate_all = nil
     def generate_all
-      return @@generate_all if @@generate_all
-
-      if @options[:lono]
-        ensure_s3_bucket_exist
-
-        build_scripts
-        generate_templates # generates with some placeholders for build_files IE: file://app/files/my.rb
-        build_files # builds app/files to output/BLUEPRINT/files
-
-        post_process_templates
-
-        unless @options[:noop]
-          upload_files
-          upload_scripts
-          upload_templates
-        end
-      end
-
-      # Pass down all options to generate_params because it eventually uses template
-      param_generator.generate  # Writes the json file in CamelCase keys format
-      @@generate_all = param_generator.params    # Returns Array in underscore keys format
-
-      check_for_errors
-      @@generate_all
-    end
-
-    def ensure_s3_bucket_exist
-      bucket = Lono::S3::Bucket.new
-      return if bucket.exist?
-      bucket.deploy
-    end
-
-    def build_scripts
-      Lono::Script::Build.new(@blueprint, @options.merge(stack: @stack_name)).run
-    end
-
-    def build_files
-      Lono::AppFile::Build.new(@blueprint, @options.merge(stack: @stack_name)).run
-    end
-
-    def generate_templates
-      Lono::Template::Generator.new(@blueprint, @options.merge(stack: @stack_name)).run
-    end
-
-    def param_generator
-      generator_options = {
-        regenerate: true,
-        allow_not_exists: true,
-      }.merge(@options)
-      generator_options[:stack] ||= @stack_name || @blueprint
-      Lono::Param::Generator.new(@blueprint, generator_options)
-    end
-    memoize :param_generator
-
-    def post_process_templates
-      Lono::Template::PostProcessor.new(@blueprint, @options).run
-    end
-
-    def upload_templates
-      Lono::Template::Upload.new(@blueprint).run
-    end
-
-    def upload_scripts
-      Lono::Script::Upload.new(@blueprint).run
-    end
-
-    def upload_files
-      Lono::AppFile::Upload.new(@blueprint).upload
+      Generate.new(@options).all
     end
 
     # Maps to CloudFormation format.  Example:
@@ -214,23 +127,6 @@ class Lono::Cfn
       end
 
       tags
-    end
-
-    def check_for_errors
-      errors = check_files
-      unless errors.empty?
-        puts "Please double check the command you ran.  There were some errors."
-        puts "ERROR: #{errors.join("\n")}".color(:red)
-        exit
-      end
-    end
-
-    def check_files
-      errors = []
-      unless File.exist?(@template_path)
-        errors << "Template file missing: could not find #{@template_path}"
-      end
-      errors
     end
 
     # All CloudFormation states listed here:
@@ -267,7 +163,7 @@ class Lono::Cfn
 
     def show_parameters(params, meth=nil)
       params = params.clone.compact
-      params[:template_body] = "Hidden due to size... View at: #{pretty_path(@template_path)}"
+      params[:template_body] = "Hidden due to size... View at: #{pretty_path(template_path)}"
       params[:template_url] = params[:template_url].sub(/\?.*/,'')
       to = meth || "AWS API"
       puts "Parameters passed to #{to}:"
@@ -282,7 +178,7 @@ class Lono::Cfn
     # Reference: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html
     def set_template_body!(params)
       upload = Lono::Template::Upload.new(@blueprint)
-      url_path = @template_path.sub("#{Lono.root}/",'')
+      url_path = template_path.sub("#{Lono.root}/",'')
       url = upload.s3_presigned_url(url_path)
       params[:template_url] = url
       params

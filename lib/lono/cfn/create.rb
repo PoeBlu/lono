@@ -22,8 +22,8 @@ class Lono::Cfn
         return
       end
 
-      unless File.exist?(@template_path)
-        puts "Cannot create #{@stack_name.color(:green)} template not found: #{@template_path}."
+      unless File.exist?(template_path)
+        puts "Cannot create #{@stack_name.color(:green)} template not found: #{template_path}."
         return
       end
 

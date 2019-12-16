@@ -1,23 +1,14 @@
 require "yaml"
 
 class Lono::Template
-  class Generator
-    include Lono::Blueprint::Root
-
-    def initialize(blueprint, options={})
-      @blueprint, @options = blueprint, ActiveSupport::HashWithIndifferentAccess.new(options.dup)
-      @template = @options[:template] || @blueprint
-      Lono::ProjectChecker.check
-      set_blueprint_root(@blueprint)
-    end
-
+  class Generator < Lono::AbstractBase
     def run
       # Examples:
       #   Erb.new(b, options.dup).run
       #   Dsl.new(b, options.dup).run
       generator_class = "Lono::Template::#{template_type.classify}"
       generator_class = Object.const_get(generator_class)
-      generator_class.new(@blueprint, @options).run
+      generator_class.new(@options).run
     end
 
     def template_type

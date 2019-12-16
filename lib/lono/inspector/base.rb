@@ -1,14 +1,9 @@
 module Lono::Inspector
-  class Base
+  class Base < Lono::AbstractBase
     delegate :required_parameters, :optional_parameters, :parameters, :data,
              to: :output_template
 
     extend Memoist
-    include Lono::Blueprint::Root
-
-    def initialize(blueprint, template, options)
-      @blueprint, @template, @options = blueprint, template, options
-    end
 
     def run
       blueprints = Lono::Blueprint::Find.one_or_all(@blueprint)

@@ -37,7 +37,7 @@ class Lono::Template
         end
       end
 
-      if ENV['TEST']
+      if ENV['LONO_TEST']
         io.string
       else
         puts io.string

@@ -59,7 +59,7 @@ module Lono
       Seed.new(blueprint, options).create
     end
 
-    desc "app_files BLUEPRINT", "Builds app files"
+    desc "app_files BLUEPRINT", "Builds app files", hide: true
     long_desc Help.text("app_files")
     add_runtime_options! # Thor::Action options like --force
     def app_files(blueprint)
@@ -89,9 +89,9 @@ module Lono
       puts "Lono Pro Addon: #{Lono.pro_version}"
     end
 
-    desc "template SUBCOMMAND", "template subcommands"
-    long_desc Help.text(:template)
-    subcommand "template", Template
+    desc "blueprint SUBCOMMAND", "blueprint subcommands"
+    long_desc Help.text(:blueprint)
+    subcommand "blueprint", Blueprint
 
     desc "cfn SUBCOMMAND", "cfn subcommands"
     long_desc Help.text(:cfn)
@@ -101,20 +101,24 @@ module Lono
     long_desc Help.text(:param)
     subcommand "param", Param
 
-    desc "script SUBCOMMAND", "script subcommands"
-    long_desc Help.text(:script)
-    subcommand "script", Script
-
-    desc "upgrade SUBCOMMAND", "upgrade subcommands"
-    long_desc Help.text(:upgrade)
-    subcommand "upgrade", Upgrade
-
     desc "s3 SUBCOMMAND", "s3 subcommands"
     long_desc Help.text(:s3)
     subcommand "s3", S3
 
-    desc "blueprint SUBCOMMAND", "blueprint subcommands"
-    long_desc Help.text(:blueprint)
-    subcommand "blueprint", Blueprint
+    desc "script SUBCOMMAND", "script subcommands"
+    long_desc Help.text(:script)
+    subcommand "script", Script
+
+    desc "sets SUBCOMMAND", "sets subcommands"
+    long_desc Help.text(:sets)
+    subcommand "sets", Sets
+
+    desc "template SUBCOMMAND", "template subcommands"
+    long_desc Help.text(:template)
+    subcommand "template", Template
+
+    desc "upgrade SUBCOMMAND", "upgrade subcommands"
+    long_desc Help.text(:upgrade)
+    subcommand "upgrade", Upgrade
   end
 end

@@ -1,16 +1,12 @@
 module Lono
-  class ConfigLocation
+  class ConfigLocation < AbstractBase
     extend Memoist
     include Lono::Conventions
 
     def initialize(config, options={}, env=Lono.env, root=Lono.root)
+      super(options)
       # config can be params or variables
-      @config, @options, @root, @env = config, options, root, env
-
-      @stack = options[:stack]
-      @blueprint = options[:blueprint] || @stack
-      @template, @param = template_param_convention(options)
-
+      @config, @options, @env, @root = config, options, env, root
       @requested = determine_requested
     end
 

@@ -12,24 +12,20 @@ require "yaml"
 # Note there is no params method to hook. The Base class handles params well.
 #
 class Lono::Seed
-  class Base
-    include Lono::Blueprint::Root
+  class Base < Lono::AbstractBase
     include Lono::AwsServices
-    include Lono::Conventions
     include ServiceRole
 
     # What's needed for a Thor::Group or "Sequence"
     # Gives us Thor::Actions commands like create_file
     include Thor::Actions
     include Thor::Base
+    # Override Thor::Base initialize
+    def initialize(options={})
+      reinitialize(options)
+    end
 
     extend Memoist
-
-    # attr_reader :options
-    def initialize(blueprint, options)
-      @blueprint, @options = blueprint, options
-      @template, @param = template_param_convention(options)
-    end
 
     def run
       check_dsl_type!

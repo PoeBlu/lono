@@ -1,7 +1,7 @@
 class Lono::Template
   class Dsl < Base
     attr_reader :results
-    def initialize(blueprint, options={})
+    def initialize(options={})
       super
     end
 

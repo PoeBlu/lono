@@ -3,10 +3,6 @@ module Lono::AppFile
     include Lono::AwsServices
     extend Memoist
 
-    def initialize(blueprint, options={})
-      @blueprint, @options = blueprint, options
-    end
-
     def upload
       puts "Uploading app/files..."
 

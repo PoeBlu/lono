@@ -1,11 +1,16 @@
 module Lono
   module Conventions
-    # Think can make this a module, but need to figure out how it fits with lono cfn
-    def template_param_convention(options)
-      options = options.deep_symbolize_keys
-      template = options[:template] || @blueprint
-      param = options[:param] || template || @blueprint
-      [template, param]
+    def naming_conventions(options)
+      o = options.deep_symbolize_keys
+      stack = o[:stack]
+      blueprint = o[:blueprint] || o[:stack]
+      template = o[:template] || o[:blueprint]
+      param = o[:param] || template || o[:blueprint]
+      [stack, blueprint, template, param]
+    end
+
+    def template_path
+      "#{Lono.config.output_path}/#{@blueprint}/templates/#{@template}.yml"
     end
   end
 end

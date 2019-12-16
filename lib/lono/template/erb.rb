@@ -3,7 +3,7 @@ class Lono::Template
     include Evaluate
     include Util
 
-    def initialize(blueprint, options={})
+    def initialize(options={})
       super
       @templates = []
       @results = {}

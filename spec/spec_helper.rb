@@ -1,4 +1,4 @@
-ENV['TEST'] = '1'
+ENV['LONO_TEST'] = '1'
 # Ensures aws api never called. Fixture home folder does not contain ~/.aws/credentails
 ENV['HOME'] = "spec/fixtures/home"
 # We'll always re-generate a new lono project in tmp. It can be:

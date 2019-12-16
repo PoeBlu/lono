@@ -27,7 +27,7 @@ class Lono::Blueprint
 
     # for specs
     def set_cwd
-      @cwd = ENV['TEST'] ? File.dirname(Lono.root) : "#{Dir.pwd}/blueprints"
+      @cwd = ENV['LONO_TEST'] ? File.dirname(Lono.root) : "#{Dir.pwd}/blueprints"
 
       if options[:from_new]
         # At this point @cwd will have the project_name from `lono new`

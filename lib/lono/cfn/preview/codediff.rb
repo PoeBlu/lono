@@ -32,7 +32,7 @@ module Lono::Cfn::Preview
 
     # for clarity
     def new_cfn_template
-      @template_path
+      template_path
     end
 
     def existing_template_path
