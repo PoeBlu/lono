@@ -5,7 +5,7 @@ class Lono::Cfn
 
     def initialize(options={})
       @options = options
-      @stack = options[:stack]
+      @stack = options.delete(:stack)
     end
 
     def run
@@ -16,7 +16,7 @@ class Lono::Cfn
         are_you_sure?(@stack, :delete)
 
         if stack_exists?(@stack)
-          cfn.delete_stack(stack: @stack)
+          cfn.delete_stack(stack_name: @stack)
           puts message
         else
           puts "#{@stack.inspect} stack does not exist".color(:red)

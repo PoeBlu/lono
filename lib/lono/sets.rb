@@ -14,9 +14,17 @@ module Lono
       option :template, desc: "override convention and specify the template file to use"
       option :variable, aliases: "v", desc: "override convention and specify the variable file to use"
     end
+    update_options = Proc.new do
+      option :change_set, type: :boolean, default: true, desc: "Uses generated change set to update the stack.  If false, will perform normal update-stack."
+      option :codediff_preview, type: :boolean, default: true, desc: "Show codediff changes preview."
+      option :changeset_preview, type: :boolean, default: true, desc: "Show ChangeSet changes preview."
+      option :param_preview, type: :boolean, default: true, desc: "Show parameter diff preview."
+      option :sure, type: :boolean, desc: "Skips are you sure prompt"
+    end
 
     desc "deploy STACK_SET_NAME", "Deploy CloudFormation stack set."
     base_options.call
+    update_options.call
     def deploy(stack)
       Deploy.new(options.merge(stack: stack)).run
     end

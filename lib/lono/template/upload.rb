@@ -94,7 +94,7 @@ class Lono::Template
       "https://s3.amazonaws.com/#{s3_bucket}/#{@prefix}/#{template_path}"
     end
 
-    # used for cfn/base.rb def set_template_body!(params)
+    # used for cfn/base.rb def set_template_url!(options)
     def s3_presigned_url(template_output_path)
       template_path = template_output_path.sub('output/templates/','')
       key = "#{@prefix}/#{template_path}"

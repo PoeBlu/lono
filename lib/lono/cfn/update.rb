@@ -29,7 +29,6 @@ class Lono::Cfn
       # create new copy of preview when update_stack is called because of IAM retry logic
       changeset_preview = Lono::Cfn::Preview::Changeset.new(options)
 
-      error = nil
       param_preview.run if @options[:param_preview]
       codediff_preview.run if @options[:codediff_preview]
       changeset_preview.run if @options[:changeset_preview]
@@ -41,7 +40,7 @@ class Lono::Cfn
       else
         standard_update(parameters)
       end
-      puts message unless @options[:mute] || error
+      puts message unless @options[:mute]
     end
 
     def standard_update(parameters)
@@ -52,23 +51,23 @@ class Lono::Cfn
         disable_rollback: !@options[:rollback],
       }
       options[:tags] = tags unless tags.empty?
-      set_template_body!(options)
+      set_template_url!(options)
       show_options(options, "cfn.update_stack")
       begin
         cfn.update_stack(options)
       rescue Aws::CloudFormation::Errors::ValidationError => e
-        puts "ERROR: #{e.message}".red
+        puts "ERROR: #{e.message}".color(:red)
         false
       end
     end
 
     def codediff_preview
-      Lono::Cfn::Preview::Codediff.new(@stack, @options.merge(mute_params: true, mute_using: true))
+      Lono::Cfn::Preview::Codediff.new(@options.merge(mute_params: true, mute_using: true))
     end
     memoize :codediff_preview
 
     def param_preview
-      Lono::Cfn::Preview::Param.new(@stack, @options)
+      Lono::Cfn::Preview::Param.new(@options)
     end
     memoize :param_preview
   end

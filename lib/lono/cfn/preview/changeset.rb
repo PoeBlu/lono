@@ -9,35 +9,35 @@ module Lono::Cfn::Preview
         return
       end
 
-      params = generate_all
-      success = preview_change_set(params)
+      parameters = generate_all
+      success = preview_change_set(parameters)
       delete_change_set if success && !@options[:keep] # Clean up and delete the change set
     end
 
-    def preview_change_set(params)
-      success = create_change_set(params)
+    def preview_change_set(parameters)
+      success = create_change_set(parameters)
       display_change_set if success
     end
 
-    def create_change_set(params)
+    def create_change_set(parameters)
       unless stack_exists?(@stack)
         puts "WARN: Cannot create a change set for the stack because the #{@stack} does not exists.".color(:yellow)
         return false
       end
       exit_unless_updatable!(stack_status(@stack))
 
-      params = {
+      options = {
         change_set_name: change_set_name,
         stack_name: @stack,
-        parameters: params,
+        parameters: parameters,
       }
-      params[:tags] = tags unless tags.empty?
-      set_template_body!(params)
-      show_options(params, "cfn.create_change_set")
+      options[:tags] = tags unless tags.empty?
+      set_template_url!(options)
+      show_options(options, "cfn.create_change_set")
       begin
         # Tricky for preview need to set capabilities so that it gets updated. For Base#run save_stack within the begin block already.
-        params[:capabilities] = capabilities # ["CAPABILITY_IAM", "CAPABILITY_NAMED_IAM"]
-        cfn.create_change_set(params)
+        options[:capabilities] = capabilities # ["CAPABILITY_IAM", "CAPABILITY_NAMED_IAM"]
+        cfn.create_change_set(options)
       rescue Aws::CloudFormation::Errors::InsufficientCapabilitiesException => e
         # If coming from cfn_preview_command automatically add iam capabilities
         cfn_preview_command = ARGV.join(" ").include?("cfn preview")

@@ -34,7 +34,7 @@ class Lono::Cfn
         disable_rollback: !@options[:rollback],
       }
       options[:tags] = tags unless tags.empty?
-      set_template_body!(options)
+      set_template_url!(options)
 
       show_options(options, "cfn.create_stack")
       cfn.create_stack(options) # TODO: COMMENT OUT FOR TESTING

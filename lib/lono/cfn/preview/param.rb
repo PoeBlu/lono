@@ -9,7 +9,7 @@ module Lono::Cfn::Preview
     def run
       return unless stack_exists?(@stack)
 
-      generated_params # eager call generated_params so its output is above Parameter Diff Preview
+      generated_parameters # eager call generated_parameters so its output is above Parameter Diff Preview
       puts "Parameter Diff Preview:".color(:green)
       if @options[:noop]
         puts "NOOP CloudFormation parameters preview for #{@stack} update"
@@ -30,7 +30,7 @@ module Lono::Cfn::Preview
     memoize :existing_params
 
     def new_params
-      params = optional_params.merge(generated_params)
+      params = optional_params.merge(generated_parameters)
       subtract(params, noecho_params)
     end
 
@@ -42,11 +42,11 @@ module Lono::Cfn::Preview
       Hash[hash.sort_by {|k,v| k}]
     end
 
-    def generated_params
-      params = generate_all
-      normalize(params)
+    def generated_parameters
+      parameters = generate_all
+      normalize(parameters)
     end
-    memoize :generated_params
+    memoize :generated_parameters
 
     def optional_params
       # normalizing to simple Hash

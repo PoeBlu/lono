@@ -62,7 +62,7 @@ class Lono::Cfn
       begin
         cfn.continue_update_rollback(options)
       rescue Aws::CloudFormation::Errors::ValidationError => e
-        puts "ERROR5: #{e.message}".red
+        puts "ERROR5: #{e.message}".color(:red)
         exit 1
       end
     end
@@ -104,7 +104,7 @@ class Lono::Cfn
     end
 
     def generate_all
-      Generate.new(@options).all
+      Lono::Generate.new(@options).all
     end
 
     # Maps to CloudFormation format.  Example:
@@ -176,10 +176,11 @@ class Lono::Cfn
     #   template_url: 460,800 bytes - s3 limit
     #
     # Reference: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html
-    def set_template_body!(options)
-      upload = Lono::Template::Upload.new(@blueprint)
+    def set_template_url!(options)
+      upload = Lono::Template::Upload.new(@options)
       url_path = template_path.sub("#{Lono.root}/",'')
       url = upload.s3_presigned_url(url_path)
+      url.gsub!(/\.yml.*/, ".yml") # Interesting dont need presign query string. For stack sets it actually breaks it. So removing.
       options[:template_url] = url
       options
     end
