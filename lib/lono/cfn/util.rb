@@ -19,9 +19,5 @@ class Lono::Cfn
         exit 0
       end
     end
-
-    def switch_current(stack_name)
-      Current.name!(stack_name)
-    end
   end
 end

@@ -35,8 +35,8 @@ module Lono
     suffix_option.call
     wait_option.call
     long_desc Lono::Help.text("cfn/create")
-    def create(stack_name)
-      Create.new(stack_name, options).run
+    def create(stack)
+      Create.new(options.merge(stack: stack)).run
     end
 
     desc "update STACK", "Update a CloudFormation stack using the generated template."
@@ -44,8 +44,8 @@ module Lono
     base_options.call
     update_options.call
     wait_option.call
-    def update(stack_name=:current)
-      Update.new(stack_name, options).run
+    def update(stack)
+      Update.new(options.merge(stack: stack)).run
     end
 
     desc "deploy STACK", "Create or update a CloudFormation stack using the generated template."
@@ -54,8 +54,8 @@ module Lono
     suffix_option.call
     update_options.call
     wait_option.call
-    def deploy(stack_name=:current)
-      Deploy.new(stack_name, options).run
+    def deploy(stack)
+      Deploy.new(options.merge(stack: stack)).run
     end
 
     desc "delete STACK", "Delete a CloudFormation stack."
@@ -63,16 +63,16 @@ module Lono
     option :sure, type: :boolean, desc: "Skips are you sure prompt"
     base_options.call
     wait_option.call
-    def delete(stack_name=:current)
-      Delete.new(stack_name, options).run
+    def delete(stack)
+      Delete.new(options.merge(stack: stack)).run
     end
 
     desc "cancel STACK", "Cancel a CloudFormation stack."
     long_desc Lono::Help.text("cfn/cancel")
     option :sure, type: :boolean, desc: "Skips are you sure prompt"
     wait_option.call
-    def cancel(stack_name=:current)
-      Cancel.new(stack_name, options).run
+    def cancel(stack)
+      Cancel.new(options.merge(stack: stack)).run
     end
 
     desc "preview STACK", "Preview a CloudFormation stack update.  This is similar to terraform's plan or puppet's dry-run mode."
@@ -83,10 +83,10 @@ module Lono
     option :changeset_preview, type: :boolean, default: true, desc: "Show ChangeSet changes preview."
     base_options.call
     suffix_option.call
-    def preview(stack_name=:current)
-      Preview::Param.new(stack_name, options).run if options[:param_preview]
-      Preview::Codediff.new(stack_name, options).run if options[:codediff_preview]
-      Preview::Changeset.new(stack_name, options).run if options[:changeset_preview]
+    def preview(stack)
+      Preview::Param.new(options.merge(stack: stack)).run if options[:param_preview]
+      Preview::Codediff.new(options.merge(stack: stack)).run if options[:codediff_preview]
+      Preview::Changeset.new(options.merge(stack: stack)).run if options[:changeset_preview]
     end
 
     desc "download STACK", "Download CloudFormation template from existing stack."
@@ -94,8 +94,8 @@ module Lono
     option :name, desc: "Name you want to save the template as. Default: existing stack name."
     base_options.call
     suffix_option.call
-    def download(stack_name=:current)
-      Download.new(stack_name, options).run
+    def download(stack)
+      Download.new(options.merge(stack: stack)).run
     end
 
     desc "current", "Current stack that you're working with."
@@ -110,8 +110,8 @@ module Lono
     desc "status", "Shows the current status for the stack."
     long_desc Lono::Help.text("cfn/status")
     suffix_option.call
-    def status(stack_name=:current)
-      status = Lono::Cfn::Status.new(stack_name, options)
+    def status(stack)
+      status = Lono::Cfn::Status.new(options.merge(stack: stack))
       success = status.run
       exit 3 unless success
     end

@@ -1,10 +1,10 @@
 class Lono::Cfn
   class Deploy < Base
-    def save_stack(params)
-      if stack_exists?(@stack_name)
-        Update.new(@stack_name, @options).update_stack(params)
+    def save_stack(parameters)
+      if stack_exists?(@stack)
+        Update.new(@options).update_stack(parameters)
       else
-        Create.new(@stack_name, @options).create_stack(params)
+        Create.new(@options).create_stack(parameters)
       end
     end
   end

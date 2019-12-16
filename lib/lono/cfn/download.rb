@@ -10,7 +10,7 @@ class Lono::Cfn
 
     def download_template
       resp = cfn.get_template(
-        stack_name: @stack_name,
+        stack_name: @stack,
         template_stage: "Original"
       )
       body = convert_to_yaml(resp.template_body)
@@ -26,7 +26,7 @@ class Lono::Cfn
     end
 
     def download_path
-      name = @options[:name] || @stack_name
+      name = @options[:name] || @stack
       "/tmp/#{name}.yml"
     end
   end

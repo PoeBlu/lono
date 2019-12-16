@@ -5,7 +5,7 @@ module Lono::Cfn::Preview
       puts "Changeset Preview:".color(:green)
 
       if @options[:noop]
-        puts "NOOP CloudFormation preview for #{@stack_name} update"
+        puts "NOOP CloudFormation preview for #{@stack} update"
         return
       end
 
@@ -20,20 +20,20 @@ module Lono::Cfn::Preview
     end
 
     def create_change_set(params)
-      unless stack_exists?(@stack_name)
-        puts "WARN: Cannot create a change set for the stack because the #{@stack_name} does not exists.".color(:yellow)
+      unless stack_exists?(@stack)
+        puts "WARN: Cannot create a change set for the stack because the #{@stack} does not exists.".color(:yellow)
         return false
       end
-      exit_unless_updatable!(stack_status(@stack_name))
+      exit_unless_updatable!(stack_status(@stack))
 
       params = {
         change_set_name: change_set_name,
-        stack_name: @stack_name,
+        stack_name: @stack,
         parameters: params,
       }
       params[:tags] = tags unless tags.empty?
       set_template_body!(params)
-      show_parameters(params, "cfn.create_change_set")
+      show_options(params, "cfn.create_change_set")
       begin
         # Tricky for preview need to set capabilities so that it gets updated. For Base#run save_stack within the begin block already.
         params[:capabilities] = capabilities # ["CAPABILITY_IAM", "CAPABILITY_NAMED_IAM"]
@@ -83,7 +83,7 @@ module Lono::Cfn::Preview
 
       case change_set.status
       when "CREATE_COMPLETE"
-        puts "CloudFormation preview for '#{@stack_name}' stack update. Changes:"
+        puts "CloudFormation preview for '#{@stack}' stack update. Changes:"
         changes = change_set.changes.sort_by do |change|
           change["resource_change"]["action"]
         end
@@ -91,7 +91,7 @@ module Lono::Cfn::Preview
           display_change(change)
         end
       when "FAILED"
-        puts "WARN: Fail to create a CloudFormation preview for '#{@stack_name}' stack update. Reason:".color(:yellow)
+        puts "WARN: Fail to create a CloudFormation preview for '#{@stack}' stack update. Reason:".color(:yellow)
         puts change_set.status_reason
         quit(0)
       else
@@ -102,14 +102,14 @@ module Lono::Cfn::Preview
     def delete_change_set
       cfn.delete_change_set(
         change_set_name: change_set_name,
-        stack_name: @stack_name
+        stack_name: @stack
       )
     end
 
     def execute_change_set
       cfn.execute_change_set(
         change_set_name: change_set_name,
-        stack_name: @stack_name
+        stack_name: @stack
       )
     end
 
@@ -160,7 +160,7 @@ module Lono::Cfn::Preview
     def describe_change_set
       cfn.describe_change_set(
         change_set_name: change_set_name,
-        stack_name: @stack_name
+        stack_name: @stack
       )
     end
   end

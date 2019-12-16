@@ -7,12 +7,12 @@ module Lono::Cfn::Preview
     include Lono::AwsServices
 
     def run
-      return unless stack_exists?(@stack_name)
+      return unless stack_exists?(@stack)
 
       generated_params # eager call generated_params so its output is above Parameter Diff Preview
       puts "Parameter Diff Preview:".color(:green)
       if @options[:noop]
-        puts "NOOP CloudFormation parameters preview for #{@stack_name} update"
+        puts "NOOP CloudFormation parameters preview for #{@stack} update"
         return
       end
 
@@ -62,7 +62,7 @@ module Lono::Cfn::Preview
     memoize :noecho_params
 
     def stack_parameters
-      resp = cfn.describe_stacks(stack_name: @stack_name)
+      resp = cfn.describe_stacks(stack_name: @stack)
       stack = resp.stacks.first
       stack.parameters
     end

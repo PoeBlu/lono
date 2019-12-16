@@ -8,14 +8,14 @@ class Lono::Cfn
 
     def starting_message
       action = self.class.to_s.split('::').last
-      puts "#{action} #{@stack_name.color(:green)} stack..."
+      puts "#{action} #{@stack.color(:green)} stack..."
     end
 
     def run
       starting_message
-      params = generate_all
+      parameters = generate_all
       begin
-        save_stack(params) # defined in the sub class
+        save_stack(parameters) # defined in the sub class
       rescue Aws::CloudFormation::Errors::InsufficientCapabilitiesException => e
         yes = rerun_with_iam?(e)
         retry if yes
@@ -57,10 +57,10 @@ class Lono::Cfn
 
     def continue_update_rollback
       continue_update_rollback_sure?
-      params = {stack_name: @stack_name}
-      show_parameters(params, "cfn.continue_update_rollback")
+      options = {stack_name: @stack}
+      show_options(options, "cfn.continue_update_rollback")
       begin
-        cfn.continue_update_rollback(params)
+        cfn.continue_update_rollback(options)
       rescue Aws::CloudFormation::Errors::ValidationError => e
         puts "ERROR5: #{e.message}".red
         exit 1
@@ -68,12 +68,12 @@ class Lono::Cfn
     end
 
     def delete_rollback_stack
-      rollback = Rollback.new(@stack_name)
+      rollback = Rollback.new(@stack)
       rollback.delete_stack
     end
 
     def status
-      @status ||= Status.new(@stack_name)
+      @status ||= Status.new(@stack)
     end
 
     def rerun_with_iam?(e)
@@ -121,7 +121,7 @@ class Lono::Cfn
 
       update_operation = %w[Preview Update].include?(self.class.to_s)
       if tags.empty? && update_operation
-        resp = cfn.describe_stacks(stack_name: @stack_name)
+        resp = cfn.describe_stacks(stack_name: @stack)
         tags = resp.stacks.first.tags
         tags = tags.map(&:to_h)
       end
@@ -144,7 +144,7 @@ class Lono::Cfn
       return false if @options[:noop]
 
       unless status =~ /_COMPLETE$/ || status == "UPDATE_ROLLBACK_FAILED"
-        puts "Cannot create a change set for the stack because the #{@stack_name} is not in an updatable state.  Stack status: #{status}".color(:red)
+        puts "Cannot create a change set for the stack because the #{@stack} is not in an updatable state.  Stack status: #{status}".color(:red)
         quit(1)
       end
     end
@@ -161,13 +161,13 @@ class Lono::Cfn
       end
     end
 
-    def show_parameters(params, meth=nil)
-      params = params.clone.compact
-      params[:template_body] = "Hidden due to size... View at: #{pretty_path(template_path)}"
-      params[:template_url] = params[:template_url].sub(/\?.*/,'')
+    def show_options(options, meth=nil)
+      options = options.clone.compact
+      options[:template_body] = "Hidden due to size... View at: #{pretty_path(template_path)}"
+      options[:template_url] = options[:template_url].sub(/\?.*/,'')
       to = meth || "AWS API"
       puts "Parameters passed to #{to}:"
-      puts YAML.dump(params.deep_stringify_keys)
+      puts YAML.dump(options.deep_stringify_keys)
     end
 
     # Lono always uploads the template to s3 so we can use much larger templates.
@@ -176,12 +176,12 @@ class Lono::Cfn
     #   template_url: 460,800 bytes - s3 limit
     #
     # Reference: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html
-    def set_template_body!(params)
+    def set_template_body!(options)
       upload = Lono::Template::Upload.new(@blueprint)
       url_path = template_path.sub("#{Lono.root}/",'')
       url = upload.s3_presigned_url(url_path)
-      params[:template_url] = url
-      params
+      options[:template_url] = url
+      options
     end
 
     def pretty_path(path)
