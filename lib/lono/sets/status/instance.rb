@@ -21,12 +21,14 @@ class Lono::Sets::Status
         show(stack_instance)
         @shown << stack_instance
         status = resp.stack_instance.status
-        sleep 5 unless completed?(status)
+        sleep 2 unless completed?(status)
       end
     end
 
     def show(stack_instance)
       already_shown = @shown.detect do |o|
+        o[:account] == stack_instance[:account] &&
+        o[:region] == stack_instance[:region] &&
         o[:status] == stack_instance[:status]
       end
       return if already_shown

@@ -46,10 +46,21 @@ class Lono::Sets
         if completed?(status)
           show_time_spent(stack_set_operation)
         else
-          # Instances::Status.new(@options).run # TODO: also add to completed?
+          start_instances_status_waiter
           sleep 5
         end
       end
+    end
+
+    @@instances_status_waiter_started = false
+    def start_instances_status_waiter
+      return if @@instances_status_waiter_started
+      Thread.new do
+        o = @options.merge(stack: @stack, start_on_outdated: true)
+        instances_status = Lono::Sets::Instances::Status.new(o)
+        instances_status.run
+      end
+      @@instances_status_waiter_started = true
     end
 
     def show_time_spent(stack_set_operation)
