@@ -26,15 +26,6 @@ class Lono::Sets
       option :accounts, type: :array, desc: "List of accounts to apply stack set to. IE: 112233445566 223344556677"
     end
 
-    desc "list STACK_SET_NAME", "Deploy CloudFormation stack set."
-    long_desc Lono::Help.text("sets/instances/list")
-    base_options.call
-    update_options.call
-    sets_options.call
-    def list(stack)
-      List.new(options.merge(stack: stack)).run
-    end
-
     desc "deploy STACK_SET_NAME", "Deploy CloudFormation stack set."
     long_desc Lono::Help.text("sets/instances/deploy")
     base_options.call
@@ -42,6 +33,15 @@ class Lono::Sets
     sets_options.call
     def deploy(stack)
       Deploy.new(options.merge(stack: stack)).run
+    end
+
+    desc "list STACK_SET_NAME", "Deploy CloudFormation stack set."
+    long_desc Lono::Help.text("sets/instances/list")
+    base_options.call
+    update_options.call
+    sets_options.call
+    def list(stack)
+      List.new(options.merge(stack: stack)).run
     end
 
     desc "status STACK_SET_NAME", "Show current status of stack instances."

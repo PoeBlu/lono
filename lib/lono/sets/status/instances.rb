@@ -9,13 +9,22 @@ class Lono::Sets::Status
 
     def wait
       wait_until_outdated if @options[:start_on_outdated]
-      waiters = stack_instances.map do |stack_instance|
+      with_instances do |instance|
+        Thread.new { instance.wait }
+      end.map(&:join)
+    end
+
+    def show
+      with_instances do |instance|
+        Thread.new { instance.show }
+      end.map(&:join)
+    end
+
+    def with_instances
+      stack_instances.map do |stack_instance|
         instance = Instance.new(stack_instance)
-        Thread.new do
-          instance.wait
-        end
+        yield(instance)
       end
-      waiters.map(&:join)
     end
 
     # If we dont wait until OUTDATED, during a `lono sets deploy` it'll immediately think that the instance statuses are done
