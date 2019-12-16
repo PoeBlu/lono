@@ -21,21 +21,36 @@ class Lono::Sets
       option :param_preview, type: :boolean, default: true, desc: "Show parameter diff preview."
       option :sure, type: :boolean, desc: "Skips are you sure prompt"
     end
+    sets_options = Proc.new do
+      option :regions, type: :array, desc: "List of regions to apply stack set to. IE: us-west-2 us-east-1"
+      option :accounts, type: :array, desc: "List of accounts to apply stack set to. IE: 112233445566 223344556677"
+    end
 
     desc "list STACK_SET_NAME", "Deploy CloudFormation stack set."
+    long_desc Lono::Help.text("sets/instances/list")
     base_options.call
     update_options.call
+    sets_options.call
     def list(stack)
       List.new(options.merge(stack: stack)).run
     end
 
     desc "deploy STACK_SET_NAME", "Deploy CloudFormation stack set."
+    long_desc Lono::Help.text("sets/instances/deploy")
     base_options.call
     update_options.call
-    option :regions, type: :array, desc: "List of regions to apply stack set to. IE: us-west-2 us-east-1"
-    option :accounts, type: :array, desc: "List of accounts to apply stack set to. IE: 112233445566 223344556677"
+    sets_options.call
     def deploy(stack)
       Deploy.new(options.merge(stack: stack)).run
+    end
+
+    desc "status STACK_SET_NAME", "Show current status of stack instances."
+    long_desc Lono::Help.text("sets/instances/status")
+    sets_options.call
+    def status(stack)
+      status = Status.new(options.merge(stack: stack))
+      success = status.run
+      exit 3 unless success
     end
   end
 end

@@ -1,5 +1,6 @@
 class Lono::Sets
   class Status
+    extend Memoist
     include Lono::AwsServices
     include Lono::Utils::PrettyTime
 
@@ -45,6 +46,7 @@ class Lono::Sets
         if completed?(status)
           show_time_spent(stack_set_operation)
         else
+          # Instances::Status.new(@options).run # TODO: also add to completed?
           sleep 5
         end
       end
