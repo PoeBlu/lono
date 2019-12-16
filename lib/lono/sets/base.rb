@@ -9,6 +9,8 @@ class Lono::Sets
       # end
 
       return unless @options[:wait]
+      return unless operation_id # only available on update
+
       status = Status.new(@stack, operation_id)
       success = status.wait unless @options[:noop]
       exit 1 unless success

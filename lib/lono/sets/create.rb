@@ -27,11 +27,11 @@ class Lono::Sets
       }
       options[:tags] = tags unless tags.empty?
       set_template_url!(options)
-
       show_options(options, "cfn.create_stack_set")
-      cfn.create_stack_set(options)
-      # TODO: add rescues.. but should be same as update, this is handled in a class in cfn
+
+      resp = cfn.create_stack_set(options)
       puts message unless @options[:mute]
+      nil # resp has no operation_id
     end
   end
 end

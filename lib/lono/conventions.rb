@@ -4,8 +4,8 @@ module Lono
       o = options.deep_symbolize_keys
       stack = o[:stack]
       blueprint = o[:blueprint] || o[:stack]
-      template = o[:template] || o[:blueprint]
-      param = o[:param] || template || o[:blueprint]
+      template = o[:template] || blueprint
+      param = o[:param] || template || blueprint
       [stack, blueprint, template, param]
     end
 

@@ -53,10 +53,9 @@ module Lono
       Deploy.new(options.merge(stack: stack)).run
     end
 
-    desc "delete STACK", "Delete a CloudFormation stack."
+    desc "delete STACK", "Delete CloudFormation stack."
     long_desc Lono::Help.text("cfn/delete")
     option :sure, type: :boolean, desc: "Skips are you sure prompt"
-    base_options.call
     wait_option.call
     def delete(stack)
       Delete.new(options.merge(stack: stack)).run

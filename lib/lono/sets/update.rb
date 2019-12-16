@@ -35,16 +35,10 @@ class Lono::Sets
       options[:tags] = tags unless tags.empty?
       set_template_url!(options)
       show_options(options, "cfn.update_stack_set")
-      operation_id = nil
-      begin
-        resp = cfn.update_stack_set(options)
-        operation_id = resp[:operation_id]
-      rescue Aws::CloudFormation::Errors::ValidationError => e
-        puts "ERROR: #{e.message}".color(:red)
-      end
 
+      resp = cfn.update_stack_set(options)
       puts message unless @options[:mute]
-      operation_id
+      resp[:operation_id]
     end
   end
 end

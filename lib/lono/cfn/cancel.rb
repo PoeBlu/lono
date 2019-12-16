@@ -1,7 +1,7 @@
 class Lono::Cfn
   class Cancel
     include Lono::AwsServices
-    include Util
+    include Sure
 
     def initialize(options={})
       @options = options
