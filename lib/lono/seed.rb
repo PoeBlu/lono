@@ -3,7 +3,7 @@ module Lono
     def create
       puts "Creating starter config files for #{@blueprint}"
       configs_class = load_configs_class # ::Configs or Lono::Seed::Base
-      configs = configs_class.new(@blueprint, @options)
+      configs = configs_class.new(@options)
       # The Configs class implements: variables
       configs.run # setup the instance variables
     end

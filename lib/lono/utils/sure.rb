@@ -4,8 +4,13 @@ module Lono::Utils
       if @options[:sure]
         sure = 'y'
       else
-        puts "#{message} (y/N)"
-        puts desc if desc
+        out = message
+        if desc
+          out += "\n#{desc}\nAre you sure? (y/N) "
+        else
+          out += " (y/N) "
+        end
+        print out
         sure = $stdin.gets
       end
 

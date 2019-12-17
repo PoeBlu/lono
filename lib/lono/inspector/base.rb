@@ -19,7 +19,7 @@ module Lono::Inspector
     end
 
     def generate_templates
-      Lono::Template::Generator.new(@blueprint, @options.clone.merge(quiet: false)).run
+      Lono::Template::Generator.new(@options.clone.merge(quiet: false)).run
     end
 
     def all_templates

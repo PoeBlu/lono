@@ -1,5 +1,5 @@
 class Lono::Sets
-  class Deploy < Lono::Cfn::Base
+  class Deploy < Base
     def run
       if stack_set_exists?(@stack)
         Update.new(@options).run

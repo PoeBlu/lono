@@ -20,8 +20,8 @@ class Lono::Sets
       end
       exit_unless_updatable!
 
-      # TODO: param preview    cfn.describe_stack_set => stack_set.parameters
-      # TODO: codediff preview cfn.describe_stack_set => stack_set.template_body
+      param_preview.run
+      codediff_preview.run
       # changeset preview not supported for stack sets
 
       sure?("Are you sure you want to update the #{@stack} stack set?")
@@ -40,5 +40,15 @@ class Lono::Sets
       puts message unless @options[:mute]
       resp[:operation_id]
     end
+
+    def codediff_preview
+      Lono::Sets::Preview::Codediff.new(@options.merge(mute_params: true, mute_using: true))
+    end
+    memoize :codediff_preview
+
+    def param_preview
+      Lono::Sets::Preview::Param.new(@options)
+    end
+    memoize :param_preview
   end
 end

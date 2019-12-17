@@ -1,13 +1,12 @@
-module Lono::Cfn::Preview
-  class Codediff < Lono::Cfn::Base
-    include DiffViewer
-    include Lono::AwsServices
+module Lono::Sets::Preview
+  class Codediff < Lono::Sets::Base
+    include Lono::Cfn::Preview::DiffViewer
 
     def run
-      puts "Code Diff Preview:".color(:green)
+      puts "Lono::Sets::Preview::Codediff#run"
 
-      unless stack_exists?(@stack)
-        puts "WARN: Cannot create a diff for the stack because the #{@stack} does not exists.".color(:yellow)
+      unless stack_set_exists?(@stack)
+        puts "WARN: Cannot create a diff for the stack set because the #{@stack} does not exists.".color(:yellow)
         return
       end
 
@@ -22,11 +21,8 @@ module Lono::Cfn::Preview
     end
 
     def download_existing_cfn_template
-      resp = cfn.get_template(
-        stack_name: @stack,
-        template_stage: "Original"
-      )
-      IO.write(existing_template_path, resp.template_body)
+      resp = cfn.describe_stack_set(stack_set_name: @stack)
+      IO.write(existing_template_path, resp.stack_set.template_body)
     end
 
     # for clarity
@@ -35,7 +31,7 @@ module Lono::Cfn::Preview
     end
 
     def existing_template_path
-      "/tmp/existing_stack.yml"
+      "/tmp/existing_stack_set.yml"
     end
   end
 end

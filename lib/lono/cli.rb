@@ -56,7 +56,7 @@ module Lono
     option :template, desc: "override convention and specify the template file to use"
     add_runtime_options! # Thor::Action options like --force
     def seed(blueprint)
-      Seed.new(blueprint, options).create
+      Seed.new(options.merge(blueprint: blueprint)).create
     end
 
     desc "app_files BLUEPRINT", "Builds app files", hide: true
