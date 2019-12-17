@@ -4,7 +4,7 @@ class Lono::Cfn
   class Base < Lono::AbstractBase
     extend Memoist
     include Lono::AwsServices
-    include Sure
+    include Lono::Utils::Sure
 
     def starting_message
       action = self.class.to_s.split('::').last

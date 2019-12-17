@@ -13,7 +13,7 @@ class Lono::Cfn
       if @options[:noop]
         puts "NOOP #{message}"
       else
-        are_you_sure?(@stack, :delete)
+        sure?("Are you sure you want to delete the #{@stack} stack?")
 
         if stack_exists?(@stack)
           cfn.delete_stack(stack_name: @stack)

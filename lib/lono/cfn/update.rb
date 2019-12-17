@@ -28,7 +28,7 @@ class Lono::Cfn
       param_preview.run if @options[:param_preview]
       codediff_preview.run if @options[:codediff_preview]
       changeset_preview.run if @options[:changeset_preview]
-      are_you_sure?(@stack, :update)
+      sure?("Are you sure you want to update the #{@stack} stack?")
 
       if @options[:change_set] # defaults to this
         message << " via change set: #{changeset_preview.change_set_name}"

@@ -1,7 +1,7 @@
 class Lono::Sets
   class Delete
     include Lono::AwsServices
-    include Lono::Cfn::Sure
+    include Lono::Utils::Sure
 
     def initialize(options={})
       @options = options
@@ -13,7 +13,7 @@ class Lono::Sets
       if @options[:noop]
         puts "NOOP #{message}"
       else
-        are_you_sure?(@stack, :delete, stack_set: true)
+        sure?("Are you sure you want to delete the #{@stack} stack set?", "Be sure that it emptied of stack instances first.")
 
         if stack_set_exists?(@stack)
           cfn.delete_stack_set(stack_set_name: @stack)

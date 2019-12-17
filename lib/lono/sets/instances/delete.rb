@@ -12,7 +12,7 @@ class Lono::Sets::Instances
     def run
       validate!
 
-      are_you_sure?(@stack, :delete, stack_set: true)
+      sure?("Are you sure you want to delete the #{@stack} instances?", desc)
 
       resp = cfn.delete_stack_instances(
         options = {
@@ -22,7 +22,19 @@ class Lono::Sets::Instances
           retain_stacks: false,
         }
       )
+      puts "resp:"
+      pp resp
       puts "Stack Instances deleting"
+    end
+
+    def desc
+      <<~EOL
+      These stack instances will be deleted:
+
+          accounts: #{accounts.join(',')}
+          regions: #{regions.join(',')}
+
+      EOL
     end
   end
 end

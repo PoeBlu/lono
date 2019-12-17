@@ -1,6 +1,7 @@
 class Lono::Sets::Instances
   class Sync < Base
     include Validate
+    include Lono::Utils::Sure
 
     def initialize(options={})
       super
@@ -8,9 +9,6 @@ class Lono::Sets::Instances
     end
 
     def run
-      # TODO: handle parameters :accounts :regions
-      # TODO: compute existing instance and run update or create
-
       validate!
 
       existing = stack_instances.map do |summary|
@@ -18,19 +16,46 @@ class Lono::Sets::Instances
       end
 
       creates = requested - existing
-      updates = requested - creates
       deletes = existing - requested
 
-      puts "creates: #{creates}"
-      puts "updates: #{updates}"
-      puts "deletes: #{deletes}"
+      if creates.empty? and deletes.empty?
+        puts <<~EOL
+          Nothing to be synced in terms of creating and deleting stack instances.  If you want to update the entire
+          stack set instead, use the `lono sets deploy` command.
+        EOL
+        return
+      end
+      sure?("Are you sure you want to sync stack instances?", desc(creates: creates, deletes: deletes))
 
       execute(:create_stack_instances, creates)
-      # execute(:update_stack_instances, updates)
       execute(:delete_stack_instances, deletes) if @options[:delete]
     end
 
   private
+
+    # data:
+    #    {creates: creates, deletes: deletes}
+    # where creates and deletes are instances_data structures:
+    #    [["112233445566", "us-west-1"], ["112233445566", "us-west-1"]]
+    def desc(data={})
+      desc = "lono will run:\n"
+      verbs = [:creates, :deletes]
+      verbs.each do |verb|
+        unless data[verb].empty?
+          info = {
+            accounts: accounts_list(data[verb]).join(','),
+            regions: regions_list(data[verb]).join(','),
+          }
+          message = <<~EOL
+            #{verb.to_s.singularize}_stack_instances for:
+              accounts: #{info[:accounts]}
+              regions: #{info[:regions]}
+          EOL
+          desc << message
+        end
+      end
+      desc
+    end
 
     # meth:
     #    create_stack_set
@@ -54,13 +79,12 @@ class Lono::Sets::Instances
         regions: regions,
       }
       options[:retain_stacks] = false if meth == :delete_stack_instances
-      puts "=> Running #{meth} on:"
-      puts "accounts: #{accounts.join(',')}"
-      puts "regions: #{regions.join(',')}"
-      pp options # TODO: delete
-      resp = cfn.send(meth, options)
-      puts "resp:" # TODO: delete
-      pp resp
+      puts <<~EOL
+        => Running #{meth} on:"
+          accounts: #{accounts.join(',')}"
+          regions: #{regions.join(',')}"
+      EOL
+      cfn.send(meth, options) # resp has resp[:operation_id]
 
       o = @options.merge(filter: instances_data)
       o[:start_on_outdated] = true if meth != :delete_stack_instances

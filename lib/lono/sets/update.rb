@@ -24,7 +24,7 @@ class Lono::Sets
       # TODO: codediff preview cfn.describe_stack_set => stack_set.template_body
       # changeset preview not supported for stack sets
 
-      are_you_sure?(@stack, :update)
+      sure?("Are you sure you want to update the #{@stack} stack set?")
 
       parameters = generate_all
       options = {
