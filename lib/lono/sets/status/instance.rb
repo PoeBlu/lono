@@ -8,7 +8,16 @@ class Lono::Sets::Status
       @output = "" # for say method and specs
     end
 
-    def wait
+    def wait(to="completed")
+      case to
+      when "completed"
+        wait_until_completed
+      when "deleted"
+        wait_until_deleted
+      end
+    end
+
+    def wait_until_completed
       # resp.stack_instance.status : one of CURRENT, OUTDATED, INOPERABLE
       status = nil
       until completed?(status)
@@ -21,7 +30,32 @@ class Lono::Sets::Status
         show_instance(stack_instance)
         @shown << stack_instance
         status = resp.stack_instance.status
-        sleep 2 unless completed?(status)
+        unless completed?(status)
+          # puts "Status::Instance wait sleep 2" # TODO remove
+          sleep 2
+        end
+      end
+    end
+
+    def wait_until_deleted
+      # resp.stack_instance.status : one of CURRENT, OUTDATED, INOPERABLE
+      while true
+        begin
+          resp = cfn.describe_stack_instance(
+            stack_instance_account: @stack_instance.account,
+            stack_instance_region: @stack_instance.region,
+            stack_set_name: @stack_instance.stack_set_id,
+          )
+        rescue Aws::CloudFormation::Errors::StackInstanceNotFoundException
+          say status_line(@stack_instance.account, @stack_instance.region, "DELETED")
+          break
+        end
+        stack_instance = resp.stack_instance
+        show_instance(stack_instance)
+        @shown << stack_instance
+
+        # puts "Status::Instance wait_until_deleted sleep 2" # TODO remove
+        sleep 2
       end
     end
 
@@ -37,11 +71,15 @@ class Lono::Sets::Status
       end
       return if already_shown
 
-      say [
+      say status_line(stack_instance.account, stack_instance.region, stack_instance.status)
+    end
+
+    def status_line(account, region, status)
+      [
         "Stack Instance:",
-        "account".color(:purple), stack_instance.account,
-        "region".color(:purple), stack_instance.region,
-        "status".color(:purple), stack_instance.status,
+        "account".color(:purple), account,
+        "region".color(:purple), region,
+        "status".color(:purple), status,
       ].join(" ")
     end
 
@@ -49,6 +87,7 @@ class Lono::Sets::Status
       ENV["LONO_TEST"] ? @output << "#{text}\n" : puts(text)
     end
 
+    # status: one of CURRENT, OUTDATED, INOPERABLE
     def completed?(status)
       completed_statuses = %w[CURRENT INOPERABLE]
       completed_statuses.include?(status)

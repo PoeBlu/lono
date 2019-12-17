@@ -7,12 +7,12 @@ class Lono::Sets::Status
       @stack = options[:stack]
     end
 
-    def wait
+    def wait(to="completed")
       puts "Stack Instance statuses..."
       wait_until_outdated if @options[:start_on_outdated]
 
       with_instances do |instance|
-        Thread.new { instance.wait }
+        Thread.new { instance.wait(to) }
       end.map(&:join)
     end
 
@@ -34,6 +34,7 @@ class Lono::Sets::Status
       outdated = false
       until outdated
         outdated = stack_instances.detect { |stack_instance| stack_instance.status == "OUTDATED" }
+        # puts "wait_until_outdated sleep 2.5" # TODO remove
         sleep 2.5
       end
     end

@@ -20,8 +20,8 @@ class Lono::Sets::Instances
 
       if creates.empty? and deletes.empty?
         puts <<~EOL
-          Nothing to be synced in terms of creating and deleting stack instances.  If you want to update the entire
-          stack set instead, use the `lono sets deploy` command.
+          Nothing to be synced in terms of creating and deleting stack instances.  If you want to update the
+          stack set and update all stack instances instead, use the `lono sets deploy` command.
         EOL
         return
       end
@@ -80,16 +80,20 @@ class Lono::Sets::Instances
       }
       options[:retain_stacks] = false if meth == :delete_stack_instances
       puts <<~EOL
-        => Running #{meth} on:"
-          accounts: #{accounts.join(',')}"
-          regions: #{regions.join(',')}"
+        => Running #{meth} on:
+          accounts: #{accounts.join(',')}
+          regions: #{regions.join(',')}
       EOL
       cfn.send(meth, options) # resp has resp[:operation_id]
 
-      o = @options.merge(filter: instances_data)
-      o[:start_on_outdated] = true if meth != :delete_stack_instances
+      # Status tailing
+      o = @options.merge(
+        filter: instances_data,
+        start_on_outdated: meth != :delete_stack_instances,
+      )
       status = Status.new(o)
-      status.run unless @options[:noop] # returns success: true or false
+      final_status = meth == :delete_stack_instances ? "deleted" : "completed"
+      status.run(to: final_status) unless @options[:noop] # returns success: true or false
     end
 
     def accounts_list(instances_data)
@@ -99,20 +103,6 @@ class Lono::Sets::Instances
     def regions_list(instances_data)
       instances_data.map { |a| a[1] }.sort.uniq
     end
-
-    # Simple structure to help with subtracting logic
-    # [["112233445566", "us-west-1"], ["112233445566", "us-west-1"]]
-    def requested
-      requested = []
-      accounts.each do |a|
-        regions.each do |r|
-          item = [a,r]
-          requested << item
-        end
-      end
-      requested.sort.uniq
-    end
-    memoize :requested
 
     # Override accounts and regions
     def accounts

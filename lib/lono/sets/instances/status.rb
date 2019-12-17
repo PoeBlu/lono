@@ -7,9 +7,9 @@ class Lono::Sets::Instances
       @stack = options[:stack]
     end
 
-    def run
+    def run(to: "completed")
       instances = Lono::Sets::Status::Instances.new(@options)
-      instances.wait
+      instances.wait(to)
     end
   end
 end

@@ -1,7 +1,7 @@
 class Lono::Sets::Instances
   class Delete < Base
     include Lono::AwsServices
-    include Lono::Cfn::Sure
+    include Lono::Utils::Sure
     include Validate
 
     def initialize(options={})
@@ -14,7 +14,10 @@ class Lono::Sets::Instances
 
       sure?("Are you sure you want to delete the #{@stack} instances?", desc)
 
-      resp = cfn.delete_stack_instances(
+      # delete_stack_instances resp has operation_id
+      # Could also use that to poll for status with the list_stack_set_operation_results
+      # api. Currently, Instance::Status class not using this info. If we need will add the logic.
+      cfn.delete_stack_instances(
         options = {
           stack_set_name: @stack,
           accounts: accounts,
@@ -22,9 +25,13 @@ class Lono::Sets::Instances
           retain_stacks: false,
         }
       )
-      puts "resp:"
-      pp resp
-      puts "Stack Instances deleting"
+
+      o = @options.merge(
+        filter: requested,
+        start_on_outdated: false,
+      )
+      status = Status.new(o)
+      status.run(to: "deleted") unless @options[:noop] # returns success: true or false
     end
 
     def desc
