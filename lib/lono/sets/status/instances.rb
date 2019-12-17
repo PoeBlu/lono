@@ -34,8 +34,7 @@ class Lono::Sets::Status
       outdated = false
       until outdated
         outdated = stack_instances.detect { |stack_instance| stack_instance.status == "OUTDATED" }
-        # puts "wait_until_outdated sleep 2.5" # TODO remove
-        sleep 2.5
+        sleep 5
       end
     end
 

@@ -27,6 +27,10 @@ class Lono::Sets::Instances
       end
       sure?("Are you sure you want to sync stack instances?", desc(creates: creates, deletes: deletes))
 
+      # Note: Not calling update_stack_instances because after deleting stacks it instances in in a weird state
+      # where an update_stack_instances fails. Can reproduce this by deleting stacks and then trying an update_stack_instances
+      # with the AWS CLI. In theory, we never really should have to call update_stack_instances anyway because
+      # updating the stack set at the parent level kicks off an update_stack_instances automatically.
       execute(:create_stack_instances, creates)
       execute(:delete_stack_instances, deletes) if @options[:delete]
     end

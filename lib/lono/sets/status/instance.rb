@@ -31,8 +31,7 @@ class Lono::Sets::Status
         @shown << stack_instance
         status = resp.stack_instance.status
         unless completed?(status)
-          # puts "Status::Instance wait sleep 2" # TODO remove
-          sleep 2
+          sleep 2.5
         end
       end
     end
@@ -54,8 +53,7 @@ class Lono::Sets::Status
         show_instance(stack_instance)
         @shown << stack_instance
 
-        # puts "Status::Instance wait_until_deleted sleep 2" # TODO remove
-        sleep 2
+        sleep 2.5
       end
     end
 

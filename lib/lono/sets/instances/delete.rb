@@ -17,7 +17,7 @@ class Lono::Sets::Instances
       # delete_stack_instances resp has operation_id
       # Could also use that to poll for status with the list_stack_set_operation_results
       # api. Currently, Instance::Status class not using this info. If we need will add the logic.
-      cfn.delete_stack_instances(
+      resp = cfn.delete_stack_instances(
         options = {
           stack_set_name: @stack,
           accounts: accounts,
@@ -25,6 +25,7 @@ class Lono::Sets::Instances
           retain_stacks: false,
         }
       )
+      pp resp
 
       o = @options.merge(
         filter: requested,

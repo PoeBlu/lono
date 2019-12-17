@@ -4,9 +4,7 @@ module Lono::Sets::Preview
   #      stack_parameters
   #
   class Param < Lono::Cfn::Preview::Param
-    # TODO: param preview    cfn.describe_stack_set => stack_set.parameters
     def run
-      puts "Lono::Sets::Preview::Param#run"
       return unless stack_set_exists?(@stack)
 
       generated_parameters # eager call generated_parameters so its output is above Parameter Diff Preview

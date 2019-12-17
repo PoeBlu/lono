@@ -7,13 +7,6 @@ class Lono::Sets
         return
       end
 
-      # TODO: implement
-      # deleted = delete_rollback_stack
-      # if deleted
-      #   create(parameters)
-      #   return
-      # end
-
       unless stack_set_exists?(@stack)
         puts "Cannot update a stack set because the #{@stack} does not exists."
         return

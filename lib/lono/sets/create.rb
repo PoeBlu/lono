@@ -7,8 +7,6 @@ class Lono::Sets
         return
       end
 
-      # delete_rollback_stack_set # TODO
-
       if stack_set_exists?(@stack)
         puts "Cannot create #{@stack.color(:green)} stack set because it already exists.".color(:red)
         return
