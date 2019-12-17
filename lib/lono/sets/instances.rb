@@ -15,9 +15,7 @@ class Lono::Sets
       option :variable, aliases: "v", desc: "override convention and specify the variable file to use"
     end
     update_options = Proc.new do
-      option :change_set, type: :boolean, default: true, desc: "Uses generated change set to update the stack.  If false, will perform normal update-stack."
       option :codediff_preview, type: :boolean, default: true, desc: "Show codediff changes preview."
-      option :changeset_preview, type: :boolean, default: true, desc: "Show ChangeSet changes preview."
       option :param_preview, type: :boolean, default: true, desc: "Show parameter diff preview."
       option :sure, type: :boolean, desc: "Skips are you sure prompt"
     end
@@ -26,16 +24,26 @@ class Lono::Sets
       option :accounts, type: :array, desc: "List of accounts to apply stack set to. IE: 112233445566 223344556677"
     end
 
-    desc "deploy STACK_SET_NAME", "Deploy CloudFormation stack set."
-    long_desc Lono::Help.text("sets/instances/deploy")
+    desc "delete STACK_SET_NAME", "Delete CloudFormation stack set instances."
+    long_desc Lono::Help.text("sets/instances/delete")
     base_options.call
     update_options.call
     sets_options.call
-    def deploy(stack)
-      Deploy.new(options.merge(stack: stack)).run
+    def delete(stack)
+      Delete.new(options.merge(stack: stack)).run
     end
 
-    desc "list STACK_SET_NAME", "Deploy CloudFormation stack set."
+    desc "sync STACK_SET_NAME", "Sync CloudFormation stack set instances."
+    long_desc Lono::Help.text("sets/instances/sync")
+    base_options.call
+    update_options.call
+    sets_options.call
+    option :delete, type: :boolean, default: true, desc: "Delete stack instances that are not provided"
+    def sync(stack)
+      Sync.new(options.merge(stack: stack)).run
+    end
+
+    desc "list STACK_SET_NAME", "List CloudFormation stack set instances."
     long_desc Lono::Help.text("sets/instances/list")
     base_options.call
     update_options.call

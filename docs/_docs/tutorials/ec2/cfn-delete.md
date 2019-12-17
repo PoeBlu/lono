@@ -6,7 +6,7 @@ We covered `lono cfn delete` earlier. For completeness, we'll cover it at the en
 
 ```sh
 $ lono cfn delete ec2
-Are you sure you want to want to delete the stack? (y/N)
+Are you sure you want to delete the stack? (y/N)
 y
 Deleted example stack.
 $

@@ -3,7 +3,7 @@ require 'yaml'
 
 class Lono::Upgrade
   class Upgrade4
-    def initialize(options)
+    def initialize(options={})
       @options = options
     end
 

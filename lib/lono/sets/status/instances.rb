@@ -2,13 +2,15 @@ class Lono::Sets::Status
   class Instances
     include Lono::AwsServices
 
-    def initialize(options)
+    def initialize(options={})
       @options = options
       @stack = options[:stack]
     end
 
     def wait
+      puts "Stack Instance statuses..."
       wait_until_outdated if @options[:start_on_outdated]
+
       with_instances do |instance|
         Thread.new { instance.wait }
       end.map(&:join)
@@ -37,9 +39,22 @@ class Lono::Sets::Status
     end
 
     # TODO: scope this to accounts and regions from cli or configs
+    def instances
+      stack_instances.map { |stack_instance| Instance.new(stack_instance) }
+    end
+
     def stack_instances
       resp = cfn.list_stack_instances(stack_set_name: @stack)
-      resp.summaries
+      summaries = resp.summaries
+      # filter is really only used internally. So it's fine to keep it as complex data structure since that's what we
+      # build it up as in Lono::Sets::Instances::Deploy
+      filter = @options[:filter] # [["112233445566", "us-west-1"],["112233445566", "us-west-2"]]
+      return summaries unless filter
+
+      summaries.reject do |s|
+        intersect = [[s.account, s.region]] & filter
+        intersect.empty?
+      end
     end
   end
 end

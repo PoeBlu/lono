@@ -14,7 +14,7 @@ Delete a CloudFormation stack.
 ## Examples
 
     $ lono cfn delete ec2
-    Are you sure you want to want to delete the stack? (y/N)
+    Are you sure you want to delete the stack? (y/N)
     y
     Deleted example stack.
     $

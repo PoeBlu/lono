@@ -73,10 +73,8 @@ module Lono
     end
 
     def requested_file(path)
-      # List of paths to consider from initial path provided
-      paths = @config == "params" ?
-                [path, "#{path}.txt", "#{path}.sh"] :
-                [path, "#{path}.rb"]
+      # List of paths to consider from initial path provided. Combine params and variables possible paths for simplicity.
+      paths = [path, "#{path}.txt", "#{path}.sh", "#{path}.rb"]
       paths.find { |p| File.file?(p) }
     end
     memoize :requested_file
