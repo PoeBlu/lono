@@ -28,5 +28,17 @@ class Lono::Sets
         quit(1)
       end
     end
+
+    def build_options
+      parameters = generate_all
+      options = {
+        stack_set_name: @stack,
+        parameters: parameters,
+        capabilities: capabilities, # ["CAPABILITY_IAM", "CAPABILITY_NAMED_IAM"]
+      }
+      options[:tags] = tags unless tags.empty?
+      set_template_url!(options)
+      options
+    end
   end
 end

@@ -3,8 +3,6 @@ module Lono::Sets::Preview
     include Lono::Cfn::Preview::DiffViewer
 
     def run
-      puts "Lono::Sets::Preview::Codediff#run"
-
       unless stack_set_exists?(@stack)
         puts "WARN: Cannot create a diff for the stack set because the #{@stack} does not exists.".color(:yellow)
         return

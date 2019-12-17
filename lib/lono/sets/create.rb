@@ -19,17 +19,12 @@ class Lono::Sets
         return
       end
 
-      parameters = generate_all
-      options = {
-        stack_set_name: @stack,
-        parameters: parameters,
-        capabilities: capabilities, # ["CAPABILITY_IAM", "CAPABILITY_NAMED_IAM"]
-      }
-      options[:tags] = tags unless tags.empty?
-      set_template_url!(options)
+      options = build_options
       show_options(options, "cfn.create_stack_set")
 
-      resp = cfn.create_stack_set(options)
+      sure?("Are you sure you want to create the #{@stack} stack set?")
+
+      cfn.create_stack_set(options) # resp.stack_set_id => String
       puts message unless @options[:mute]
       nil # resp has no operation_id
     end
