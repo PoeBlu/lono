@@ -120,7 +120,6 @@ p, [--param=PARAM]                                   # override convention and s
     [--tags=key:value]                               # Tags for the stack. IE: name:api-web owner:bob
     [--template=TEMPLATE]                            # override convention and specify the template file to use
 v, [--variable=VARIABLE]                             # override convention and specify the variable file to use
-    [--suffix=SUFFIX]                                # Suffix for stack name.
     [--change-set], [--no-change-set]                # Uses generated change set to update the stack.  If false, will perform normal update-stack.
                                                      # Default: true
     [--codediff-preview], [--no-codediff-preview]    # Show codediff changes preview.
@@ -132,7 +131,7 @@ v, [--variable=VARIABLE]                             # override convention and s
     [--sure], [--no-sure]                            # Skips are you sure prompt
     [--wait], [--no-wait]                            # Wait for stack operation to complete.
                                                      # Default: true
-    [--verbose], [--no-verbose]                      
-    [--noop], [--no-noop]                            
+    [--verbose], [--no-verbose]
+    [--noop], [--no-noop]
 ```
 

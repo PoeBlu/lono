@@ -15,7 +15,7 @@ class Lono::Cfn
       starting_message
       parameters = generate_all
       begin
-        save_stack(parameters) # defined in the sub class
+        save(parameters) # defined in the sub class
       rescue Aws::CloudFormation::Errors::InsufficientCapabilitiesException => e
         yes = rerun_with_iam?(e)
         retry if yes

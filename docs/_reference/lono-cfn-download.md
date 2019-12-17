@@ -32,8 +32,7 @@ p, [--param=PARAM]                  # override convention and specify the param 
     [--tags=key:value]              # Tags for the stack. IE: name:api-web owner:bob
     [--template=TEMPLATE]           # override convention and specify the template file to use
 v, [--variable=VARIABLE]            # override convention and specify the variable file to use
-    [--suffix=SUFFIX]               # Suffix for stack name.
-    [--verbose], [--no-verbose]     
-    [--noop], [--no-noop]           
+    [--verbose], [--no-verbose]
+    [--noop], [--no-noop]
 ```
 

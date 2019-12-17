@@ -32,19 +32,6 @@ Shortened commands:
 
 The stack name is not longer required because it is set as the current name.
 
-## Suffix Example
-
-Random suffixes can help streamlined your development workflow.
-
-    lono cfn current --suffix random
-    lono cfn create demo
-    lono cfn update demo-abc # generated random suffix was abc
-    lono cfn current --name demo-abc
-    lono cfn update
-    lono cfn update # update again
-
-In this way, you can create multiple stacks continuously and random suffixes will be appended to the stack name. Then set the current stack name to the one are focused on updating and developing.
-
 ## Remove all settings
 
 To remove all current settings.

@@ -39,23 +39,6 @@ module Lono
       end
     end
 
-    # Precedence (highest to lowest)
-    #   1. LONO_SUFFIX
-    #   2. .current/lono
-    #   3. config/settings.yml
-    def suffix
-      suffix = ENV['LONO_SUFFIX'] # highest precedence
-      suffix ||= Cfn::Current.suffix
-      unless suffix
-        settings = Setting.new.data
-        suffix ||= settings["stack_name_suffix"] # lowest precedence
-      end
-
-      return if suffix&.empty?
-      suffix
-    end
-    memoize :suffix
-
     # Do not use the Setting#data to load the profile because it can cause an
     # infinite loop then if we decide to use Lono.env from within settings class.
     def settings

@@ -7,7 +7,6 @@ base:
   # extract_scripts:
   #   to: "/opt"
   #   as: "ec2-user"
-  # stack_name_suffix: random # tack on a 3 char random string at the end of the stack name for lono cfn create
 
 development:
   # When you have AWS_PROFILE set to one of these values, lono will switch to the desired

@@ -35,7 +35,7 @@ module Lono::Cfn::Preview
       set_template_url!(options)
       show_options(options, "cfn.create_change_set")
       begin
-        # Tricky for preview need to set capabilities so that it gets updated. For Base#run save_stack within the begin block already.
+        # Tricky for preview need to set capabilities so that it gets updated. For Base#run save within the begin block already.
         options[:capabilities] = capabilities # ["CAPABILITY_IAM", "CAPABILITY_NAMED_IAM"]
         cfn.create_change_set(options)
       rescue Aws::CloudFormation::Errors::InsufficientCapabilitiesException => e

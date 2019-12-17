@@ -21,23 +21,12 @@ Set current values like stack name and suffix.
     lono cfn current --name demo
     lono cfn update
 
-## Suffix Example
-
-    lono cfn current --suffix random
-    lono cfn create demo
-    lono cfn update demo-abc # generated random suffix was abc
-    lono cfn current --name demo-abc
-    lono cfn update
-    lono cfn update # update again
-
-
 ## Options
 
 ```
 [--rm], [--no-rm]            # Remove all current settings. Removes `.lono/current`
 [--name=NAME]                # Current stack name.
-[--suffix=SUFFIX]            # Suffix for stack name.
-[--verbose], [--no-verbose]  
-[--noop], [--no-noop]        
+[--verbose], [--no-verbose]
+[--noop], [--no-noop]
 ```
 
