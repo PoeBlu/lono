@@ -22,9 +22,9 @@ class Lono::Sets
 
       sure?("Are you sure you want to create the #{@stack} stack set?")
 
-      cfn.create_stack_set(options) # resp.stack_set_id => String
+      cfn.create_stack_set(options) # resp.stack_set_id => String. There is no resp.operation_id
       puts message unless @options[:mute]
-      nil # resp has no operation_id
+      true # There is no resp.operation_id
     end
   end
 end

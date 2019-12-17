@@ -23,7 +23,6 @@ module Lono::Sets::Preview
     def stack_parameters
       stack_set_parameters
     end
-    memoize :stack_parameters
 
     def stack_set_parameters
       resp = cfn.describe_stack_set(stack_set_name: @stack)

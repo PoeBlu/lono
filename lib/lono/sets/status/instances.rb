@@ -38,7 +38,6 @@ class Lono::Sets::Status
       end
     end
 
-    # TODO: scope this to accounts and regions from cli or configs
     def instances
       stack_instances.map { |stack_instance| Instance.new(stack_instance) }
     end

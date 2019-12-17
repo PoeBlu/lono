@@ -23,8 +23,34 @@ class Lono::Sets
       sure?("Are you sure you want to update the #{@stack} stack set?")
 
       resp = cfn.update_stack_set(options)
+      operation_id = resp[:operation_id]
       puts message unless @options[:mute]
-      resp[:operation_id]
+
+      return true unless @options[:wait]
+      status = Status.new(@stack, operation_id)
+      success = status.wait unless @options[:noop]
+      unless success
+        summaries_errors(operation_id)
+        exit 1
+      end
+      success
+    end
+
+    def summaries_errors(operation_id)
+      puts "Stack Set Operation Summaries errors:"
+      resp = cfn.list_stack_set_operation_results(stack_set_name: @stack, operation_id: operation_id)
+      resp.summaries.each do |s|
+        data = {
+          account: s.account,
+          region: s.region,
+          status: s.status,
+          "status reason": s.status_reason,
+        }
+        message = data.inject("") do |text, (k,v)|
+          text = [k.to_s.color(:purple), v].join(" ") + "\n"
+        end
+        puts message
+      end
     end
 
     def codediff_preview
