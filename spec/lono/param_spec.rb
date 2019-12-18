@@ -10,4 +10,3 @@ describe Lono::Param do
     end
   end
 end
-

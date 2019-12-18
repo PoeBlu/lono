@@ -21,9 +21,10 @@ module Lono
     option :stack, desc: "stack name. defaults to blueprint name."
     def generate(blueprint=nil)
       Blueprint::Find.one_or_all(blueprint).each do |b|
-        Script::Build.new(b, options).run
-        Template::Generator.new(b, options).run
-        Param::Generator.new(b, options).generate
+        o = options.merge(blueprint: b)
+        Script::Build.new(o).run
+        Template::Generator.new(o).run
+        Param::Generator.new(o).generate
       end
     end
 

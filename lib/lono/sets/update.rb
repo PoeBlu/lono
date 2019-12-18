@@ -47,7 +47,7 @@ class Lono::Sets
           "status reason": s.status_reason,
         }
         message = data.inject("") do |text, (k,v)|
-          text = [k.to_s.color(:purple), v].join(" ") + "\n"
+          text += [k.to_s.color(:purple), v].join(" ") + " "
         end
         puts message
       end

@@ -1,9 +1,9 @@
 describe Lono::Template::Erb do
   context "tmp/lono_project" do
     it "#evaluate_templates" do
-      dsl = Lono::Template::Erb.new("erb-demo", quiet: true)
-      dsl.evaluate_templates
-      templates = dsl.instance_variable_get(:@templates)
+      erb = Lono::Template::Erb.new(blueprint: "erb-demo", quiet: true)
+      erb.evaluate_templates
+      templates = erb.instance_variable_get(:@templates)
       template_names = templates.map { |h| h[:name] }
       expect(template_names).to include("erb-demo")
     end
@@ -11,8 +11,8 @@ describe Lono::Template::Erb do
 
   context "lono generate" do
     before(:each) do
-      dsl = Lono::Template::Erb.new("erb-demo", quiet: true)
-      dsl.run
+      erb = Lono::Template::Erb.new(blueprint: "erb-demo", quiet: true)
+      erb.run
     end
 
     it "should generate cloudformation template" do
@@ -39,8 +39,8 @@ describe Lono::Template::Erb do
   end
 
   context "yaml parse error" do
-    let(:dsl) do
-      Lono::Template::Erb.new("erb-demo", quiet: true)
+    let(:erb) do
+      Lono::Template::Erb.new(blueprint: "erb-demo", quiet: true)
     end
 
     it "show exact line of error code when yaml is invalid" do
@@ -49,7 +49,7 @@ test: 1
 foo
   test
 EOL
-      out = dsl.validate_yaml("tmp/bad.yml")
+      out = erb.validate_yaml("tmp/bad.yml")
       expect(out).to include("2 foo")
     end
 

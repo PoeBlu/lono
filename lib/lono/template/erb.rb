@@ -1,6 +1,7 @@
 class Lono::Template
   class Erb < Base
     include Evaluate
+    include Util
 
     def initialize(options={})
       super
