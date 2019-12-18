@@ -1,7 +1,7 @@
 class Lono::Cfn
   class Cancel
     include Lono::AwsServices
-    include Sure
+    include Lono::Utils::Sure
 
     def initialize(options={})
       @options = options
@@ -9,6 +9,11 @@ class Lono::Cfn
     end
 
     def run
+      if @options[:noop]
+        puts "NOOP Canceling #{@stack} stack"
+        return
+      end
+
       stack = find_stack(@stack)
       unless stack
         puts "The '#{@stack}' stack does not exist. Unable to cancel"

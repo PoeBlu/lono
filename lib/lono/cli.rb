@@ -39,7 +39,7 @@ module Lono
     desc "summary BLUEPRINT TEMPLATE", "Prints summary of CloudFormation templates."
     long_desc Help.text("summary")
     def summary(blueprint=nil, template=nil)
-      Lono::Inspector::Summary.new(blueprint, template, options).run
+      Lono::Inspector::Summary.new(options.merge(blueprint: blueprint, template: template)).run
     end
 
     desc "xgraph STACK", "Graphs dependencies tree of CloudFormation template resources."
@@ -48,7 +48,7 @@ module Lono
     option :noop, type: :boolean, desc: "noop mode"
     def xgraph(blueprint, template=nil)
       template ||= blueprint
-      Lono::Inspector::Graph.new(blueprint, template, options).run
+      Lono::Inspector::Graph.new(options.merge(blueprint: blueprint, template: template)).run
     end
 
     desc "seed BLUEPRINT", "Generates starter configs for a blueprint."

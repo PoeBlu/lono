@@ -1,6 +1,6 @@
 describe Lono::Cfn::Preview::Param do
   let(:preview) do
-    Lono::Cfn::Preview::Param.new("ec2")
+    Lono::Cfn::Preview::Param.new(blueprint: "ec2")
   end
 
   let(:optional_parameters) do
@@ -22,9 +22,9 @@ describe Lono::Cfn::Preview::Param do
   end
 
   context "normalize" do
-    it "generated_params" do
+    it "generated_parameters" do
       allow(preview).to receive(:generate_all).and_return(generate_all)
-      expect(preview.generated_params).to eq(
+      expect(preview.generated_parameters).to eq(
         {"Dog"=>"whatever", "Cat"=>"456"}
       )
     end
