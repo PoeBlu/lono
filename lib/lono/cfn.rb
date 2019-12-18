@@ -1,35 +1,13 @@
 module Lono
   class Cfn < Command
+    options = Lono::Cfn::Options.new(self)
+
     class_option :verbose, type: :boolean
     class_option :noop, type: :boolean
 
-    base_options = Proc.new do
-      # common to create, update and deploy
-      option :config, aliases: "c", desc: "override convention and specify both the param and variable file to use"
-      option :blueprint, desc: "override convention and specify the template file to use"
-      option :capabilities, type: :array, desc: "iam capabilities. Ex: CAPABILITY_IAM, CAPABILITY_NAMED_IAM"
-      option :iam, type: :boolean, desc: "Shortcut for common IAM capabilities: CAPABILITY_IAM, CAPABILITY_NAMED_IAM"
-      option :lono, type: :boolean, desc: "invoke lono to generate CloudFormation templates", default: true
-      option :param, aliases: "p", desc: "override convention and specify the param file to use"
-      option :rollback, type: :boolean, desc: "rollback", default: true
-      option :tags, type: :hash, desc: "Tags for the stack. IE: name:api-web owner:bob"
-      option :template, desc: "override convention and specify the template file to use"
-      option :variable, aliases: "v", desc: "override convention and specify the variable file to use"
-    end
-    wait_option = Proc.new do
-      option :wait, type: :boolean, desc: "Wait for stack operation to complete.", default: true
-    end
-    update_options = Proc.new do
-      option :change_set, type: :boolean, default: true, desc: "Uses generated change set to update the stack.  If false, will perform normal update-stack."
-      option :codediff_preview, type: :boolean, default: true, desc: "Show codediff changes preview."
-      option :changeset_preview, type: :boolean, default: true, desc: "Show ChangeSet changes preview."
-      option :param_preview, type: :boolean, default: true, desc: "Show parameter diff preview."
-      option :sure, type: :boolean, desc: "Skips are you sure prompt"
-    end
-
     desc "create STACK", "Create a CloudFormation stack using the generated template.", hide: true
-    base_options.call
-    wait_option.call
+    options.base
+    options.wait
     long_desc Lono::Help.text("cfn/create")
     def create(stack)
       Create.new(options.merge(stack: stack)).run
@@ -37,34 +15,32 @@ module Lono
 
     desc "update STACK", "Update a CloudFormation stack using the generated template.", hide: true
     long_desc Lono::Help.text("cfn/update")
-    base_options.call
-    update_options.call
-    wait_option.call
+    options.base
+    options.update
+    options.wait
     def update(stack)
       Update.new(options.merge(stack: stack)).run
     end
 
     desc "deploy STACK", "Create or update a CloudFormation stack using the generated template."
     long_desc Lono::Help.text("cfn/deploy")
-    base_options.call
-    update_options.call
-    wait_option.call
+    options.base
+    options.update
+    options.wait
     def deploy(stack)
       Deploy.new(options.merge(stack: stack)).run
     end
 
     desc "delete STACK", "Delete CloudFormation stack."
     long_desc Lono::Help.text("cfn/delete")
-    option :sure, type: :boolean, desc: "Skips are you sure prompt"
-    wait_option.call
+    options.wait
     def delete(stack)
       Delete.new(options.merge(stack: stack)).run
     end
 
     desc "cancel STACK", "Cancel a CloudFormation stack."
     long_desc Lono::Help.text("cfn/cancel")
-    option :sure, type: :boolean, desc: "Skips are you sure prompt"
-    wait_option.call
+    options.wait
     def cancel(stack)
       Cancel.new(options.merge(stack: stack)).run
     end
@@ -75,7 +51,7 @@ module Lono
     option :param_preview, type: :boolean, default: true, desc: "Show parameter diff preview."
     option :codediff_preview, type: :boolean, default: true, desc: "Show codediff changes preview."
     option :changeset_preview, type: :boolean, default: true, desc: "Show ChangeSet changes preview."
-    base_options.call
+    options.base
     def preview(stack)
       Preview::Param.new(options.merge(stack: stack)).run if options[:param_preview]
       Preview::Codediff.new(options.merge(stack: stack)).run if options[:codediff_preview]
@@ -85,7 +61,7 @@ module Lono
     desc "download STACK", "Download CloudFormation template from existing stack."
     long_desc Lono::Help.text("cfn/download")
     option :name, desc: "Name you want to save the template as. Default: existing stack name."
-    base_options.call
+    options.base
     def download(stack)
       Download.new(options.merge(stack: stack)).run
     end

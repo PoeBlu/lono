@@ -13,8 +13,8 @@ class Lono::Sets
       end
       exit_unless_updatable!
 
-      param_preview.run
-      codediff_preview.run
+      param_preview.run if @options[:param_preview]
+      codediff_preview.run if @options[:codediff_preview]
       # changeset preview not supported for stack sets
 
       options = build_options

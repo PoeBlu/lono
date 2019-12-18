@@ -5,20 +5,18 @@ module Lono
     def all
       return @@parameters if @@parameters
 
-      if @options[:lono]
-        ensure_s3_bucket_exist
+      ensure_s3_bucket_exist
 
-        build_scripts
-        generate_templates # generates with some placeholders for build_files IE: file://app/files/my.rb
-        build_files # builds app/files to output/BLUEPRINT/files
+      build_scripts
+      generate_templates # generates with some placeholders for build_files IE: file://app/files/my.rb
+      build_files # builds app/files to output/BLUEPRINT/files
 
-        post_process_templates
+      post_process_templates
 
-        unless @options[:noop]
-          upload_files
-          upload_scripts
-          upload_templates
-        end
+      unless @options[:noop]
+        upload_files
+        upload_scripts
+        upload_templates
       end
 
       @@parameters = param_generator.generate  # Writes the json file in CamelCase keys format
