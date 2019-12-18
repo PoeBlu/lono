@@ -1,6 +1,7 @@
 class Lono::Sets::Status
   class Instances
     include Lono::AwsServices
+    include Lono::Sets::TimeSpent
 
     def initialize(options={})
       @options = options
@@ -41,7 +42,7 @@ class Lono::Sets::Status
     end
 
     def wait_until_stack_set_operation_complete
-      status = nil
+      status, stack_set_operation = nil, nil
       until completed?(status)
         resp = cfn.describe_stack_set_operation(
           stack_set_name: @stack,
@@ -49,14 +50,13 @@ class Lono::Sets::Status
         )
         stack_set_operation = resp.stack_set_operation
         status = stack_set_operation.status
-        puts "DEBUG: wait_until_stack_set_operation_complete"
-        if completed?(status)
-          puts "DEBUG: STACK OPERATION COMPLETE"
-          # show_time_spent(stack_set_operation)
-        else
+        # puts "DEBUG: wait_until_stack_set_operation_complete"
+        unless completed?(status)
           sleep 5
         end
       end
+      show_time_spent(stack_set_operation)
+      puts "Stack set operation completed."
     end
 
     # describe_stack_set_operation stack_set_operation.status is

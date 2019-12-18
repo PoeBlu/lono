@@ -101,11 +101,13 @@ class Lono::Sets::Instances
           accounts: #{accounts.join(',')}
           regions: #{regions.join(',')}
       EOL
-      cfn.send(meth, options) # resp has resp[:operation_id]
+      resp = cfn.send(meth, options) # resp has resp[:operation_id]
+      operation_id = resp.operation_id
 
       # Status tailing
       o = @options.merge(
         filter: instances_data,
+        operation_id: operation_id,
         start_on_outdated: meth != :delete_stack_instances,
       )
       status = Status.new(o)

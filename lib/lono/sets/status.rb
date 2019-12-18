@@ -2,7 +2,7 @@ class Lono::Sets
   class Status
     extend Memoist
     include Lono::AwsServices
-    include Lono::Utils::PrettyTime
+    include TimeSpent
 
     attr_reader :operation_id
     def initialize(options={})
@@ -59,12 +59,6 @@ class Lono::Sets
         instances_status.run
       end
       @@instances_status_waiter_started = true
-    end
-
-    def show_time_spent(stack_set_operation)
-      seconds = stack_set_operation.end_timestamp - stack_set_operation.creation_timestamp
-      time_took = pretty_time(seconds).color(:green)
-      puts "Time took to complete stack set operation: #{time_took}"
     end
 
     def show(stack_set_operation)
