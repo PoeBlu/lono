@@ -18,6 +18,7 @@ class Lono::Sets
     long_desc Lono::Help.text("sets/instances/sync")
     options.call
     option :delete, type: :boolean, default: true, desc: "Delete stack instances that are not provided"
+    option :blueprint, desc: "override convention and specify the template file to use"
     def sync(stack)
       Sync.new(options.merge(stack: stack)).run
     end

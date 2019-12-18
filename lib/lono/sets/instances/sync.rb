@@ -51,15 +51,22 @@ class Lono::Sets::Instances
       desc = "lono will run:\n"
       verbs = [:creates, :deletes]
       verbs.each do |verb|
+        accounts = accounts_list(data[verb])
+        regions = regions_list(data[verb])
         unless data[verb].empty?
           info = {
-            accounts: accounts_list(data[verb]).join(','),
-            regions: regions_list(data[verb]).join(','),
+            accounts: accounts.join(','),
+            regions: regions.join(','),
           }
+          change_total = accounts.size * regions.size
+          singular_verb = verb.to_s.singularize
+          past_verb = verb.to_s.sub(/s$/,'d')
           message = <<~EOL
-            #{verb.to_s.singularize}_stack_instances for:
+            #{singular_verb}_stack_instances for:
               accounts: #{info[:accounts]}
               regions: #{info[:regions]}
+
+            Number of stack instances to be #{past_verb}: #{change_total}
           EOL
           desc << message
         end
@@ -143,8 +150,9 @@ class Lono::Sets::Instances
       items = []
       lines = IO.readlines(path)
       lines.map do |l|
-        item = l.strip
-        items << item unless item.empty?
+        l = l.strip
+        l = l.sub(/ #.*/, '') # trailing comment
+        items << l unless l.empty? || l.match(/^\s*#/) # dont include empty linnks or commented lines
       end
       items
     end

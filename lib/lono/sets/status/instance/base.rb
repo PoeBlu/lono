@@ -51,10 +51,6 @@ class Lono::Sets::Status::Instance
       @output = "" # for say method and specs
     end
 
-    def show
-      show_instance(@stack_instance)
-    end
-
     def show_instance(stack_instance)
       already_shown = @shown.detect do |o|
         o[:account] == stack_instance[:account] &&

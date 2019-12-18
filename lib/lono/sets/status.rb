@@ -4,6 +4,7 @@ class Lono::Sets
     include Lono::AwsServices
     include Lono::Utils::PrettyTime
 
+    attr_reader :operation_id
     def initialize(options={})
       @options = options
       @stack, @operation_id = options[:stack], options[:operation_id]

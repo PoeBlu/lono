@@ -12,5 +12,9 @@ class Lono::Sets::Status
         Deleted.new(@stack_instance).tail
       end
     end
+
+    def show
+      Show.new(@stack_instance).run
+    end
   end
 end

@@ -1,7 +1,7 @@
 class Lono::Cfn
   class Options
     def initialize(cli)
-      @cli = cli # Lono::Cfn or Lono::Sets only
+      @cli = cli # Lono::Cfn and Lono::Sets only
     end
 
     def base

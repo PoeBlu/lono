@@ -5,10 +5,10 @@ class Lono::Sets::Status
     def initialize(options={})
       @options = options
       @stack, @operation_id = options[:stack], options[:operation_id]
+      @operation_id ||= latest_operation_id
     end
 
     def wait(to="completed")
-      @operation_id ||= latest_operation_id
       puts "Stack Instance statuses..."
       wait_until_outdated if @options[:start_on_outdated]
 
