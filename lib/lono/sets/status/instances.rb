@@ -4,22 +4,34 @@ class Lono::Sets::Status
 
     def initialize(options={})
       @options = options
-      @stack = options[:stack]
+      @stack, @operation_id = options[:stack], options[:operation_id]
     end
 
     def wait(to="completed")
+      @operation_id ||= latest_operation_id
       puts "Stack Instance statuses..."
       wait_until_outdated if @options[:start_on_outdated]
 
+      # Dont join these threads. Wait on the operation results instead because it's easier to know by that when process is commpleted.
       with_instances do |instance|
         Thread.new { instance.wait(to) }
-      end.map(&:join)
+      end
+      wait_until_stack_set_operation_complete
+    end
+
+    def latest_operation_id
+      resp = cfn.list_stack_set_operations(
+        stack_set_name: @stack,
+        max_results: 1,
+      )
+      resp.summaries.first.operation_id
     end
 
     def show
       with_instances do |instance|
         Thread.new { instance.show }
-      end.map(&:join)
+      end
+      wait_until_stack_set_operation_complete
     end
 
     def with_instances
@@ -27,6 +39,32 @@ class Lono::Sets::Status
         instance = Instance.new(stack_instance)
         yield(instance)
       end
+    end
+
+    def wait_until_stack_set_operation_complete
+      status = nil
+      until completed?(status)
+        resp = cfn.describe_stack_set_operation(
+          stack_set_name: @stack,
+          operation_id: @operation_id,
+        )
+        stack_set_operation = resp.stack_set_operation
+        status = stack_set_operation.status
+        puts "DEBUG: wait_until_stack_set_operation_complete"
+        if completed?(status)
+          puts "DEBUG: STACK OPERATION COMPLETE"
+          # show_time_spent(stack_set_operation)
+        else
+          sleep 5
+        end
+      end
+    end
+
+    # describe_stack_set_operation stack_set_operation.status is
+    # one of RUNNING, SUCCEEDED, FAILED, STOPPING, STOPPED
+    def completed?(status)
+      completed_statuses = %w[SUCCEEDED FAILED STOPPED]
+      completed_statuses.include?(status)
     end
 
     # If we dont wait until OUTDATED, during a `lono sets deploy` it'll immediately think that the instance statuses are done

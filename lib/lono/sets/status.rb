@@ -4,14 +4,15 @@ class Lono::Sets
     include Lono::AwsServices
     include Lono::Utils::PrettyTime
 
-    def initialize(stack, operation_id, options={})
-      @stack, @operation_id, @options = stack, operation_id, options
+    def initialize(options={})
+      @options = options
+      @stack, @operation_id = options[:stack], options[:operation_id]
       @shown = []
       @output = "" # for say method and specs
     end
 
     def run
-      @operation_id = latest_operation_id unless @operation_id
+      @operation_id ||= latest_operation_id
       wait
     end
 
@@ -21,15 +22,6 @@ class Lono::Sets
         max_results: 1,
       )
       resp.summaries.first.operation_id
-    end
-
-    def stack_set_status
-      @operation_id = latest_operation_id unless @operation_id
-      resp = cfn.describe_stack_set_operation(
-        stack_set_name: @stack,
-        operation_id: @operation_id,
-      )
-      resp.stack_set_operation.status
     end
 
     def wait
@@ -61,7 +53,7 @@ class Lono::Sets
       end
 
       Thread.new do
-        o = @options.merge(stack: @stack, start_on_outdated: true)
+        o = @options.merge(start_on_outdated: true)
         instances_status = Lono::Sets::Instances::Status.new(o)
         instances_status.run
       end
@@ -87,10 +79,22 @@ class Lono::Sets
       ENV["LONO_TEST"] ? @output << "#{text}\n" : puts(text)
     end
 
+    # describe_stack_set_operation stack_set_operation.status is
     # one of RUNNING, SUCCEEDED, FAILED, STOPPING, STOPPED
     def completed?(status)
       completed_statuses = %w[SUCCEEDED FAILED STOPPED]
       completed_statuses.include?(status)
+    end
+
+    def stack_set_status
+      @operation_id = latest_operation_id unless @operation_id
+      resp = cfn.describe_stack_set_operation(
+        stack_set_name: @stack,
+        operation_id: @operation_id,
+      )
+      # describe_stack_set_operation stack_set_operation.status is
+      # status one of RUNNING, SUCCEEDED, FAILED, STOPPING, STOPPED
+      resp.stack_set_operation.status
     end
   end
 end

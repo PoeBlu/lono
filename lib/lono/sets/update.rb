@@ -27,8 +27,8 @@ class Lono::Sets
       puts message unless @options[:mute]
 
       return true unless @options[:wait]
-      status = Status.new(@stack, operation_id)
-      success = status.wait unless @options[:noop]
+      status = Status.new(@options.merge(operation_id: operation_id))
+      success = status.run unless @options[:noop]
       unless success
         summaries_errors(operation_id)
         exit 1

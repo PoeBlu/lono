@@ -8,7 +8,7 @@ class Lono::Sets
       return true if ENV['LONO_ENV']
       return false if @options[:noop]
 
-      status = Status.new(@stack, nil) # using status for completed?
+      status = Status.new(@options) # using status for completed?
       completed = status.completed?(status.stack_set_status)
       unless completed
         puts "Cannot update stack set because #{@stack} is not in an updatable state.  Stack set status: #{status.stack_set_status}".color(:red)

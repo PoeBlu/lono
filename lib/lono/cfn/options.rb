@@ -12,7 +12,8 @@ class Lono::Cfn
         end
 
         # common to Lono::Cfn and Lono::Sets
-        # common to create, update and deploy
+        # Lono::Cfn create, update and deploy
+        # Lono::Sets deploy
         option :blueprint, desc: "override convention and specify the template file to use"
         option :capabilities, type: :array, desc: "iam capabilities. Ex: CAPABILITY_IAM, CAPABILITY_NAMED_IAM"
         option :config, aliases: "c", desc: "override convention and specify both the param and variable file to use"
