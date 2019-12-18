@@ -12,10 +12,9 @@ class Lono::Sets::Status
       puts "Stack Instance statuses..."
       wait_until_outdated if @options[:start_on_outdated]
 
-      # Dont join these threads. Wait on the operation results instead because it's easier to know by that when process is commpleted.
       with_instances do |instance|
-        Thread.new { instance.wait(to) }
-      end
+        Thread.new { instance.tail(to) }
+      end.map(&:join)
       wait_until_stack_set_operation_complete
     end
 
@@ -30,7 +29,7 @@ class Lono::Sets::Status
     def show
       with_instances do |instance|
         Thread.new { instance.show }
-      end
+      end.map(&:join)
       wait_until_stack_set_operation_complete
     end
 
