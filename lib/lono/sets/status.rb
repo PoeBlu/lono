@@ -2,6 +2,7 @@ class Lono::Sets
   class Status
     extend Memoist
     include Lono::AwsServices
+    include Summarize
     include TimeSpent
 
     attr_reader :operation_id
@@ -51,15 +52,16 @@ class Lono::Sets
 
     def show
       display_one
-      o = @options.merge(show_time_spent: true)
+      o = @options.merge(show_time_spent: false)
       instances_status = Lono::Sets::Instances::Status.new(o)
       instances_status.run
+      summarize(@operation_id)
     end
 
     @@instances_status_waiter_started = false
     def start_instances_status_waiter
       return if @@instances_status_waiter_started
-      if Lono::Sets::Status::Instances.new(@options.merge(stack: @stack)).instances.size <= 0
+      if Lono::Sets::Status::Instances.new(@options.merge(stack: @stack, show_time_progress: true)).instances.size <= 0
         @@instances_status_waiter_started = true
         return
       end

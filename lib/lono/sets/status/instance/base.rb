@@ -45,8 +45,8 @@ class Lono::Sets::Status::Instance
   class Base
     include Lono::AwsServices
 
-    def initialize(stack_instance)
-      @stack_instance = stack_instance
+    def initialize(stack_instance, show_time_progress=false)
+      @stack_instance, @show_time_progress = stack_instance, show_time_progress
       @shown = []
       @output = "" # for say method and specs
     end
@@ -63,12 +63,14 @@ class Lono::Sets::Status::Instance
     end
 
     def status_line(account, region, status)
+      time = Time.now.strftime("%F %r") if @show_time_progress
       [
+        time,
         "Stack Instance:",
         "account".color(:purple), account,
         "region".color(:purple), region,
         "status".color(:purple), status,
-      ].join(" ")
+      ].compact.join(" ")
     end
 
     def say(text)

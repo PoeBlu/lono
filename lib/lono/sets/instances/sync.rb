@@ -1,10 +1,11 @@
 class Lono::Sets::Instances
   class Sync < Base
+    include Lono::Sets::Summarize
     include Lono::Utils::Sure
     include Validate
 
     def initialize(options={})
-      super
+      super # need conventions so config lookup will work
       @regions, @accounts = [], []
     end
 
@@ -26,19 +27,23 @@ class Lono::Sets::Instances
 
       if creates.empty? and deletes.empty?
         puts <<~EOL
-          Nothing to be synced in terms of creating and deleting stack instances.  If you want to update the
+          Nothing to be synced. IE: No stack instances need to be added or removed.  If you want to update the
           stack set and update all stack instances instead, use the `lono sets deploy` command.
         EOL
         return
       end
-      sure?("Are you sure you want to sync stack instances?", desc(creates: creates, deletes: deletes))
+      sure?("Are you sure you want to sync stack instances?", long_desc(creates: creates, deletes: deletes))
 
       # Note: Not calling update_stack_instances because after deleting stacks it instances in in a weird state
       # where an update_stack_instances fails. Can reproduce this by deleting stacks and then trying an update_stack_instances
       # with the AWS CLI. In theory, we never really should have to call update_stack_instances anyway because
       # updating the stack set at the parent level kicks off an update_stack_instances automatically.
-      execute(:create_stack_instances, creates)
-      execute(:delete_stack_instances, deletes) if @options[:delete]
+      operation_id = execute(:create_stack_instances, creates)
+      summarize(operation_id) if operation_id
+      if @options[:delete]
+        operation_id = execute(:delete_stack_instances, deletes)
+        summarize(operation_id) if operation_id
+      end
     end
 
   private
@@ -47,7 +52,7 @@ class Lono::Sets::Instances
     #    {creates: creates, deletes: deletes}
     # where creates and deletes are instances_data structures:
     #    [["112233445566", "us-west-1"], ["112233445566", "us-west-1"]]
-    def desc(data={})
+    def long_desc(data={})
       desc = "lono will run:\n"
       verbs = [:creates, :deletes]
       verbs.each do |verb|
@@ -87,7 +92,7 @@ class Lono::Sets::Instances
       regions = regions_list(instances_data)
       if accounts.empty? or regions.empty?
         # puts "Cannot have one empty. accounts: #{accounts.size} regions: #{regions.size}. No executing #{meth}." # uncomment to debug
-        return
+        return # no  operation_id
       end
 
       options = {
@@ -109,10 +114,12 @@ class Lono::Sets::Instances
         filter: instances_data,
         operation_id: operation_id,
         start_on_outdated: meth != :delete_stack_instances,
+        show_time_progress: true,
       )
       instances_status = Status.new(o)
       final_status = meth == :delete_stack_instances ? "deleted" : "completed"
       instances_status.run(to: final_status) unless @options[:noop] # returns success: true or false
+      operation_id
     end
 
     def accounts_list(instances_data)

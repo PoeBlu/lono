@@ -11,7 +11,7 @@ class Lono::Sets::Status
     end
 
     def wait(to="completed")
-      puts "Stack Instance statuses..."
+      puts "Stack Instance statuses... (takes a while)"
       wait_until_outdated if @options[:start_on_outdated]
 
       with_instances do |instance|
@@ -29,6 +29,15 @@ class Lono::Sets::Status
     end
 
     def show
+      if stack_instances.empty?
+        # Note: no access to @blueprint here
+        puts <<~EOL
+          There are 0 stack instances associated with the #{@stack} stack set.  Add files
+          Add accounts and regions configs use `lono sets instances sync` to add stack instances.
+        EOL
+        return
+      end
+
       with_instances do |instance|
         Thread.new { instance.show }
       end.map(&:join)
@@ -37,7 +46,7 @@ class Lono::Sets::Status
 
     def with_instances
       stack_instances.map do |stack_instance|
-        instance = Instance.new(stack_instance)
+        instance = Instance.new(stack_instance, @options[:show_time_progress])
         yield(instance)
       end
     end
@@ -79,7 +88,7 @@ class Lono::Sets::Status
     end
 
     def instances
-      stack_instances.map { |stack_instance| Instance.new(stack_instance) }
+      stack_instances.map { |stack_instance| Instance.new(stack_instance, @options[:show_time_progress]) }
     end
 
     def stack_instances
