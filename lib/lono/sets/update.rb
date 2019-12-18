@@ -8,7 +8,7 @@ class Lono::Sets
       end
 
       unless stack_set_exists?(@stack)
-        puts "Cannot update a stack set because the #{@stack} does not exists."
+        puts "ERROR: Cannot update a stack set because #{@stack} does not exists.".color(:red)
         return
       end
       exit_unless_updatable!

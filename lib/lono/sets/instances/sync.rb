@@ -1,7 +1,7 @@
 class Lono::Sets::Instances
   class Sync < Base
-    include Validate
     include Lono::Utils::Sure
+    include Validate
 
     def initialize(options={})
       super
@@ -9,6 +9,12 @@ class Lono::Sets::Instances
     end
 
     def run
+      unless stack_set_exists?(@stack)
+        puts "ERROR: Cannot update a stack set because #{@stack} does not exists.".color(:red)
+        return
+      end
+      exit_unless_updatable!
+
       validate!
 
       existing = stack_instances.map do |summary|
