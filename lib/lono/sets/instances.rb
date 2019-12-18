@@ -32,8 +32,8 @@ class Lono::Sets
     desc "status STACK_SET", "Show current status of stack instances."
     long_desc Lono::Help.text("sets/instances/status")
     def status(stack)
-      status = Status.new(options.merge(stack: stack))
-      success = status.run
+      instances_status = Status.new(options.merge(stack: stack))
+      success = instances_status.run
       exit 3 unless success
     end
   end

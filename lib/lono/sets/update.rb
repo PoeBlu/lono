@@ -31,7 +31,7 @@ class Lono::Sets
       return true if @options[:noop] || !@options[:wait]
 
       status = Status.new(@options.merge(operation_id: operation_id))
-      success = status.run
+      success = status.wait
       summarize(operation_id)
       puts "DEBUG: SETS UPDATE success #{success}"
       exit 1 unless success

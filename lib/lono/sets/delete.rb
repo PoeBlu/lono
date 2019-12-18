@@ -28,7 +28,7 @@ class Lono::Sets
       return true if @options[:noop] || !@options[:wait]
 
       status = Status.new(@options)
-      success = status.run
+      success = status.wait
       operation_id = status.operation_id # getting operation_id from status because cfn.delete_stack_set resp is an Empty structure
       summarize(operation_id)
       puts "DEBUG: SETS DELETE success #{success}"

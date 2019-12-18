@@ -30,8 +30,8 @@ class Lono::Sets::Instances
         filter: requested,
         start_on_outdated: false,
       )
-      status = Status.new(o)
-      status.run(to: "deleted") unless @options[:noop] # returns success: true or false
+      instances_status = Status.new(o)
+      instances_status.run(to: "deleted") unless @options[:noop] # returns success: true or false
     end
 
     def desc

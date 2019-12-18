@@ -110,9 +110,9 @@ class Lono::Sets::Instances
         operation_id: operation_id,
         start_on_outdated: meth != :delete_stack_instances,
       )
-      status = Status.new(o)
+      instances_status = Status.new(o)
       final_status = meth == :delete_stack_instances ? "deleted" : "completed"
-      status.run(to: final_status) unless @options[:noop] # returns success: true or false
+      instances_status.run(to: final_status) unless @options[:noop] # returns success: true or false
     end
 
     def accounts_list(instances_data)

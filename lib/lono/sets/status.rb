@@ -10,31 +10,14 @@ class Lono::Sets
       @stack, @operation_id = options[:stack], options[:operation_id]
       @shown = []
       @output = "" # for say method and specs
-    end
-
-    def run
       @operation_id ||= latest_operation_id
-      wait
-    end
-
-    def latest_operation_id
-      resp = cfn.list_stack_set_operations(
-        stack_set_name: @stack,
-        max_results: 1,
-      )
-      resp.summaries.first.operation_id
     end
 
     def wait
       status = nil
       until completed?(status)
-        resp = cfn.describe_stack_set_operation(
-          stack_set_name: @stack,
-          operation_id: @operation_id,
-        )
+        resp = display_one
         stack_set_operation = resp.stack_set_operation
-        show(stack_set_operation)
-        @shown << stack_set_operation
         status = stack_set_operation.status
         # always sleep delay even if completed to provide start_instances_status_waiter some extra time to complete
         sleep 5
@@ -45,6 +28,32 @@ class Lono::Sets
         end
       end
       status == "SUCCEEDED"
+    end
+
+    def display_one
+      resp = cfn.describe_stack_set_operation(
+        stack_set_name: @stack,
+        operation_id: @operation_id,
+      )
+      stack_set_operation = resp.stack_set_operation
+      show_stack_set_operation(stack_set_operation)
+      @shown << stack_set_operation
+      resp
+    end
+
+    def latest_operation_id
+      resp = cfn.list_stack_set_operations(
+        stack_set_name: @stack,
+        max_results: 1,
+      )
+      resp.summaries.first.operation_id
+    end
+
+    def show
+      display_one
+      o = @options.merge(show_time_spent: true)
+      instances_status = Lono::Sets::Instances::Status.new(o)
+      instances_status.run
     end
 
     @@instances_status_waiter_started = false
@@ -64,7 +73,7 @@ class Lono::Sets
       @@instances_status_waiter_started = true
     end
 
-    def show(stack_set_operation)
+    def show_stack_set_operation(stack_set_operation)
       already_shown = @shown.detect do |o|
         o[:status] == stack_set_operation[:status]
       end

@@ -15,7 +15,7 @@ module Lono
     long_desc Help.text("sets/status")
     def status(stack)
       status = Status.new(@options.merge(stack: stack, delay_for_threads: false))
-      success = status.run
+      success = status.show
       exit 3 unless success
     end
 
