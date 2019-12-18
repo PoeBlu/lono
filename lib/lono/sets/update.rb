@@ -1,5 +1,7 @@
 class Lono::Sets
   class Update < Base
+    include Summarize
+
     def save
       message = "Updating #{@stack} stack set"
       if @options[:noop]
@@ -26,31 +28,14 @@ class Lono::Sets
       operation_id = resp[:operation_id]
       puts message unless @options[:mute]
 
-      return true unless @options[:wait]
-      status = Status.new(@options.merge(operation_id: operation_id))
-      success = status.run unless @options[:noop]
-      unless success
-        summaries_errors(operation_id)
-        exit 1
-      end
-      success
-    end
+      return true if @options[:noop] || !@options[:wait]
 
-    def summaries_errors(operation_id)
-      puts "Stack Set Operation Summaries errors:"
-      resp = cfn.list_stack_set_operation_results(stack_set_name: @stack, operation_id: operation_id)
-      resp.summaries.each do |s|
-        data = {
-          account: s.account,
-          region: s.region,
-          status: s.status,
-          "status reason": s.status_reason,
-        }
-        message = data.inject("") do |text, (k,v)|
-          text += [k.to_s.color(:purple), v].join(" ") + " "
-        end
-        puts message
-      end
+      status = Status.new(@options.merge(operation_id: operation_id))
+      success = status.run
+      summarize(operation_id)
+      puts "DEBUG: SETS UPDATE success #{success}"
+      exit 1 unless success
+      success
     end
 
     def codediff_preview

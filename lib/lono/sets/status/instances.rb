@@ -6,6 +6,7 @@ class Lono::Sets::Status
     def initialize(options={})
       @options = options
       @stack, @operation_id = options[:stack], options[:operation_id]
+      @show_time_spent = options[:show_time_spent].nil? ? true : options[:show_time_spent]
       @operation_id ||= latest_operation_id
     end
 
@@ -55,8 +56,10 @@ class Lono::Sets::Status
           sleep 5
         end
       end
-      show_time_spent(stack_set_operation)
-      puts "Stack set operation completed."
+      if @show_time_spent # or else it double shows from `lono sets deploy`. Do want it to show for `lono sets instances sync` though
+        show_time_spent(stack_set_operation)
+        puts "Stack set operation completed."
+      end
     end
 
     # describe_stack_set_operation stack_set_operation.status is

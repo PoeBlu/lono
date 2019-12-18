@@ -36,13 +36,15 @@ class Lono::Sets
         show(stack_set_operation)
         @shown << stack_set_operation
         status = stack_set_operation.status
+        # always sleep delay even if completed to provide start_instances_status_waiter some extra time to complete
+        sleep 5
         if completed?(status)
           show_time_spent(stack_set_operation)
         else
           start_instances_status_waiter
-          sleep 5
         end
       end
+      status == "SUCCEEDED"
     end
 
     @@instances_status_waiter_started = false
@@ -54,7 +56,8 @@ class Lono::Sets
       end
 
       Thread.new do
-        o = @options.merge(start_on_outdated: true)
+        # show_time_spent because we already show it in this status class. Dont want it to show twice.
+        o = @options.merge(start_on_outdated: true, show_time_spent: false)
         instances_status = Lono::Sets::Instances::Status.new(o)
         instances_status.run
       end

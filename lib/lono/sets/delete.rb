@@ -1,6 +1,7 @@
 class Lono::Sets
   class Delete
     include Lono::AwsServices
+    include Lono::Sets::Summarize
     include Lono::Utils::Sure
 
     def initialize(options={})
@@ -24,15 +25,14 @@ class Lono::Sets
         end
       end
 
-      return true unless @options[:wait]
+      return true if @options[:noop] || !@options[:wait]
+
       status = Status.new(@options)
-      success = status.run unless @options[:noop]
+      success = status.run
       operation_id = status.operation_id # getting operation_id from status because cfn.delete_stack_set resp is an Empty structure
-      unless success
-        summaries_errors(operation_id)
-        exit 1
-      end
-      success
+      summarize(operation_id)
+      puts "DEBUG: SETS DELETE success #{success}"
+      exit 1 unless success
 
     rescue Aws::CloudFormation::Errors::StackSetNotEmptyException => e
       puts "ERROR: #{e.class}: #{e.message}".color(:red)

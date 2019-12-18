@@ -14,7 +14,7 @@ module Lono
     desc "status STACK_SET", "Show current status of stack set."
     long_desc Help.text("sets/status")
     def status(stack)
-      status = Status.new(stack, nil, @options)
+      status = Status.new(@options.merge(stack: stack, delay_for_threads: false))
       success = status.run
       exit 3 unless success
     end
