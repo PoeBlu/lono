@@ -1,7 +1,5 @@
 module Lono::Inspector
   class Base < Lono::AbstractBase
-    include Lono::Utils::Url
-
     delegate :required_parameters, :optional_parameters, :parameters, :data,
              to: :output_template
 

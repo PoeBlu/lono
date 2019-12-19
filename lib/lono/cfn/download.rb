@@ -2,14 +2,8 @@ require 'json'
 require 'open-uri'
 
 class Lono::Cfn
-  class Download
+  class Download < Lono::AbstractBase
     include Lono::AwsServices
-    include Lono::Utils::Url
-
-    def initialize(options={})
-      @options = options
-      @stack, @url = options[:stack], options[:url]
-    end
 
     def run
       puts "Downloading template to: #{download_path}"
@@ -25,8 +19,9 @@ class Lono::Cfn
     end
 
     def download_stack
-      if @url
-        open(@url).read # url
+      url = @options[:url]
+      if url
+        open(url).read # url
       else
         resp = cfn.get_template(
           stack_name: @stack,
@@ -45,7 +40,7 @@ class Lono::Cfn
     end
 
     def download_path
-      @url ? "#{Lono.config.output_path}/#{@blueprint}/templates/#{@blueprint}.yml" : "/tmp/#{name}.yml"
+      "#{Lono.config.output_path}/#{@blueprint}/templates/#{@blueprint}.yml"
     end
 
     def name

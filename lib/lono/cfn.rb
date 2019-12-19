@@ -62,6 +62,7 @@ module Lono
     long_desc Lono::Help.text("cfn/download")
     option :name, desc: "Name you want to save the template as. Default: existing stack name."
     options.base
+    option :url, desc: "url with template, normally downloading from existing stack but url overrides that"
     def download(stack)
       Download.new(options.merge(stack: stack)).run
     end
