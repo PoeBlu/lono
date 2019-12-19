@@ -114,8 +114,8 @@ class Lono::Sets::Instances
         filter: instances_data,
         operation_id: operation_id,
         start_on_outdated: meth != :delete_stack_instances,
-        show_time_progress: true,
       )
+      Lono::Sets::Status::Instance::Base.show_time_progress = true
       instances_status = Status.new(o)
       final_status = meth == :delete_stack_instances ? "deleted" : "completed"
       instances_status.run(to: final_status) unless @options[:noop] # returns success: true or false

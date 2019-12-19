@@ -46,7 +46,7 @@ class Lono::Sets::Status
 
     def with_instances
       stack_instances.map do |stack_instance|
-        instance = Instance.new(stack_instance, @options[:show_time_progress])
+        instance = Instance.new(stack_instance)
         yield(instance)
       end
     end
@@ -88,7 +88,7 @@ class Lono::Sets::Status
     end
 
     def instances
-      stack_instances.map { |stack_instance| Instance.new(stack_instance, @options[:show_time_progress]) }
+      stack_instances.map { |stack_instance| Instance.new(stack_instance) }
     end
 
     def stack_instances

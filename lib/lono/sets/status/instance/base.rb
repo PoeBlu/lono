@@ -1,3 +1,5 @@
+require "active_support/core_ext/class"
+
 # The Completed and Deleted classes inherit from Base.
 # They implement `tail` and should not override `show`.
 #
@@ -45,8 +47,10 @@ class Lono::Sets::Status::Instance
   class Base
     include Lono::AwsServices
 
-    def initialize(stack_instance, show_time_progress=false)
-      @stack_instance, @show_time_progress = stack_instance, show_time_progress
+    class_attribute :show_time_progress
+
+    def initialize(stack_instance)
+      @stack_instance = stack_instance
       @shown = []
       @output = "" # for say method and specs
     end
@@ -62,8 +66,12 @@ class Lono::Sets::Status::Instance
       say status_line(stack_instance.account, stack_instance.region, stack_instance.status)
     end
 
+    def show_time_progress
+      self.class.show_time_progress
+    end
+
     def status_line(account, region, status)
-      time = Time.now.strftime("%F %r") if @show_time_progress
+      time = Time.now.strftime("%F %r") if show_time_progress
       [
         time,
         "Stack Instance:",

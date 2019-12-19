@@ -39,7 +39,8 @@ class Lono::Sets
 
       return true if @options[:noop] || !@options[:wait]
 
-      status = Status.new(@options.merge(operation_id: operation_id, show_time_progress: true))
+      Lono::Sets::Status::Instance::Base.show_time_progress = true
+      status = Status.new(@options.merge(operation_id: operation_id))
       success = status.wait
       summarize(operation_id)
       puts "DEBUG: SETS UPDATE success #{success}"
