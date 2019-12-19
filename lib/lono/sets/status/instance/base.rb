@@ -110,7 +110,7 @@ class Lono::Sets::Status::Instance
     end
 
     def delay
-      # delay factor is really the max_concurrent_count
+      # delay factor based on number of stack instances
       factor = self.class.delay_factor || 1
       base = 4.5
       delay = factor * base

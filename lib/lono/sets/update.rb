@@ -40,7 +40,7 @@ class Lono::Sets
       return true if @options[:noop] || !@options[:wait]
 
       Lono::Sets::Status::Instance::Base.show_time_progress = true
-      Lono::Sets::Status::Instance::Base.delay_factor = @options[:max_concurrent_count]
+      Lono::Sets::Status::Instance::Base.delay_factor = stack_instances.size
       status = Status.new(@options.merge(operation_id: operation_id))
       success = status.wait
       summarize(operation_id)

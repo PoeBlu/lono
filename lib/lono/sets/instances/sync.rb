@@ -116,7 +116,7 @@ class Lono::Sets::Instances
         start_on_outdated: meth != :delete_stack_instances,
       )
       Lono::Sets::Status::Instance::Base.show_time_progress = true
-      Lono::Sets::Status::Instance::Base.delay_factor = @options[:max_concurrent_count]
+      Lono::Sets::Status::Instance::Base.delay_factor = accounts.size * regions.size
       instances_status = Status.new(o)
       final_status = meth == :delete_stack_instances ? "deleted" : "completed"
       instances_status.run(to: final_status) unless @options[:noop] # returns success: true or false
