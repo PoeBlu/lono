@@ -13,7 +13,7 @@ module Lono
       @options = options
       Lono::ProjectChecker.check
       @stack, @blueprint, @template, @param = naming_conventions(options)
-      return if options[:skip_set_blueprint_root]
+      return if options[:url]
       set_blueprint_root(@blueprint)
       Lono::ProjectChecker.empty_templates
     end

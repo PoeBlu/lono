@@ -19,6 +19,7 @@ module Lono
     option :clean, type: :boolean, default: false, desc: "remove all output files before generating"
     option :quiet, type: :boolean, desc: "silence the output"
     option :stack, desc: "stack name. defaults to blueprint name."
+    option :url, desc: "url with template, overrides template generation"
     def generate(blueprint=nil)
       Blueprint::Find.one_or_all(blueprint).each do |b|
         o = options.merge(blueprint: b)
@@ -39,8 +40,9 @@ module Lono
     desc "summary BLUEPRINT", "Prints summary of CloudFormation templates."
     long_desc Help.text("summary")
     option :template, desc: "template if it doesnt match the blueprint"
+    option :url, desc: "url with template, overrides template generation"
     def summary(blueprint)
-      Lono::Inspector::Summary.new(options.merge(blueprint: blueprint, skip_set_blueprint_root: true)).run
+      Lono::Inspector::Summary.new(options.merge(blueprint: blueprint)).run
     end
 
     desc "xgraph STACK", "Graphs dependencies tree of CloudFormation template resources."

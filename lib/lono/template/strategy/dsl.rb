@@ -1,4 +1,4 @@
-class Lono::Template
+module Lono::Template::Strategy
   class Dsl < Base
     attr_reader :results
     def initialize(options={})

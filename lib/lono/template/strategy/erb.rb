@@ -1,4 +1,4 @@
-class Lono::Template
+module Lono::Template::Strategy
   class Erb < Base
     include Evaluate
     include Util

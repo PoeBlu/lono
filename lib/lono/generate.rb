@@ -9,8 +9,8 @@ module Lono
 
       build_scripts
       generate_templates # generates with some placeholders for build_files IE: file://app/files/my.rb
-      build_files # builds app/files to output/BLUEPRINT/files
 
+      build_files # builds app/files to output/BLUEPRINT/files
       post_process_templates
 
       unless @options[:noop]
@@ -29,6 +29,7 @@ module Lono
         regenerate: true,
         allow_not_exists: true,
       }.merge(@options)
+      o = HashWithIndifferentAccess.new(o)
       Lono::Param::Generator.new(o)
     end
     memoize :param_generator
