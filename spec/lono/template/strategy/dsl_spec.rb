@@ -1,5 +1,5 @@
-describe Lono::Template::Dsl do
-  let(:dsl) { Lono::Template::Dsl.new(blueprint: "example") }
+describe Lono::Template::Strategy::Dsl do
+  let(:dsl) { Lono::Template::Strategy::Dsl.new(blueprint: "example") }
   context "run" do
     it "produces template" do
       dsl.run

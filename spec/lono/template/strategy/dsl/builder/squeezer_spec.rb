@@ -1,5 +1,5 @@
-describe Lono::Template::Dsl::Builder::Squeezer do
-  let(:squeezer) { Lono::Template::Dsl::Builder::Squeezer.new(data) }
+describe Lono::Template::Strategy::Dsl::Builder::Squeezer do
+  let(:squeezer) { Lono::Template::Strategy::Dsl::Builder::Squeezer.new(data) }
   context "with no nil values should equal initial data" do
     let(:data) do
       text =<<~EOL

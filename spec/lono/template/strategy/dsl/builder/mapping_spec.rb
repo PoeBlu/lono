@@ -1,5 +1,5 @@
-describe Lono::Template::Dsl::Builder::Condition do
-  let(:condition) { Lono::Template::Dsl::Builder::Condition.new("ec2", definition) }
+describe Lono::Template::Strategy::Dsl::Builder::Mapping do
+  let(:mapping) { Lono::Template::Strategy::Dsl::Builder::Mapping.new("ec2", definition) }
   context "medium form" do
     let(:definition) do
       [:ami_map, {
@@ -9,9 +9,9 @@ describe Lono::Template::Dsl::Builder::Condition do
     end
 
     it "produces template" do
-      condition.template
-      result = condition.template
-      # puts result
+      mapping.template
+      result = mapping.template
+      puts result
       expect(result).to eq(
         {"AmiMap"=>{"us-east-1"=>{"Ami"=>"ami-111"}, "us-east-2"=>{"Ami"=>"ami-222"}}}
       )
@@ -27,8 +27,8 @@ describe Lono::Template::Dsl::Builder::Condition do
     end
 
     it "produces template" do
-      condition.template
-      result = condition.template
+      mapping.template
+      result = mapping.template
       # puts result
       expect(result).to eq(
         {"AmiMap"=>{"us-east-1"=>{"Ami"=>"ami-111"}, "us-east-2"=>{"Ami"=>"ami-222"}}}

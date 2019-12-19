@@ -1,5 +1,5 @@
-describe Lono::Template::Dsl::Builder::Parameter do
-  let(:parameter) { Lono::Template::Dsl::Builder::Parameter.new("ec2", definition) }
+describe Lono::Template::Strategy::Dsl::Builder::Parameter do
+  let(:parameter) { Lono::Template::Strategy::Dsl::Builder::Parameter.new("ec2", definition) }
 
   context "short form without default" do
     let(:definition) do

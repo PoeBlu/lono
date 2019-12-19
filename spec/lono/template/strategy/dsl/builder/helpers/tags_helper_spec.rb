@@ -1,12 +1,12 @@
 class TagsHelperTester
-  include Lono::Template::Dsl::Builder::Helpers::TagsHelper
+  include Lono::Template::Strategy::Dsl::Builder::Helpers::TagsHelper
 
   def initialize
     @tags = {name: "mimic-var"}
   end
 end
 
-describe Lono::Template::Dsl::Builder::Helpers::TagsHelper do
+describe Lono::Template::Strategy::Dsl::Builder::Helpers::TagsHelper do
   let(:tester) { TagsHelperTester.new }
   context "tags" do
     it "convert Hash to Array" do

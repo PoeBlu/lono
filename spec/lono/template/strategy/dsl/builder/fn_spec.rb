@@ -1,8 +1,8 @@
 class FnBuilderContext
-  include Lono::Template::Dsl::Builder::Fn
+  include Lono::Template::Strategy::Dsl::Builder::Fn
 end
 
-describe Lono::Template::Dsl::Builder::Fn do
+describe Lono::Template::Strategy::Dsl::Builder::Fn do
   let(:context) { FnBuilderContext.new }
   context "methods" do
     it "ref" do
@@ -43,12 +43,12 @@ describe Lono::Template::Dsl::Builder::Fn do
     end
 
     it "Fn::" do
-      out = Lono::Template::Dsl::Builder::Fn::ref("Name")
+      out = Lono::Template::Strategy::Dsl::Builder::Fn::ref("Name")
       expect(out).to eq({"Ref" => "Name"})
     end
 
     it "Fn." do
-      out = Lono::Template::Dsl::Builder::Fn.ref("Name")
+      out = Lono::Template::Strategy::Dsl::Builder::Fn.ref("Name")
       expect(out).to eq({"Ref" => "Name"})
     end
   end

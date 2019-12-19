@@ -1,7 +1,7 @@
 module Lono::Template::Strategy
   class Erb < Base
-    include Evaluate
-    include Util
+    include Lono::Template::Evaluate
+    include Lono::Template::Util
 
     def initialize(options={})
       super

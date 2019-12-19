@@ -1,7 +1,7 @@
-describe Lono::Template::Erb do
+describe Lono::Template::Strategy::Erb do
   context "tmp/lono_project" do
     it "#evaluate_templates" do
-      erb = Lono::Template::Erb.new(blueprint: "erb-demo", quiet: true)
+      erb = Lono::Template::Strategy::Erb.new(blueprint: "erb-demo", quiet: true)
       erb.evaluate_templates
       templates = erb.instance_variable_get(:@templates)
       template_names = templates.map { |h| h[:name] }
@@ -11,7 +11,7 @@ describe Lono::Template::Erb do
 
   context "lono generate" do
     before(:each) do
-      erb = Lono::Template::Erb.new(blueprint: "erb-demo", quiet: true)
+      erb = Lono::Template::Strategy::Erb.new(blueprint: "erb-demo", quiet: true)
       erb.run
     end
 
@@ -40,7 +40,7 @@ describe Lono::Template::Erb do
 
   context "yaml parse error" do
     let(:erb) do
-      Lono::Template::Erb.new(blueprint: "erb-demo", quiet: true)
+      Lono::Template::Strategy::Erb.new(blueprint: "erb-demo", quiet: true)
     end
 
     it "show exact line of error code when yaml is invalid" do
