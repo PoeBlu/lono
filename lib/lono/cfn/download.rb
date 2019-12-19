@@ -6,7 +6,8 @@ class Lono::Cfn
     include Lono::AwsServices
 
     def run
-      puts "Downloading template to: #{download_path}"
+      pretty_path = download_path.sub("#{Lono.root}/", '')
+      puts "Downloading template to: #{pretty_path}"
       return if @options[:noop]
       download_template
     end

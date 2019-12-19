@@ -11,7 +11,7 @@ class Lono::Cfn
 
       deleted = delete_rollback_stack
       if deleted
-        Create.new(@options).create_stack(parameters)
+        Create.new(@options).save(parameters)
         return
       end
 
