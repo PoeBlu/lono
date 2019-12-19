@@ -36,19 +36,20 @@ module Lono
       UserData.new(blueprint, options.merge(name: name)).generate
     end
 
-    desc "summary BLUEPRINT TEMPLATE", "Prints summary of CloudFormation templates."
+    desc "summary BLUEPRINT", "Prints summary of CloudFormation templates."
     long_desc Help.text("summary")
-    def summary(blueprint=nil, template=nil)
-      Lono::Inspector::Summary.new(options.merge(blueprint: blueprint, template: template)).run
+    option :template, desc: "template if it doesnt match the blueprint"
+    def summary(blueprint)
+      Lono::Inspector::Summary.new(options.merge(blueprint: blueprint, skip_set_blueprint_root: true)).run
     end
 
     desc "xgraph STACK", "Graphs dependencies tree of CloudFormation template resources."
     long_desc Help.text("xgraph")
     option :display, type: :string, desc: "graph or text", default: "graph"
     option :noop, type: :boolean, desc: "noop mode"
-    def xgraph(blueprint, template=nil)
-      template ||= blueprint
-      Lono::Inspector::Graph.new(options.merge(blueprint: blueprint, template: template)).run
+    option :template, desc: "template if it doesnt match the blueprint"
+    def xgraph(blueprint)
+      Lono::Inspector::Graph.new(options.merge(blueprint: blueprint)).run
     end
 
     desc "seed BLUEPRINT", "Generates starter configs for a blueprint."

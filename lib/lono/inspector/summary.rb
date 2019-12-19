@@ -1,6 +1,7 @@
 module Lono::Inspector
   class Summary < Base
     def perform(template)
+      puts "template #{template}"
       # little dirty but @template is used in data method so we dont have to pass it to the data method
       @template = template
 

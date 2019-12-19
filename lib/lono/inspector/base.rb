@@ -1,20 +1,28 @@
 module Lono::Inspector
   class Base < Lono::AbstractBase
+    include Lono::Utils::Url
+
     delegate :required_parameters, :optional_parameters, :parameters, :data,
              to: :output_template
 
     extend Memoist
 
     def run
-      blueprints = Lono::Blueprint::Find.one_or_all(@blueprint)
-      blueprints.each do |blueprint|
-        @blueprint = blueprint # intentional overwrite
+      generate
+      templates = @template_name ? [@template_name] : all_templates
+      templates.each do |template_name|
+        perform(template_name)
+      end
+    end
+
+    def generate
+      if url?(@blueprint)
+        downloader = Lono::Cfn::Download.new(source: @blueprint)
+        @blueprint = downloader.name # override @blueprint
+        downloader.download_path = "#{Lono.config.output_path}/#{@blueprint}/templates/#{@blueprint}.yml"
+        downloader.run
+      else
         generate_templates
-        set_blueprint_root(blueprint)
-        templates = @template_name ? [@template_name] : all_templates
-        templates.each do |template_name|
-          perform(template_name)
-        end
       end
     end
 
