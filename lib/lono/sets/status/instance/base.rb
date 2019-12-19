@@ -98,21 +98,24 @@ class Lono::Sets::Status::Instance
           stack_instance_region: @stack_instance.region,
           stack_set_name: @stack_instance.stack_set_id)
       rescue Aws::CloudFormation::Errors::Throttling => e
-        puts "#{e.class}: #{e.message}"
         retries += 1
         delay = 2 ** retries
-        # puts "Backing off for #{delay}s and will retry" # uncomment to debug
+        if ENV['LONO_DEBUG_THROTTLE']
+          puts "#{e.class}: #{e.message}"
+          puts "Backing off for #{delay}s and will retry"
+        end
         sleep delay
         retry
       end
     end
 
     def delay
+      # delay factor is really the max_concurrent_count
       factor = self.class.delay_factor || 1
-      base = 2.5
+      base = 4.5
       delay = factor * base
-      delay = [delay, 90].max
-      # puts "Sleeping for #{delay}s..." # uncomment to debug
+      delay = [delay, 90].min
+      puts "Sleeping for #{delay}s..." if ENV['LONO_DEBUG_THROTTLE']
       sleep delay
     end
   end
