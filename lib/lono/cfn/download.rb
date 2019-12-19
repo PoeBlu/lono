@@ -3,12 +3,13 @@ require 'open-uri'
 
 class Lono::Cfn
   class Download
+    include Lono::AwsServices
     include Lono::Utils::Url
 
     attr_writer :download_path
     def initialize(options={})
       @options = options
-      @source = options[:source]
+      @stack, @url = options[:stack], options[:url]
     end
 
     def run
@@ -18,18 +19,18 @@ class Lono::Cfn
     end
 
     def download_template
-      body = download_source
+      body = download_stack
       body = convert_to_yaml(body)
       FileUtils.mkdir_p(File.dirname(download_path))
       IO.write(download_path, body)
     end
 
-    def download_source
-      if url?(@source)
-        open(@source).read # url
+    def download_stack
+      if @url
+        open(@url).read # url
       else
         resp = cfn.get_template(
-          source_name: @source,
+          stack_name: @stack,
           template_stage: "Original"
         )
         resp.template_body
@@ -49,14 +50,7 @@ class Lono::Cfn
     end
 
     def name
-      return @options[:name]  if @options[:name]
-
-      if url?(@source)
-        url = @source
-        File.basename(url, File.extname(url)).gsub(/[^a-z0-9]/i, "-")
-      else
-        @source
-      end
+      @options[:name] || @stack
     end
   end
 end

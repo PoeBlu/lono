@@ -63,7 +63,7 @@ module Lono
     option :name, desc: "Name you want to save the template as. Default: existing stack name."
     options.base
     def download(stack)
-      Download.new(options.merge(source: stack)).run
+      Download.new(options.merge(stack: stack)).run
     end
 
     desc "current", "Current stack that you're working with."

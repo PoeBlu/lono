@@ -1,4 +1,4 @@
-class Lono::Template::Dsl
+module Lono::Template::Dsl
   class Builder
     include Lono::Template::Util
     include Lono::Template::Context::Loader
