@@ -19,7 +19,6 @@ class Lono::Cfn
         option :config, aliases: "c", desc: "override convention and specify both the param and variable file to use"
         option :iam, type: :boolean, desc: "Shortcut for common IAM capabilities: CAPABILITY_IAM, CAPABILITY_NAMED_IAM"
         option :param, aliases: "p", desc: "override convention and specify the param file to use"
-        option :sure, type: :boolean, desc: "Skip are you sure prompt"
         option :tags, type: :hash, desc: "Tags for the stack. IE: Name:api-web Owner:bob"
         option :template, desc: "override convention and specify the template file to use"
         option :variable, aliases: "v", desc: "override convention and specify the variable file to use"
@@ -29,6 +28,7 @@ class Lono::Cfn
     def wait
       with_cli_scope do
         option :wait, type: :boolean, desc: "Wait for stack operation to complete.", default: true
+        option :sure, type: :boolean, desc: "Skip are you sure prompt" # moved to base but used by commands like `lono cfn delete` also. Just keep here.
       end
     end
 

@@ -31,7 +31,6 @@ class Lono::Sets
       success = status.wait
       operation_id = status.operation_id # getting operation_id from status because cfn.delete_stack_set resp is an Empty structure
       summarize(operation_id)
-      puts "DEBUG: SETS DELETE success #{success}"
       exit 1 unless success
 
     rescue Aws::CloudFormation::Errors::StackSetNotEmptyException => e
