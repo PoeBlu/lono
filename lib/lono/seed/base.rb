@@ -29,10 +29,7 @@ class Lono::Seed
 
     def run
       generate_template
-      exit
-
-      # check_dsl_type!
-
+      @output_template = Lono::OutputTemplate.new(@blueprint, @template)
       setup
       self.destination_root = Dir.pwd # Thor::Actions require destination_root to be set
       create_params
@@ -41,40 +38,23 @@ class Lono::Seed
     end
 
     def generate_template
-      puts "generate_template"
-      Lono::Generate.new(@options).all
+      Lono::Template::Generator.new(@options).run
     end
 
     def create_params
       return unless params
-
-      # Only supporting the main blueprint for now
-      path = "#{Lono.config.templates_path}/#{@blueprint}.rb"
-      if File.exist?(path)
-        create_param_file(path)
-      end
-
-      # TODO: detect and write multiple templates to different paths
-      # with_each_template do |path|
-      #   create_param_file(path)
-      # end
+      create_param_file
     end
 
-    def params
-      true
-    end
-
-    def create_param_file(app_template_path)
-      parameters = parameters(app_template_path)
-
+    def create_param_file
       lines = []
-      required = required(parameters)
+      required = @output_template.required_parameters
       lines << "# Required parameters:" unless required.empty?
       required.each do |name, data|
         example = description_example(data["Description"])
         lines << "#{name}=#{example}"
       end
-      optional = optional(parameters)
+      optional = @output_template.optional_parameters
       lines << "# Optional parameters:" unless optional.empty?
       optional.each do |name, data|
         value = default_value(data)
@@ -91,28 +71,14 @@ class Lono::Seed
       create_file(dest_path, content) # Thor::Action
     end
 
+    def params
+      true
+    end
+
     def create_variables
       return unless variables
       dest_path = "configs/#{@blueprint}/variables/#{Lono.env}.rb"
       create_file(dest_path, variables) # Thor::Action
-    end
-
-    def check_dsl_type!
-      dsl_type = template_type == 'dsl'
-      unless dsl_type
-        puts "Detected template_type: #{template_type}"
-        puts "lono seed only supports dsl template types currently."
-        exit 1
-      end
-    end
-
-    def template_type
-      blueprint_root = find_blueprint_root(@blueprint)
-      meta_config = "#{blueprint_root}/.meta/config.yml"
-      return false unless File.exist?(meta_config)
-
-      meta = YAML.load_file(meta_config)
-      meta['template_type']
     end
 
     def setup; end
@@ -122,11 +88,6 @@ class Lono::Seed
     # Return String with contents of variables file.
     def variables
       false
-    end
-
-    def write(path, content)
-      FileUtils.mkdir_p(File.dirname(path))
-      IO.write(path, content)
     end
 
     def description_example(description)
@@ -145,30 +106,6 @@ class Lono::Seed
         description_example(data["Description"])
       else
         value
-      end
-    end
-
-    def parameters(app_template_path)
-      builder = Lono::Template::Dsl::Builder.new(app_template_path, @blueprint, quiet: false)
-      template = builder.template
-      template["Parameters"] || []
-    end
-    memoize :parameters
-
-    def required(parameters)
-      parameters.select { |logical_id, p| p["Default"].nil? } # allow for false
-    end
-
-    def optional(parameters)
-      parameters.select { |logical_id, p| !p["Default"].nil? } # allow for false
-    end
-
-  private
-    def with_each_template
-      paths = Dir.glob("#{Lono.config.templates_path}/**/*.rb")
-      files = paths.select{ |e| File.file?(e) }
-      files.each do |path|
-        yield(path)
       end
     end
   end

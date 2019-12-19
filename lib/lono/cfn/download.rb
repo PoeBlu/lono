@@ -6,7 +6,6 @@ class Lono::Cfn
     include Lono::AwsServices
     include Lono::Utils::Url
 
-    attr_writer :download_path
     def initialize(options={})
       @options = options
       @stack, @url = options[:stack], options[:url]
@@ -46,7 +45,7 @@ class Lono::Cfn
     end
 
     def download_path
-      @download_path || "/tmp/#{name}.yml"
+      @url ? "#{Lono.config.output_path}/#{@blueprint}/templates/#{@blueprint}.yml" : "/tmp/#{name}.yml"
     end
 
     def name

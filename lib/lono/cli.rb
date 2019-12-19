@@ -50,6 +50,7 @@ module Lono
     option :display, type: :string, desc: "graph or text", default: "graph"
     option :noop, type: :boolean, desc: "noop mode"
     option :template, desc: "template if it doesnt match the blueprint"
+    option :url, desc: "url with template, overrides template generation"
     def xgraph(blueprint)
       Lono::Inspector::Graph.new(options.merge(blueprint: blueprint)).run
     end
@@ -58,6 +59,7 @@ module Lono
     long_desc Help.text("seed")
     option :param, desc: "override convention and specify the param file to use"
     option :template, desc: "override convention and specify the template file to use"
+    option :url, desc: "url with template, overrides template generation"
     add_runtime_options! # Thor::Action options like --force
     def seed(blueprint)
       Seed.new(options.merge(blueprint: blueprint)).create

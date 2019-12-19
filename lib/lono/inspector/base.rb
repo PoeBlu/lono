@@ -16,11 +16,8 @@ module Lono::Inspector
     end
 
     def generate
-      if url?(@blueprint)
-        downloader = Lono::Cfn::Download.new(source: @blueprint)
-        @blueprint = downloader.name # override @blueprint
-        downloader.download_path = "#{Lono.config.output_path}/#{@blueprint}/templates/#{@blueprint}.yml"
-        downloader.run
+      if @options[:url]
+        Lono::Cfn::Download.new(@options).run
       else
         generate_templates
       end
