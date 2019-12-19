@@ -48,6 +48,7 @@ class Lono::Sets::Status::Instance
     include Lono::AwsServices
 
     class_attribute :show_time_progress
+    class_attribute :delay_factor
 
     def initialize(stack_instance)
       @stack_instance = stack_instance
@@ -59,30 +60,60 @@ class Lono::Sets::Status::Instance
       already_shown = @shown.detect do |o|
         o[:account] == stack_instance[:account] &&
         o[:region] == stack_instance[:region] &&
-        o[:status] == stack_instance[:status]
+        o[:status] == stack_instance[:status] &&
+        o[:status_reason] == stack_instance[:status_reason]
       end
       return if already_shown
 
-      say status_line(stack_instance.account, stack_instance.region, stack_instance.status)
+      s = stack_instance
+      say status_line(s.account, s.region, s.status, s.status_reason)
     end
 
     def show_time_progress
       self.class.show_time_progress
     end
 
-    def status_line(account, region, status)
+    def status_line(account, region, status, reason=nil)
       time = Time.now.strftime("%F %r") if show_time_progress
-      [
+      items = [
         time,
         "Stack Instance:",
         "account".color(:purple), account,
         "region".color(:purple), region,
         "status".color(:purple), status,
-      ].compact.join(" ")
+      ]
+      items += ["reason".color(:purple), reason] if reason
+      items.compact.join(" ")
     end
 
     def say(text)
       ENV["LONO_TEST"] ? @output << "#{text}\n" : puts(text)
+    end
+
+    def describe_stack_instance
+      retries = 0
+      begin
+        cfn.describe_stack_instance(
+          stack_instance_account: @stack_instance.account,
+          stack_instance_region: @stack_instance.region,
+          stack_set_name: @stack_instance.stack_set_id)
+      rescue Aws::CloudFormation::Errors::Throttling => e
+        puts "#{e.class}: #{e.message}"
+        retries += 1
+        delay = 2 ** retries
+        # puts "Backing off for #{delay}s and will retry" # uncomment to debug
+        sleep delay
+        retry
+      end
+    end
+
+    def delay
+      factor = self.class.delay_factor || 1
+      base = 2.5
+      delay = factor * base
+      delay = [delay, 90].max
+      # puts "Sleeping for #{delay}s..." # uncomment to debug
+      sleep delay
     end
   end
 end

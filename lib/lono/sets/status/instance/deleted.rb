@@ -17,15 +17,12 @@ class Lono::Sets::Status::Instance
           say status_line(@stack_instance.account, @stack_instance.region, "DELETED")
           break
         end
-        sleep 2.5
+        delay
       end
     end
 
     def display_one
-      resp = cfn.describe_stack_instance(
-                  stack_instance_account: @stack_instance.account,
-                  stack_instance_region: @stack_instance.region,
-                  stack_set_name: @stack_instance.stack_set_id)
+      resp = describe_stack_instance
       stack_instance = resp.stack_instance
       show_instance(stack_instance)
       @shown << stack_instance

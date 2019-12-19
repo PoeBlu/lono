@@ -14,18 +14,12 @@ class Lono::Sets::Status::Instance
       until completed?(status)
         resp = display_one
         status = resp.stack_instance.status
-        unless completed?(status)
-          sleep 2.5
-        end
+        delay unless completed?(status)
       end
     end
 
     def display_one
-      resp = cfn.describe_stack_instance(
-        stack_instance_account: @stack_instance.account,
-        stack_instance_region: @stack_instance.region,
-        stack_set_name: @stack_instance.stack_set_id,
-      )
+      resp = describe_stack_instance
       stack_instance = resp.stack_instance
       show_instance(stack_instance)
       @shown << stack_instance
