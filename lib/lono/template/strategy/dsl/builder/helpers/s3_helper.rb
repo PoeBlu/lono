@@ -1,4 +1,4 @@
-module Lono::Template::Dsl::Builder::Helpers
+module Lono::Template::Strategy::Dsl::Builder::Helpers
   module S3Helper
     def s3_bucket
       Lono::S3::Bucket.name

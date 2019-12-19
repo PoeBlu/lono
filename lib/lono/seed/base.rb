@@ -28,12 +28,21 @@ class Lono::Seed
     extend Memoist
 
     def run
-      check_dsl_type!
+      generate_template
+      exit
+
+      # check_dsl_type!
+
       setup
       self.destination_root = Dir.pwd # Thor::Actions require destination_root to be set
       create_params
       create_variables
       finish
+    end
+
+    def generate_template
+      puts "generate_template"
+      Lono::Generate.new(@options).all
     end
 
     def create_params

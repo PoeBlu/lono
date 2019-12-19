@@ -1,5 +1,5 @@
 # Note: These are experimental helpers. Their interface may change or removed entirely.
-module Lono::Template::Dsl::Builder::Helpers
+module Lono::Template::Strategy::Dsl::Builder::Helpers
   module ParamHelper
     # Decorate the parameter method to make smarter.
     def parameter(*definition)

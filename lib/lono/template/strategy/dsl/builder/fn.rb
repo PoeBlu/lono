@@ -1,4 +1,4 @@
-class Lono::Template::Dsl::Builder
+class Lono::Template::Strategy::Dsl::Builder
   module Fn
     # Also act as documentation on the method signatures
     # Also used in Coder crafting so should always list all the functions here

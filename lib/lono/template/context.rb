@@ -5,7 +5,7 @@ class Lono::Template
     include Lono::Template::Helper
     include Loader
     include Helpers # ERB
-    include Dsl::Builder::Syntax # DSL
+    include Strategy::Dsl::Builder::Syntax # DSL
 
     def initialize(options={})
       super

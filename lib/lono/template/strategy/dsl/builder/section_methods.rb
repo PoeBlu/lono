@@ -1,5 +1,5 @@
 # Organize core section method syntax here
-class Lono::Template::Dsl::Builder
+class Lono::Template::Strategy::Dsl::Builder
   module SectionMethods
     def aws_template_format_version(version_date)
       @cfn["AWSTemplateFormatVersion"] = version_date

@@ -1,4 +1,4 @@
-class Lono::Template::Dsl::Builder::Resource
+class Lono::Template::Strategy::Dsl::Builder::Resource
   # Moves the property to the top-level attributes *destructively*
   class PropertyMover
     def initialize(resource, logical_id, properties)

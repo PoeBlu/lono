@@ -1,4 +1,4 @@
-class Lono::Template::Dsl::Builder
+class Lono::Template::Strategy::Dsl::Builder
   class Squeezer
     def initialize(data)
       @data = data

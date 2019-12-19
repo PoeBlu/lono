@@ -1,5 +1,5 @@
 # Built-in helpers for the DSL form
-class Lono::Template::Dsl::Builder
+class Lono::Template::Strategy::Dsl::Builder
   module Helpers
     extend Memoist
     include CoreHelper
