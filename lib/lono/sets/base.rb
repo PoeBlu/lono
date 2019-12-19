@@ -24,8 +24,20 @@ class Lono::Sets
         capabilities: capabilities, # ["CAPABILITY_IAM", "CAPABILITY_NAMED_IAM"]
       }
       options[:tags] = tags unless tags.empty?
+      options[:operation_preferences] = operation_preferences unless operation_preferences.empty?
+      options.reject! {|k, v| v.nil? }
       set_template_url!(options)
       options
+    end
+
+    def operation_preferences
+      o = {}
+      o[:failure_tolerance_count] = @options[:failure_tolerance_count]
+      o[:failure_tolerance_percentage] = @options[:failure_tolerance_percentage]
+      o[:max_concurrent_count] = @options[:max_concurrent_count]
+      o[:max_concurrent_percentage] = @options[:max_concurrent_percentage]
+      o.reject! {|k, v| v.nil? }
+      o
     end
   end
 end

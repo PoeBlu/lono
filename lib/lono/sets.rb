@@ -1,12 +1,10 @@
 module Lono
   class Sets < Command
-    options = Lono::Cfn::Options.new(self)
+    options = Options.new(self)
 
     desc "deploy STACK_SET", "Deploy CloudFormation stack set."
     long_desc Help.text("sets/deploy")
-    options.base
-    options.wait
-    options.update
+    options.deploy
     def deploy(stack)
       Deploy.new(options.merge(stack: stack)).run
     end

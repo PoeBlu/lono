@@ -1,19 +1,55 @@
 class Lono::Cfn
   class Options
     def initialize(cli)
-      @cli = cli # Lono::Cfn and Lono::Sets only
+      @cli = cli # Lono::Cfn
     end
 
-    def base
+    def create
+      base_options
+      wait_options
+    end
+
+    def update
+      base_options
+      update_options
+      wait_options
+    end
+
+    def deploy
+      update # not update_options intentionally
+    end
+
+    def delete
+      wait_options
+    end
+
+    def cancel
+      wait_options
+    end
+
+    def preview
+      base_options
+      update_options
       with_cli_scope do
-        # Lono::Cfn only
-        if self == Lono::Cfn
+        option :keep, type: :boolean, desc: "keep the changeset instead of deleting it afterwards"
+      end
+    end
+
+    def download
+      base_options
+      with_cli_scope do
+        option :name, desc: "Name you want to save the template as. Default: existing stack name."
+        option :url, desc: "url with template, normally downloading from existing stack but url overrides that"
+      end
+    end
+
+    # Lono::Cfn and Lono::Sets
+    def base_options(rollback: true)
+      with_cli_scope do
+        if rollback
           option :rollback, type: :boolean, desc: "rollback", default: true
         end
-
         # common to Lono::Cfn and Lono::Sets
-        # Lono::Cfn create, update and deploy
-        # Lono::Sets deploy
         option :url, desc: "url override, dont generate templates"
         option :blueprint, desc: "override convention and specify the template file to use"
         option :capabilities, type: :array, desc: "iam capabilities. Ex: CAPABILITY_IAM, CAPABILITY_NAMED_IAM"
@@ -26,17 +62,16 @@ class Lono::Cfn
       end
     end
 
-    def wait
+    def wait_options
       with_cli_scope do
         option :wait, type: :boolean, desc: "Wait for stack operation to complete.", default: true
         option :sure, type: :boolean, desc: "Skip are you sure prompt" # moved to base but used by commands like `lono cfn delete` also. Just keep here.
       end
     end
 
-    def update
+    def update_options(change_set: true)
       with_cli_scope do
-        # Lono::Cfn only
-        if self == Lono::Cfn
+        if change_set
           option :change_set, type: :boolean, default: true, desc: "Uses generated change set to update the stack.  If false, will perform normal update-stack."
           option :changeset_preview, type: :boolean, default: true, desc: "Show ChangeSet changes preview."
         end
