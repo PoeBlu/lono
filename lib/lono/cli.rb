@@ -1,6 +1,7 @@
 module Lono
   class CLI < Command
     include Thor::Actions # for add_runtime_options
+    options = Options.new(self)
 
     long_desc Help.text(:new)
     New.cli_options.each do |args|
@@ -19,7 +20,7 @@ module Lono
     option :clean, type: :boolean, default: false, desc: "remove all output files before generating"
     option :quiet, type: :boolean, desc: "silence the output"
     option :stack, desc: "stack name. defaults to blueprint name."
-    option :url, desc: "url or file with with template, overrides template generation"
+    options.url
     def generate(blueprint=nil)
       Blueprint::Find.one_or_all(blueprint).each do |b|
         o = options.merge(blueprint: b)
@@ -39,8 +40,8 @@ module Lono
 
     desc "summary BLUEPRINT", "Prints summary of CloudFormation templates."
     long_desc Help.text("summary")
-    option :template, desc: "template if it doesnt match the blueprint"
-    option :url, desc: "url or file with with template, overrides template generation"
+    options.template
+    options.url
     def summary(blueprint)
       Lono::Inspector::Summary.new(options.merge(blueprint: blueprint)).run
     end
@@ -49,8 +50,8 @@ module Lono
     long_desc Help.text("xgraph")
     option :display, type: :string, desc: "graph or text", default: "graph"
     option :noop, type: :boolean, desc: "noop mode"
-    option :template, desc: "template if it doesnt match the blueprint"
-    option :url, desc: "url or file with with template, overrides template generation"
+    options.template
+    options.url
     def xgraph(blueprint)
       Lono::Inspector::Graph.new(options.merge(blueprint: blueprint)).run
     end
@@ -58,8 +59,8 @@ module Lono
     desc "seed BLUEPRINT", "Generates starter configs for a blueprint."
     long_desc Help.text("seed")
     option :param, desc: "override convention and specify the param file to use"
-    option :template, desc: "override convention and specify the template file to use"
-    option :url, desc: "url or file with with template, overrides template generation"
+    options.template
+    options.url
     add_runtime_options! # Thor::Action options like --force
     def seed(blueprint)
       Seed.new(options.merge(blueprint: blueprint)).create

@@ -1,9 +1,5 @@
 class Lono::Cfn
-  class Options
-    def initialize(cli)
-      @cli = cli # Lono::Cfn
-    end
-
+  class Options < Lono::CLI::Options
     def create
       base_options
       wait_options
@@ -79,11 +75,6 @@ class Lono::Cfn
         option :codediff_preview, type: :boolean, default: true, desc: "Show codediff changes preview."
         option :param_preview, type: :boolean, default: true, desc: "Show parameter diff preview."
       end
-    end
-
-  private
-    def with_cli_scope(&block)
-      @cli.instance_eval(&block)
     end
   end
 end
