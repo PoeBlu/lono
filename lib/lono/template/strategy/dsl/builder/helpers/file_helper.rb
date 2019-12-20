@@ -11,12 +11,12 @@ module Lono::Template::Strategy::Dsl::Builder::Helpers
     end
 
     def user_data_script
-      return "# @user_data variable not set" unless @user_data
+      return %Q|# @user_data_script variable not set. IE: @user_data_script = "configs/#{@blueprint}/user-data/boostrap.sh"| unless @user_data_script
 
-      if File.exist?(@user_data)
-        IO.read(@user_data)
+      if File.exist?(@user_data_script)
+        IO.read(@user_data_script)
       else
-        message = "WARN: #{@user_data} not found"
+        message = "WARN: #{@user_data_script} not found"
         puts message.color(:yellow)
         "# #{message}"
       end

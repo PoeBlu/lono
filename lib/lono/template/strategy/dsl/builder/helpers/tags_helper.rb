@@ -1,41 +1,32 @@
 module Lono::Template::Strategy::Dsl::Builder::Helpers
   module TagsHelper
-    def tags(list={})
-      casing = list.delete(:casing) || :camelize
-      if list.empty?
-        tag_list(@tags) if @tags # when list is empty, use @tags variable. If not set then return nil
+    def tags(hash={})
+      if hash.empty?
+        tag_list(@tags) if @tags # when hash is empty, use @tags variable. If not set then return nil
       else
-        tag_list(list, casing: casing)
+        tag_list(hash)
       end
     end
 
-    def tag_list(list, casing: :camelize)
-      raise "tags list cannot be empty" if list == nil
+    def tag_list(hash)
+      raise "tags hash cannot be empty" if hash == nil
 
-      if list.is_a?(Array)
-        hash = list.inject({}) do |h,i|
+      if hash.is_a?(Array)
+        hash = hash.inject({}) do |h,i|
           i.symbolize_keys!
-          h[i[:Key]] = i[:Value]
+          h[i[:Key]] = i[:Value].to_s
           h
         end
         return tag_list(hash) # recursive call tag_list to normalized the argument with a Hash
       end
 
-      list.map do |k,v|
-        k = k.to_s
-        k = case casing
-        when :camelize
-          k.camelize
-        when :underscore
-          k.underscore
-        when :dasherize
-          k.dasherize
-        else # leave alone
-          k
-        end
-
-        {Key: k, Value: v}
+      propagate = hash[:PropagateAtLaunch] # special treatment
+      list = hash.map do |k,v|
+        h = {Key: k.to_s, Value: v.to_s}
+        h[:PropagateAtLaunch] = propagate unless propagate.nil?
+        h
       end
+      list.reject { |h| h[:Key] == "PropagateAtLaunch" }
     end
 
     def dimensions(hash, casing: :camelize)

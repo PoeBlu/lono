@@ -67,7 +67,7 @@ module Lono
     desc "status", "Shows current status of stack."
     long_desc Lono::Help.text("cfn/status")
     def status(stack)
-      status = Lono::Cfn::Status.new(options.merge(stack: stack))
+      status = Lono::Cfn::Status.new(stack, options)
       success = status.run
       exit 3 unless success
     end
