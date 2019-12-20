@@ -35,7 +35,13 @@ class Lono::Sets
 
     rescue Aws::CloudFormation::Errors::StackSetNotEmptyException => e
       puts "ERROR: #{e.class}: #{e.message}".color(:red)
-      puts "The stack set must be empty before deleting. Cannot delete stack set until all stack instances are first deleted."
+      puts <<~EOL
+        The stack set must be empty before deleting. Cannot delete stack set until all stack instances are first
+        deleted. If you want to delete all stack instances you can use:
+
+            lono sets instances delete #{@stack} --all
+
+      EOL
     end
   end
 end
