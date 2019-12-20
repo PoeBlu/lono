@@ -32,6 +32,8 @@ class Lono::Sets::Instances
         start_on_outdated: false,
         operation_id: operation_id,
       )
+      Lono::Sets::Status::Instance::Base.show_time_progress = true
+      Lono::Sets::Status::Instance::Base.delay_factor = accounts.size * regions.size
       instances_status = Status.new(o)
       instances_status.run(to: "deleted") unless @options[:noop] # returns success: true or false
     end

@@ -74,7 +74,7 @@ class Lono::Sets::Status::Instance
     end
 
     def status_line(account, region, status, reason=nil)
-      time = Time.now.strftime("%F %r") if show_time_progress
+      time = Time.now.strftime("%F %I:%M:%S%p") if show_time_progress
       items = [
         time,
         "Stack Instance:",
