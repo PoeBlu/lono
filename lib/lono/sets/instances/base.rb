@@ -21,5 +21,10 @@ class Lono::Sets::Instances
     def regions
       @options[:regions]
     end
+
+    def stack_instances
+      resp = cfn.list_stack_instances(stack_set_name: @stack)
+      resp.summaries
+    end
   end
 end

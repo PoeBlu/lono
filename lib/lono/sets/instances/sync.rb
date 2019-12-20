@@ -2,7 +2,6 @@ class Lono::Sets::Instances
   class Sync < Base
     include Lono::Sets::Summarize
     include Lono::Utils::Sure
-    include Validate
 
     def initialize(options={})
       super # need conventions so config lookup will work
@@ -172,9 +171,12 @@ class Lono::Sets::Instances
       env == "base" ? location.lookup_base : location.lookup
     end
 
-    def stack_instances
-      resp = cfn.list_stack_instances(stack_set_name: @stack)
-      resp.summaries
+    def validate!
+      invalid = regions.blank? || accounts.blank?
+      if invalid
+        puts "ERROR: You must provide accounts and regions.".color(:red)
+        exit 1
+      end
     end
   end
 end

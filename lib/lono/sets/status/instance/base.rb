@@ -114,7 +114,7 @@ class Lono::Sets::Status::Instance
       factor = self.class.delay_factor || 1
       base = 4.5
       delay = factor * base
-      delay = [delay, 90].min
+      delay = [delay, 30].min # limit the delay to a max
       puts "Sleeping for #{delay}s..." if ENV['LONO_DEBUG_THROTTLE']
       sleep delay
     end

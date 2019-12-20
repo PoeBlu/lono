@@ -3,6 +3,9 @@ class Lono::Sets::Instances
     def delete
       operation_preferences_options
       accounts_options
+      with_cli_scope do
+        option :all, type: :boolean, desc: "Delete stack all instances. Overrides --accounts and --regions options"
+      end
     end
 
     def sync

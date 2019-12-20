@@ -2,7 +2,6 @@ class Lono::Sets::Instances
   class Delete < Base
     include Lono::AwsServices
     include Lono::Utils::Sure
-    include Validate
 
     def initialize(options={})
       @options = options
@@ -12,7 +11,7 @@ class Lono::Sets::Instances
     def run
       validate!
 
-      sure?("Are you sure you want to delete the #{@stack} instances?", desc)
+      sure?("Are you sure you want to delete the #{@stack} instances?", long_desc)
 
       # delete_stack_instances resp has operation_id
       # Could also use that to poll for status with the list_stack_set_operation_results
@@ -37,14 +36,32 @@ class Lono::Sets::Instances
       instances_status.run(to: "deleted") unless @options[:noop] # returns success: true or false
     end
 
-    def desc
+    def long_desc
+      total = accounts.size * regions.size
       <<~EOL
       These stack instances will be deleted:
 
           accounts: #{accounts.join(',')}
           regions: #{regions.join(',')}
 
+      Number of stack instances to be deleted: #{total}
       EOL
+    end
+
+    def validate!
+      invalid = (regions.blank? || accounts.blank?) && !options[:all]
+      if invalid
+        puts "ERROR: You must provide --accounts and --regions or --all.".color(:red)
+        exit 1
+      end
+    end
+
+    def accounts
+      @options[:all] ? stack_instances.map(&:account).uniq : @options[:accounts]
+    end
+
+    def regions
+      @options[:all] ? stack_instances.map(&:region).uniq : @options[:regions]
     end
   end
 end

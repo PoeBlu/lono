@@ -89,6 +89,14 @@
               {% endfor %}
             </ul>
         </li>
+        <li>Stack Sets
+            <ul>
+              {% assign docs = site.docs | where: "categories","stack-sets" | sort: "order" %}
+              {% for doc in docs -%}
+                <li><a href='{{doc.url}}'>{{doc.title}}</a></li>
+              {% endfor %}
+            </ul>
+        </li>
         <li><a href="{% link _docs/erb.md %}">ERB</a>
             <ul>
               {% assign docs = site.docs | where: "categories","erb" | sort: "order" %}

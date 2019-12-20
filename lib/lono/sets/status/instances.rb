@@ -7,7 +7,6 @@ class Lono::Sets::Status
       @options = options
       @stack, @operation_id = options[:stack], options[:operation_id]
       @show_time_spent = options[:show_time_spent].nil? ? true : options[:show_time_spent]
-      @operation_id ||= latest_operation_id
     end
 
     def wait(to="completed")
@@ -18,14 +17,6 @@ class Lono::Sets::Status
         Thread.new { instance.tail(to) }
       end.map(&:join)
       wait_until_stack_set_operation_complete
-    end
-
-    def latest_operation_id
-      resp = cfn.list_stack_set_operations(
-        stack_set_name: @stack,
-        max_results: 1,
-      )
-      resp.summaries.first.operation_id
     end
 
     def show
@@ -56,7 +47,7 @@ class Lono::Sets::Status
       until completed?(status)
         resp = cfn.describe_stack_set_operation(
           stack_set_name: @stack,
-          operation_id: @operation_id,
+          operation_id: operation_id,
         )
         stack_set_operation = resp.stack_set_operation
         status = stack_set_operation.status
@@ -103,6 +94,18 @@ class Lono::Sets::Status
         intersect = [[s.account, s.region]] & filter
         intersect.empty?
       end
+    end
+
+    def operation_id
+      @operation_id ||= latest_operation_id
+    end
+
+    def latest_operation_id
+      resp = cfn.list_stack_set_operations(
+        stack_set_name: @stack,
+        max_results: 1,
+      )
+      resp.summaries.first.operation_id
     end
   end
 end

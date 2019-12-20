@@ -11,7 +11,6 @@ class Lono::Sets
       @stack, @operation_id = options[:stack], options[:operation_id]
       @shown = []
       @output = "" # for say method and specs
-      @operation_id ||= latest_operation_id
     end
 
     def wait
@@ -34,7 +33,7 @@ class Lono::Sets
     def display_one
       resp = cfn.describe_stack_set_operation(
         stack_set_name: @stack,
-        operation_id: @operation_id,
+        operation_id: operation_id,
       )
       stack_set_operation = resp.stack_set_operation
       show_stack_set_operation(stack_set_operation)
@@ -42,26 +41,18 @@ class Lono::Sets
       resp
     end
 
-    def latest_operation_id
-      resp = cfn.list_stack_set_operations(
-        stack_set_name: @stack,
-        max_results: 1,
-      )
-      resp.summaries.first.operation_id
-    end
-
     def show
       display_one
       o = @options.merge(show_time_spent: false)
       instances_status = Lono::Sets::Instances::Status.new(o)
       instances_status.run
-      summarize(@operation_id)
+      summarize(operation_id)
     end
 
     @@instances_status_waiter_started = false
     def start_instances_status_waiter
       return if @@instances_status_waiter_started
-      if Lono::Sets::Status::Instances.new(@options.merge(stack: @stack)).instances.size <= 0
+      if stack_instances.empty?
         @@instances_status_waiter_started = true
         return
       end
@@ -96,14 +87,30 @@ class Lono::Sets
     end
 
     def stack_set_status
-      @operation_id = latest_operation_id unless @operation_id
       resp = cfn.describe_stack_set_operation(
         stack_set_name: @stack,
-        operation_id: @operation_id,
+        operation_id: operation_id,
       )
       # describe_stack_set_operation stack_set_operation.status is
       # status one of RUNNING, SUCCEEDED, FAILED, STOPPING, STOPPED
       resp.stack_set_operation.status
     end
+
+    def operation_id
+      @operation_id ||= latest_operation_id
+    end
+
+    def latest_operation_id
+      resp = cfn.list_stack_set_operations(
+        stack_set_name: @stack,
+        max_results: 1,
+      )
+      resp.summaries.first.operation_id
+    end
+
+    def stack_instances
+      Lono::Sets::Status::Instances.new(@options).stack_instances
+    end
+    memoize :stack_instances
   end
 end
