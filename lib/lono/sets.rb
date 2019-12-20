@@ -24,6 +24,13 @@ module Lono
       Delete.new(options.merge(stack: stack)).run
     end
 
+    desc "list", "List CloudFormation stack sets."
+    long_desc Lono::Help.text("sets/list")
+    option :status, default: "active", desc: "ACTIVE or DELETED"
+    def list
+      List.new(options).run
+    end
+
     desc "instances SUBCOMMAND", "instances subcommands"
     long_desc Help.text("sets/instances")
     subcommand "instances", Instances
