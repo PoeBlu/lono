@@ -24,7 +24,7 @@ class Lono::Sets
       while next_token
         o = {}
         o[:next_token] = next_token unless next_token == :start or next_token.nil?
-        o[:status] = @options[:status].upcase if @options[:status]
+        o[:status] = @options[:status].upcase if @options[:status] && @options[:status] != "all"
         resp = cfn.list_stack_sets(o)
         next_token = resp.next_token
         summaries += resp.summaries

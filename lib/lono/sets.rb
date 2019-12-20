@@ -26,7 +26,7 @@ module Lono
 
     desc "list", "List CloudFormation stack sets."
     long_desc Lono::Help.text("sets/list")
-    option :status, default: "active", desc: "ACTIVE or DELETED"
+    option :status, default: "active", desc: "active, all or deleted"
     def list
       List.new(options).run
     end
