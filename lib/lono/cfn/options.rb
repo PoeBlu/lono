@@ -39,7 +39,7 @@ class Lono::Cfn
       base_options
       with_cli_scope do
         option :name, desc: "Name you want to save the template as. Default: existing stack name."
-        option :url, desc: "url with template, normally downloading from existing stack but url overrides that"
+        option :url, desc: "url or path to file with template, normally downloading from existing stack but url overrides that"
       end
     end
 
@@ -50,7 +50,7 @@ class Lono::Cfn
           option :rollback, type: :boolean, desc: "rollback", default: true
         end
         # common to Lono::Cfn and Lono::Sets
-        option :url, desc: "url override, dont generate templates"
+        option :url, desc: "url or path to file with template, dont generate templates"
         option :blueprint, desc: "override convention and specify the template file to use"
         option :capabilities, type: :array, desc: "iam capabilities. Ex: CAPABILITY_IAM, CAPABILITY_NAMED_IAM"
         option :config, aliases: "c", desc: "override convention and specify both the param and variable file to use"
