@@ -1,6 +1,7 @@
 class Lono::Sets
   class Base < Lono::Cfn::Base
     def run
+      generate_all
       save
     end
 
