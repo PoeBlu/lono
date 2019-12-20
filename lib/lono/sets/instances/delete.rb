@@ -49,7 +49,7 @@ class Lono::Sets::Instances
     end
 
     def validate!
-      invalid = (regions.blank? || accounts.blank?) && !options[:all]
+      invalid = (regions.blank? || accounts.blank?) && !@options[:all]
       if invalid
         puts "ERROR: You must provide --accounts and --regions or --all.".color(:red)
         exit 1
