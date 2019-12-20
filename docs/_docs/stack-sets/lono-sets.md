@@ -5,6 +5,8 @@ categories: stack-sets
 
 Lono supports [CloudFormation stack sets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html).  This allows you to deploy stacks to multiple accounts and regions.
 
+![](/img/docs/stack-sets/stack-sets-details.png)
+
 ## Commands Summary
 
 The main commands for stack sets are:
@@ -31,17 +33,17 @@ configs/demo/regions/development/my-set.txt
     us-east-1
     us-east-2
 
-Then add the stack sets:
+Use `lono sets instances sync` command to add the stack instances to the accounts and regions.
 
     lono sets instances sync my-set --blueprint demo
 
-The `lono sets instances sync` calculates that stack instances needed to be added accordingly. If you remove regions from the configs and rerun it, it will remove the appropriate stack instances.
+If you remove regions from the configs and rerun it, the sync command will calculate and remove the stack instances appropriately.
 
-Later if you need to update the stack set main template itself. You can update your blueprint and use `lono sets deploy` to deploy to all the current stack instances.  Example:
+If you need to update the stack set main template itself. Uour blueprint and use `lono sets deploy`. This deploys you changes to all the stack instances.  Example:
 
     lono sets deploy my-set --blueprint demo
 
-Note: the `lono sets deploy` will not *sync* stack instances. It only deploys to the current stack instances. To sync stack instances, you must explicitly use the `lono sets instances sync` command.
+Note: the `lono sets deploy` will not *sync* stack instances. It only deploys to the current associated stack instances. To sync stack instances, you must explicitly use the `lono sets instances sync` command.
 
 ## Deleting Stack Sets
 
