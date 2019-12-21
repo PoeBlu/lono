@@ -5,10 +5,10 @@
 module Lono::Template::Strategy::Dsl::Builder::Section
   class Parameter < Base
     attr_writer :group_label
-    attr_reader :conditional
+    attr_reader :conditional, :label
 
     def template
-      camelize(add_required(flag_conditional(standarize(@definition))))
+      camelize(add_required(track_label(track_conditional(standarize(@definition)))))
     end
 
     # Type is the only required property: https://amzn.to/2x8W5aD
@@ -43,15 +43,22 @@ module Lono::Template::Strategy::Dsl::Builder::Section
       o.is_a?(Float) || o.is_a?(Integer) || o.is_a?(String) || o.is_a?(TrueClass) || o.is_a?(FalseClass)
     end
 
-    def flag_conditional(attributes)
+    def track_conditional(attributes)
       properties = attributes.values.first
       @conditional ||= properties[:Conditional] # flag for later
-      properties.delete(:Conditional) # remove property, it's not a real property, we're only use it to flag conditional parameters
+      properties.delete(:Conditional) # remove property, it's not a real property, used to flag conditional parameters
       # Ensure default
       if @conditional
         defaults = { Default: "" }
         properties.reverse_merge!(defaults)
       end
+      attributes
+    end
+
+    def track_label(attributes)
+      properties = attributes.values.first
+      @label ||= properties[:Label] # flag for later
+      properties.delete(:Label) # remove property, it's not a real property, used to build metadata interface
       attributes
     end
 
