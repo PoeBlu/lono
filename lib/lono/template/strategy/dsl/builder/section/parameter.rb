@@ -4,9 +4,11 @@
 #
 module Lono::Template::Strategy::Dsl::Builder::Section
   class Parameter < Base
+    attr_writer :group_label
+    attr_reader :conditional
+
     def template
-      puts "template Dsl::Builder @label #{@label} self #{self}".color(:yellow)
-      camelize(add_required(standarize(@definition)))
+      camelize(add_required(flag_conditional(standarize(@definition))))
     end
 
     # Type is the only required property: https://amzn.to/2x8W5aD
@@ -16,6 +18,10 @@ module Lono::Template::Strategy::Dsl::Builder::Section
         first # pass through
       elsif definition.size == 2 && second.is_a?(Hash) # medium form
         logical_id, properties = first, second
+        { logical_id => properties }
+      elsif definition.size == 3 && !second.is_a?(Hash) && third.is_a?(Hash)
+        third[:Default] = second # probably a String, Integer, or Float
+        logical_id, properties = first, third
         { logical_id => properties }
       elsif (definition.size == 2 && valid_value?(second)) || # short form
             definition.size == 1
@@ -35,6 +41,22 @@ module Lono::Template::Strategy::Dsl::Builder::Section
 
     def valid_value?(o)
       o.is_a?(Float) || o.is_a?(Integer) || o.is_a?(String) || o.is_a?(TrueClass) || o.is_a?(FalseClass)
+    end
+
+    def flag_conditional(attributes)
+      properties = attributes.values.first
+      @conditional ||= properties[:Conditional] # flag for later
+      properties.delete(:Conditional) # remove property, it's not a real property, we're only use it to flag conditional parameters
+      # Ensure default
+      if @conditional
+        defaults = { Default: "" }
+        properties.reverse_merge!(defaults)
+      end
+      attributes
+    end
+
+    def name
+      template.keys.first # logical_id or name
     end
   end
 end

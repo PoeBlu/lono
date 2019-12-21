@@ -9,26 +9,24 @@ class Lono::Template::Strategy::Dsl
     def initialize(path, blueprint, options={})
       @path, @blueprint, @options = path, blueprint, options
       @template = @path.sub("#{Lono.config.templates_path}/",'').sub(/\.rb$/,'')
+      @parameters = [] # registry
       @cfn = {}
     end
 
     def build
       load_context
       evaluate_template_path(@path) # modifies @cfn
-      build_template
+      finalize
+      to_yaml
       write_output
-      template
-    end
-
-    # Useful for lono seed to get the template in memory
-    def template
-      load_context
-      evaluate_template_path(@path) # modifies @cfn
       @cfn
     end
-    memoize :template
 
-    def build_template
+    def finalize
+      @cfn = Finalizer.new(@cfn, @parameters).run
+    end
+
+    def to_yaml
       @results = YAML.dump(@cfn)
     end
 

@@ -23,6 +23,13 @@ module Lono::Template::Strategy::Dsl::Builder::Section
       @cfn["Parameters"] ||= {}
       param = Parameter.new(@blueprint, definition)
       @cfn["Parameters"].merge!(param.template)
+
+      # Additional decorations
+      param.group_label = @group_label
+      @parameters << param # register for to build Metadata Interface later
+      if param.conditional
+        condition("Has#{param.name}", not!(equals(ref(param.name), "")))
+      end
     end
 
     def mapping(*definition)
