@@ -23,7 +23,7 @@ class Lono::Template::Strategy::Dsl
     end
 
     def finalize
-      @cfn = Finalizer.new(@cfn, @parameters).run
+      @cfn = Finalizer.new(@cfn, parameters: @parameters).run
     end
 
     def to_yaml
