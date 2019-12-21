@@ -1,5 +1,5 @@
-describe Lono::Template::Strategy::Dsl::Builder::Condition do
-  let(:condition) { Lono::Template::Strategy::Dsl::Builder::Condition.new("ec2", definition) }
+describe Lono::Template::Strategy::Dsl::Builder::Section::Condition do
+  let(:condition) { Lono::Template::Strategy::Dsl::Builder::Section::Condition.new("ec2", definition) }
   context "medium form" do
     let(:definition) do
       [:ami_map, {

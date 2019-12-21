@@ -1,5 +1,5 @@
-describe Lono::Template::Strategy::Dsl::Builder::Mapping do
-  let(:mapping) { Lono::Template::Strategy::Dsl::Builder::Mapping.new("ec2", definition) }
+describe Lono::Template::Strategy::Dsl::Builder::Section::Mapping do
+  let(:mapping) { Lono::Template::Strategy::Dsl::Builder::Section::Mapping.new("ec2", definition) }
   context "medium form" do
     let(:definition) do
       [:ami_map, {

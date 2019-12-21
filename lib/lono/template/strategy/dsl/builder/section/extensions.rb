@@ -1,10 +1,10 @@
 module Lono::Template::Strategy::Dsl::Builder::Section
   module Extensions
     def parameter_group(label)
-      @label, old = label, @label
+      @parameter_group_label = label
       puts "parameter_group label #{label}"
       yield
-      @label = old
+      @parameter_group_label = nil
     end
 
     # Decorate the parameter method to make smarter.
