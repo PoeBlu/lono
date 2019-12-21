@@ -56,4 +56,18 @@ describe Lono::Template::Strategy::Dsl::Builder::Parameter do
       )
     end
   end
+
+  context "conditional option" do
+    let(:definition) do
+      [ "InstanceType", { Conditional: true } ]
+    end
+
+    it "produces template" do
+      parameter.template
+      result = parameter.template
+      expect(result).to eq(
+        {"InstanceType"=>{"Default"=>"", "Type"=>"String"}}
+      )
+    end
+  end
 end

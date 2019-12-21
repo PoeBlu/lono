@@ -1,12 +1,2 @@
-# Implements:
-#
-#   template - uses @definition to build a CloudFormation template section
-#
-class Lono::Template::Strategy::Dsl::Builder
-  class Section < Base
-    def template
-      hash, _ = @definition
-      camelize(hash)
-    end
-  end
+module Lono::Template::Strategy::Dsl::Builder::Section
 end

@@ -2,7 +2,7 @@
 #
 #   template - uses @definition to build a CloudFormation template section
 #
-class Lono::Template::Strategy::Dsl::Builder
+module Lono::Template::Strategy::Dsl::Builder::Section
   class Resource < Base
     def template
       camelize(standarize(@definition))

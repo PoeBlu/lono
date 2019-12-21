@@ -3,7 +3,8 @@ class Lono::Template::Strategy::Dsl::Builder
   module Syntax
     include Fn
     include Lono::Template::Evaluate
-    include SectionMethods
+    include Section::Methods
+    include Section::Extensions
     include Helpers # built-in helpers
   end
 end

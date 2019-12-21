@@ -1,6 +1,6 @@
 # Organize core section method syntax here
-class Lono::Template::Strategy::Dsl::Builder
-  module SectionMethods
+module Lono::Template::Strategy::Dsl::Builder::Section
+  module Methods
     def aws_template_format_version(version_date)
       @cfn["AWSTemplateFormatVersion"] = version_date
     end
@@ -19,6 +19,7 @@ class Lono::Template::Strategy::Dsl::Builder
     end
 
     def parameter(*definition)
+      puts "parameter SectionMethods *definition #{definition.inspect}"
       @cfn["Parameters"] ||= {}
       param = Parameter.new(@blueprint, definition)
       @cfn["Parameters"].merge!(param.template)

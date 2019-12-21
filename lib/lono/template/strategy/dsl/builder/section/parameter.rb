@@ -2,9 +2,10 @@
 #
 #   template - uses @definition to build a CloudFormation template section
 #
-class Lono::Template::Strategy::Dsl::Builder
+module Lono::Template::Strategy::Dsl::Builder::Section
   class Parameter < Base
     def template
+      puts "template Dsl::Builder @label #{@label} self #{self}".color(:yellow)
       camelize(add_required(standarize(@definition)))
     end
 

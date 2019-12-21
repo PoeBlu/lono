@@ -1,7 +1,7 @@
-class Lono::Template::Strategy::Dsl::Builder
+module Lono::Template::Strategy::Dsl::Builder::Section
   class Base
-    include Fn
-    include Helpers
+    include Lono::Template::Strategy::Dsl::Builder::Fn
+    include Lono::Template::Strategy::Dsl::Builder::Helpers
 
     def initialize(blueprint, *definition)
       @blueprint = blueprint
@@ -35,7 +35,7 @@ class Lono::Template::Strategy::Dsl::Builder
 
     # Remove items with nil value automatically
     def clean(data)
-      Squeezer.new(data).squeeze
+      Lono::Template::Strategy::Dsl::Builder::Squeezer.new(data).squeeze
     end
   end
 end
