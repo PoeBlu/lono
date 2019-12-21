@@ -19,7 +19,6 @@ module Lono::Template::Strategy::Dsl::Builder::Section
     end
 
     def parameter(*definition)
-      puts "parameter SectionMethods *definition #{definition.inspect}"
       @cfn["Parameters"] ||= {}
       param = Parameter.new(@blueprint, definition)
       @cfn["Parameters"].merge!(param.template)

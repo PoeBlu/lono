@@ -2,6 +2,7 @@ module Lono::Template::Strategy::Dsl::Builder::Section
   class Base
     include Lono::Template::Strategy::Dsl::Builder::Fn
     include Lono::Template::Strategy::Dsl::Builder::Helpers
+    include Lono::Template::Strategy::Dsl::Builder::Stringify
 
     def initialize(blueprint, *definition)
       @blueprint = blueprint
@@ -16,21 +17,9 @@ module Lono::Template::Strategy::Dsl::Builder::Section
       data = if blueprint_meta.auto_camelize?(target_section)
                CfnCamelizer.transform(attributes)
              else
-               stringify_keys!(attributes)
+               stringify!(attributes)
              end
       clean(data)
-    end
-
-    # Accounts for Arrays also. ActiveSupport only works for Hashes.
-    def stringify_keys!(data)
-      case data
-      when Array
-        data.map! { |i| stringify_keys!(i) }
-      when Hash
-        data.deep_transform_keys! { |k| k.to_s }
-      else
-        data # do not transform
-      end
     end
 
     # Remove items with nil value automatically

@@ -4,7 +4,7 @@
 #
 module Lono::Template::Strategy::Dsl::Builder::Section
   class Parameter < Base
-    attr_writer :group_label
+    attr_accessor :group_label
     attr_reader :conditional, :label
 
     def template
