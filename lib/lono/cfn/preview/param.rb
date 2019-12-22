@@ -70,7 +70,7 @@ module Lono::Cfn::Preview
 
   private
     def output_template
-      Lono::OutputTemplate.new(@blueprint, @template)
+      Lono::Output::Template.new(@blueprint, @template)
     end
     memoize :output_template
 

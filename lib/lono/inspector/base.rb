@@ -33,7 +33,7 @@ module Lono::Inspector
     end
 
     def output_template
-      Lono::OutputTemplate.new(@blueprint, @template)
+      Lono::Output::Template.new(@blueprint, @template)
     end
     memoize :output_template
   end

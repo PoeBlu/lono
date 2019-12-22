@@ -46,19 +46,26 @@ class Lono::Seed
     end
 
     def create_param_file
-      @output = Lono::Output::Template.new(@blueprint, @template)
-      if @output.parameters.empty?
+      @output_template = Lono::Output::Template.new(@blueprint, @template)
+      if @output_template.parameters.empty?
         puts "Template has no parameters."
         return
       end
 
-      lines = []
-      @output.parameter_groups.each do |label, parameters|
+      # Generate by paramter group first
+      lines, shown = [], []
+      @output_template.parameter_groups.each do |label, parameters|
         lines << "# Parameter Group: #{label}"
         parameters.each do |name|
           lines << parameter_line(name)
+          shown << name
         end
         lines << ""
+      end if @output_template.parameter_groups
+
+      # Then generate the rest
+      @output_template.parameters.each do |name, data|
+        lines << parameter_line(name) unless shown.include?(name)
       end
 
       content = lines.join("\n") + "\n"
@@ -67,7 +74,7 @@ class Lono::Seed
     end
 
     def parameter_line(name)
-      data = @output.parameters[name]
+      data = @output_template.parameters[name]
       example = description_example(data["Description"])
       line = "#{name}=#{example}"
       if data["Default"].nil?
