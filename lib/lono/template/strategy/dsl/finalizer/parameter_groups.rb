@@ -8,7 +8,7 @@ class Lono::Template::Strategy::Dsl::Finalizer
     end
 
     def run
-      return if parameter_groups.empty?
+      return @cfn if parameter_groups.empty?
       @cfn["Metadata"] ||= {}
       @cfn["Metadata"]["AWS::CloudFormation::Interface"] = stringify!(interface)
       @cfn

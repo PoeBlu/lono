@@ -31,10 +31,7 @@ class Lono::Template::Strategy::Dsl
     end
 
     def write_output
-      output_path = "#{Lono.config.output_path}/#{@blueprint}/templates"
-      FileUtils.mkdir_p(output_path)
-
-      path = "#{output_path}/#{@template}.yml"
+      path = "#{Lono.config.output_path}/#{@blueprint}/templates/#{@template}.yml"
       ensure_parent_dir(path)
       IO.write(path, @results)
 
