@@ -6,17 +6,16 @@ module Lono
 
     def data
       template_path = "#{Lono.config.output_path}/#{@blueprint}/templates/#{@template}.yml"
-      check_template_exists(template_path)
+      check_template_exists!(template_path)
       YAML.load(IO.read(template_path))
     end
 
     # Check if the template exists and print friendly error message.  Exits if it
     # does not exist.
-    def check_template_exists(template_path)
-      unless File.exist?(template_path)
-        puts "The template #{template_path} does not exist. Are you sure you use the right template name?  The template name does not require the extension.".color(:red)
-        exit 1
-      end
+    def check_template_exists!(template_path)
+      return if File.exist?(template_path)
+      puts "The template #{template_path} does not exist. Are you sure you use the right template name?  The template name does not require the extension.".color(:red)
+      exit 1
     end
 
     def required_parameters
@@ -30,6 +29,5 @@ module Lono
     def parameters
       data["Parameters"] || []
     end
-
   end
 end

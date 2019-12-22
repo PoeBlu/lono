@@ -29,7 +29,6 @@ class Lono::Seed
 
     def run
       generate_template
-      @output_template = Lono::OutputTemplate.new(@blueprint, @template)
       setup
       self.destination_root = Dir.pwd # Thor::Actions require destination_root to be set
       create_params
@@ -47,23 +46,19 @@ class Lono::Seed
     end
 
     def create_param_file
-      lines = []
-      required = @output_template.required_parameters
-      lines << "# Required parameters:" unless required.empty?
-      required.each do |name, data|
-        example = description_example(data["Description"])
-        lines << "#{name}=#{example}"
-      end
-      optional = @output_template.optional_parameters
-      lines << "# Optional parameters:" unless optional.empty?
-      optional.each do |name, data|
-        value = default_value(data)
-        lines << "# #{name}=#{value}"
-      end
-
-      if lines.empty?
+      @output = Lono::Output::Template.new(@blueprint, @template)
+      if @output.parameters.empty?
         puts "Template has no parameters."
         return
+      end
+
+      lines = []
+      @output.parameter_groups.each do |label, parameters|
+        lines << "# Parameter Group: #{label}"
+        parameters.each do |name|
+          lines << parameter_line(name)
+        end
+        lines << ""
       end
 
       content = lines.join("\n") + "\n"
@@ -71,23 +66,16 @@ class Lono::Seed
       create_file(dest_path, content) # Thor::Action
     end
 
-    def params
-      true
-    end
-
-    def create_variables
-      return unless variables
-      dest_path = "configs/#{@blueprint}/variables/#{Lono.env}.rb"
-      create_file(dest_path, variables) # Thor::Action
-    end
-
-    def setup; end
-    def finish; end
-
-    # Meant to be overriden by subclass
-    # Return String with contents of variables file.
-    def variables
-      false
+    def parameter_line(name)
+      data = @output.parameters[name]
+      example = description_example(data["Description"])
+      line = "#{name}=#{example}"
+      if data["Default"].nil?
+        line = "#{line} # (required)"
+      else
+        line = "# #{line} # (optional)"
+      end
+      line
     end
 
     def description_example(description)
@@ -107,6 +95,25 @@ class Lono::Seed
       else
         value
       end
+    end
+
+    def params
+      true
+    end
+
+    def create_variables
+      return unless variables
+      dest_path = "configs/#{@blueprint}/variables/#{Lono.env}.rb"
+      create_file(dest_path, variables) # Thor::Action
+    end
+
+    def setup; end
+    def finish; end
+
+    # Meant to be overriden by subclass
+    # Return String with contents of variables file.
+    def variables
+      false
     end
   end
 end
