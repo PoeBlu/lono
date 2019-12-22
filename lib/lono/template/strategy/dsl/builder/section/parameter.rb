@@ -13,13 +13,13 @@ module Lono::Template::Strategy::Dsl::Builder::Section
 
     # Type is the only required property: https://amzn.to/2x8W5aD
     def standarize(definition)
-      first, second, _ = definition
+      first, second, third = definition
       if definition.size == 1 && first.is_a?(Hash) # long form
         first # pass through
-      elsif definition.size == 2 && second.is_a?(Hash) # medium form
+      elsif definition.size == 2 && second.is_a?(Hash) # medium form - 1
         logical_id, properties = first, second
         { logical_id => properties }
-      elsif definition.size == 3 && !second.is_a?(Hash) && third.is_a?(Hash)
+      elsif definition.size == 3 && !second.is_a?(Hash) && third.is_a?(Hash) # medium form variant - 2
         third[:Default] = second # probably a String, Integer, or Float
         logical_id, properties = first, third
         { logical_id => properties }

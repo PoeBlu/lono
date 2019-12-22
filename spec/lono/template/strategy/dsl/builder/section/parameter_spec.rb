@@ -57,7 +57,7 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Parameter do
     end
   end
 
-  context "conditional option" do
+  context "conditional option with inferred default" do
     let(:definition) do
       [ "InstanceType", { Conditional: true } ]
     end
@@ -67,6 +67,20 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Parameter do
       result = parameter.template
       expect(result).to eq(
         {"InstanceType"=>{"Default"=>"", "Type"=>"String"}}
+      )
+    end
+  end
+
+  context "conditional option with explicit default as 2nd argument String" do
+    let(:definition) do
+      [ "InstanceType", "t3.small", { Conditional: true } ]
+    end
+
+    it "produces template" do
+      parameter.template
+      result = parameter.template
+      expect(result).to eq(
+        {"InstanceType"=>{"Default"=>"t3.small", "Type"=>"String"}}
       )
     end
   end
