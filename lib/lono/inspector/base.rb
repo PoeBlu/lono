@@ -11,7 +11,7 @@ module Lono::Inspector
     end
 
     def generate
-      if @options[:url]
+      if @options[:source]
         Lono::Cfn::Download.new(@options).run
       else
         generate_templates

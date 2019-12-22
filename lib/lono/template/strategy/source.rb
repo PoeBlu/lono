@@ -1,5 +1,6 @@
 module Lono::Template::Strategy
-  class Url < Base
+  # url or path
+  class Source < Base
     def run
       Lono::Cfn::Download.new(@options).run
     end

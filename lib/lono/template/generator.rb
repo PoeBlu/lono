@@ -12,8 +12,8 @@ class Lono::Template
     end
 
     def template_type
-      if @options[:url]
-        "Url"
+      if @options[:source]
+        "Source"
       else
         meta_config = "#{Lono.blueprint_root}/.meta/config.yml"
         data = YAML.load_file(meta_config)

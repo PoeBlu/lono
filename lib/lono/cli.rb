@@ -20,7 +20,7 @@ module Lono
     option :clean, type: :boolean, default: false, desc: "remove all output files before generating"
     option :quiet, type: :boolean, desc: "silence the output"
     option :stack, desc: "stack name. defaults to blueprint name."
-    options.url
+    options.source
     def generate(blueprint=nil)
       Blueprint::Find.one_or_all(blueprint).each do |b|
         o = options.merge(blueprint: b)
@@ -41,7 +41,7 @@ module Lono
     desc "summary BLUEPRINT", "Prints summary of CloudFormation templates."
     long_desc Help.text("summary")
     options.template
-    options.url
+    options.source
     def summary(blueprint)
       Lono::Inspector::Summary.new(options.merge(blueprint: blueprint)).run
     end
@@ -51,7 +51,7 @@ module Lono
     option :display, type: :string, desc: "graph or text", default: "graph"
     option :noop, type: :boolean, desc: "noop mode"
     options.template
-    options.url
+    options.source
     def xgraph(blueprint)
       Lono::Inspector::Graph.new(options.merge(blueprint: blueprint)).run
     end
@@ -60,7 +60,7 @@ module Lono
     long_desc Help.text("seed")
     option :param, desc: "override convention and specify the param file to use"
     options.template
-    options.url
+    options.source
     add_runtime_options! # Thor::Action options like --force
     def seed(blueprint)
       Seed.new(options.merge(blueprint: blueprint)).create

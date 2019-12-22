@@ -20,9 +20,9 @@ class Lono::Cfn
     end
 
     def download_stack
-      url = @options[:url]
-      if url
-        open(url).read # url
+      source = @options[:source]
+      if source
+        open(source).read # url or file
       else
         resp = cfn.get_template(
           stack_name: @stack,

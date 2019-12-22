@@ -14,7 +14,7 @@ class Lono::Sets::Instances
       with_cli_scope do
         option :delete, type: :boolean, default: true, desc: "Delete stack instances that are not provided"
         option :blueprint, desc: "override convention and specify the template file to use"
-        option :url, desc: "url or file source instead of blueprint"
+        option :source, desc: "url or path to file with template"
       end
     end
 

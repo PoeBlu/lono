@@ -4,9 +4,9 @@ class Lono::CLI
       @cli = cli
     end
 
-    def url
+    def source
       with_cli_scope do
-        option :url, desc: "url or file with with template, overrides template generation"
+        option :source, desc: "url or path to file with template"
       end
     end
 

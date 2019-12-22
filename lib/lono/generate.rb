@@ -21,7 +21,7 @@ module Lono
     end
 
     def post_generate
-      return if @options[:noop] || @options[:url]
+      return if @options[:noop] || @options[:source]
       build_files # builds app/files to output/BLUEPRINT/files
       post_process_templates
       upload_files
