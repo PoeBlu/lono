@@ -21,13 +21,19 @@ module Lono::Inspector
         return
       end
 
+      shown = []
       puts "# Parameters Total (#{parameters.size})"
       parameter_groups.each do |label, parameters|
         puts "# Parameter Group (#{parameters.size}): #{label}"
         parameters.each do |name|
           puts parameter_line(name)
+          shown << name
         end
       end if output_template.parameter_groups
+
+      parameters.each do |name, data|
+        puts parameter_line(name) unless shown.include?(name)
+      end
     end
 
     def parameter_line(name)
