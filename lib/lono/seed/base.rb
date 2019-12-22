@@ -80,7 +80,7 @@ class Lono::Seed
       if data["Default"].nil?
         line = "#{line} # (required)"
       else
-        line = "# #{line} # (optional)"
+        line = "# #{line}"
       end
       line
     end
