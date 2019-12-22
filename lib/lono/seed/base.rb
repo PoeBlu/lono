@@ -87,22 +87,10 @@ class Lono::Seed
     end
 
     def description_example(description)
-      default = ''
-      return default unless description
+      return unless description
       md = description.match(/(Example|IE): (.*)/)
-      return default unless md
+      return unless md
       md[2]
-    end
-
-    def default_value(data)
-      value = data["Default"]
-      # Dont use !blank? since there can be false optional values
-      # Also dont use .empty? since value can be an Integer
-      if value.nil? || value == ''
-        description_example(data["Description"])
-      else
-        value
-      end
     end
 
     def params
