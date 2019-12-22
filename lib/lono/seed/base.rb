@@ -68,7 +68,7 @@ class Lono::Seed
         lines << parameter_line(name) unless shown.include?(name)
       end
 
-      content = lines.join("\n") + "\n"
+      content = lines.join("\n")
       dest_path = "configs/#{@blueprint}/params/#{Lono.env}.txt" # only support environment level parameters for now
       create_file(dest_path, content) # Thor::Action
     end
