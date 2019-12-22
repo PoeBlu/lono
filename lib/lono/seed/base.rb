@@ -75,12 +75,12 @@ class Lono::Seed
 
     def parameter_line(name)
       data = @output_template.parameters[name]
-      example = description_example(data["Description"])
-      line = "#{name}=#{example}"
       if data["Default"].nil?
-        line = "#{line} # (required)"
+        example = description_example(data["Description"])
+        line = "#{name}=#{example} # (required)"
       else
-        line = "# #{line}"
+        default = data["Default"]
+        line = "# #{name}=#{default}"
       end
       line
     end
