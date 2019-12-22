@@ -52,7 +52,7 @@ class Lono::Seed
         return
       end
 
-      # Generate by paramter group first
+      # Generate by parameter group first
       lines, shown = [], []
       @output_template.parameter_groups.each do |label, parameters|
         lines << "# Parameter Group: #{label}"
@@ -75,12 +75,13 @@ class Lono::Seed
 
     def parameter_line(name)
       data = @output_template.parameters[name]
+      example = description_example(data["Description"])
       if data["Default"].nil?
-        example = description_example(data["Description"])
         line = "#{name}=#{example} # (required)"
       else
         default = data["Default"]
         line = "# #{name}=#{default}"
+        line = "#{line} # #{example}" if example
       end
       line
     end

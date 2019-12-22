@@ -1,7 +1,9 @@
 module Lono::Inspector
   class Summary < Base
+    delegate :required_parameters, :optional_parameters, :parameters, :parameter_groups, :data,
+             to: :output_template
+
     def perform(template)
-      puts "template #{template}"
       # little dirty but @template is used in data method so we dont have to pass it to the data method
       @template = template
 
@@ -9,34 +11,36 @@ module Lono::Inspector
       return if @options[:noop]
 
       print_parameters_summary
-
-      puts "Resources:"
+      puts "# Resources:"
       print_resource_types
     end
 
     def print_parameters_summary
       if parameters.empty?
         puts "There are no parameters in this template."
-      else
-        print_parameters("Required Parameters (#{required_parameters.size})", required_parameters)
-        print_parameters("Optional Parameters (#{optional_parameters.size})", optional_parameters)
+        return
       end
+
+      puts "# Parameters Total (#{parameters.size})"
+      parameter_groups.each do |label, parameters|
+        puts "# Parameter Group (#{parameters.size}): #{label}"
+        parameters.each do |name|
+          puts parameter_line(name)
+        end
+      end if output_template.parameter_groups
     end
 
-    def print_parameters(label, parameters)
-      puts "#{label}:"
-      if parameters.empty?
-        text = label.downcase.include?("required") ? "required" : "optional"
-        puts "  There are no #{text} parameters."
-      else
-        parameters.each do |logical_id, p|
-          output = "  #{logical_id} (#{p["Type"]})"
-          if p["Default"]
-            output << " Default: #{p["Default"]}"
-          end
-          puts output
-        end
-      end
+    def parameter_line(name)
+      data = parameters[name]
+      "#{name} (#{data["Type"]})"
+    end
+
+    def description_example(description)
+      default = ''
+      return default unless description
+      md = description.match(/(Example|IE): (.*)/)
+      return default unless md
+      md[2]
     end
 
     def resource_types
@@ -63,5 +67,10 @@ module Lono::Inspector
       end
       printf "%3s %s\n", resource_types.size, "Total"
     end
+
+    def output_template
+      Lono::Output::Template.new(@blueprint, @template)
+    end
+    memoize :output_template
   end
 end

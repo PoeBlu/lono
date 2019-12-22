@@ -1,8 +1,5 @@
 module Lono::Inspector
   class Base < Lono::AbstractBase
-    delegate :required_parameters, :optional_parameters, :parameters, :data,
-             to: :output_template
-
     extend Memoist
 
     def run
@@ -31,10 +28,5 @@ module Lono::Inspector
         path.sub("#{templates_path}/", '').sub('.yml','') # template_name
       end
     end
-
-    def output_template
-      Lono::Output::Template.new(@blueprint, @template)
-    end
-    memoize :output_template
   end
 end
