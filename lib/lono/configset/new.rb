@@ -22,7 +22,7 @@ class Lono::Configset
 
     # for specs
     def set_cwd
-      @cwd = ENV['LONO_TEST'] ? File.dirname(Lono.root) : "#{Dir.pwd}/configsets"
+      @cwd = ENV['LONO_TEST'] ? File.dirname(Lono.root) : "#{Dir.pwd}/app/configsets"
     end
 
     def set_variables

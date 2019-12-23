@@ -65,7 +65,7 @@ module Lono
 
     def all_components
       components = []
-      Dir.glob("#{Lono.root}/#{@type}/*").select do |p|
+      Dir.glob("#{Lono.root}/app/#{@type}/*").select do |p|
         dot_meta = dot_meta_path(p)
         next unless File.exist?(dot_meta)
         config = yaml_load_file(dot_meta)
