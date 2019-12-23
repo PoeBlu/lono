@@ -9,7 +9,6 @@ module Lono
     desc "list", "Lists project configsets"
     long_desc Help.text("configset/new")
     def list
-      puts "Current available configsets:"
       Find.list_all
     end
   end

@@ -49,6 +49,7 @@ class Lono::Configset
           combiner.add(c, loader.load)
         end
         combiner.combine
+        Register.clear! # in case of lono generate for all templates
       end
     end
   end

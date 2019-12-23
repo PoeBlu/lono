@@ -1,3 +1,5 @@
+require "text-table"
+
 # Subclass must implement initialize and set @type and @name_key. Example:
 #
 #     class Lono::Configset
@@ -23,11 +25,7 @@ module Lono
       end
 
       def list_all
-        components = all
-        components.each do |c|
-          pretty_path = c["path"].sub("#{Lono.root}/", "")
-          puts "  #{c["name"]}: #{pretty_path} (#{c["source_type"]})"
-        end
+        new.list_all
       end
 
       def all
@@ -114,10 +112,24 @@ module Lono
       end
     end
 
+    def list_all
+      puts "Available #{@type}:"
+      table = Text::Table.new
+      table.head = ["Name", "Path", "Type"]
+
+      components = all
+      components.each do |c|
+        pretty_path = c["path"].sub("#{Lono.root}/", "")
+        table.rows << [c["name"], pretty_path, c["source_type"]]
+      end
+
+      puts table
+    end
+
     @@deprecation_warnings = []
     def deprecation_warning(message)
       return if ENV["LONO_MUTE_DEPRECATION"]
-      message = "#{message} Use LONO_MUTE_DEPRECATION=1 to mute"
+      message = "#{message} export LONO_MUTE_DEPRECATION=1 to mute"
       puts message unless @@deprecation_warnings.include?(message)
       @@deprecation_warnings << message
     end

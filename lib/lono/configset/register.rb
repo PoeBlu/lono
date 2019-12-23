@@ -23,6 +23,10 @@ class Lono::Configset
       instance_eval(IO.read(path), path)
     end
 
+    def self.clear!
+      self.configsets = []
+    end
+
     # DSL
     def configset(name, options={})
       validate_configset!(name)
