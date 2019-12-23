@@ -1,15 +1,12 @@
-lib = File.expand_path("../lib", __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-
 Gem::Specification.new do |spec|
-  spec.name          = "<%= blueprint_name %>"
+  spec.name          = "<%= configset_name %>"
   spec.version       = "0.1.0"
   spec.authors       = ["<%= user_info[:author] %>"]
   spec.email         = ["<%= ENV['LONO_EMAIL'] || user_info[:email] %>"]
 
   spec.summary       = "Write a short summary because it's required."  # TODO: Change me
   spec.description   = "Write a longer description or delete this line."  # TODO: Change me
-  spec.homepage      = "<%= ENV['LONO_ORG'] || "https://github.com/USER" %>/<%= blueprint_name %>"
+  spec.homepage      = "<%= ENV['LONO_ORG'] || "https://github.com/USER" %>/<%= configset_name %>"
   spec.license       = "<%= ENV['LONO_LICENSE'] || 'MIT' %>"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -19,8 +16,8 @@ Gem::Specification.new do |spec|
 
     spec.metadata["homepage_uri"] = spec.homepage
 <% if ENV['LONO_ORG'] -%>
-    spec.metadata["source_code_uri"] = "<%= ENV['LONO_ORG'] %>/<%= blueprint_name %>"
-    spec.metadata["changelog_uri"] = "<%= ENV['LONO_ORG'] %>/<%= blueprint_name %>/blob/master/CHANGELOG.md"
+    spec.metadata["source_code_uri"] = "<%= ENV['LONO_ORG'] %>/<%= configset_name %>"
+    spec.metadata["changelog_uri"] = "<%= ENV['LONO_ORG'] %>/<%= configset_name %>/blob/master/CHANGELOG.md"
 <% else -%>
     spec.metadata["source_code_uri"] = "https://github.com/user/repo" # TODO: Change me
     spec.metadata["changelog_uri"] = "https://github.com/user/repo/blob/master/CHANGELOG.md"  # TODO: Change me

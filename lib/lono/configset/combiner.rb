@@ -1,6 +1,6 @@
 require "yaml"
 
-module Lono::Configset
+class Lono::Configset
   class Combiner
     def initialize
       @sets = []

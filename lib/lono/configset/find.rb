@@ -1,6 +1,6 @@
 require "yaml"
 
-module Lono::Configset
+class Lono::Configset
   class Find < Lono::FindBase
     def initialize
       @type = "configsets"

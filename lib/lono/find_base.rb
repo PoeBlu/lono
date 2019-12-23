@@ -1,6 +1,6 @@
 # Subclass must implement initialize and set @type and @name_key. Example:
 #
-#     module Lono::Configset
+#     class Lono::Configset
 #       class Find < Lono::FindBase
 #         def initialize
 #           @type = "configsets"

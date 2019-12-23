@@ -17,7 +17,8 @@ class Lono::Blueprint
           Are you sure its in your Gemfile or in the blueprints folder
           with the correct blueprint_name in .meta/config.yml?
         EOL
-        List.available
+        puts "Available blueprints:"
+        Find.list_all
         exit 1
       end
     end

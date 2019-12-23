@@ -112,6 +112,10 @@ module Lono
     long_desc Help.text(:cfn)
     subcommand "cfn", Cfn
 
+    desc "configset SUBCOMMAND", "configset subcommands"
+    long_desc Help.text(:configset)
+    subcommand "configset", Configset
+
     desc "param SUBCOMMAND", "param subcommands"
     long_desc Help.text(:param)
     subcommand "param", Param

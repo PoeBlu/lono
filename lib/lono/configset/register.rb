@@ -1,6 +1,6 @@
 require "active_support/core_ext/class"
 
-module Lono::Configset
+class Lono::Configset
   class Register < Lono::AbstractBase
     class_attribute :configsets
     self.configsets = []

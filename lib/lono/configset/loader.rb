@@ -1,6 +1,6 @@
 require "json"
 
-module Lono::Configset
+class Lono::Configset
   class Loader
     extend Memoist
 
