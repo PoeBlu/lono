@@ -21,7 +21,6 @@ module Lono::Configset
       def combined_metadata_map
         combiner = Combiner.new
         Register.configsets.each do |c|
-          puts "c #{c}"
           loader = Loader.new(c[:name], c[:resource])
           combiner.add(c[:name], c[:resource], loader.load)
         end

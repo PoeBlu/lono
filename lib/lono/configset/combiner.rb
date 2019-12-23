@@ -23,7 +23,7 @@ module Lono::Configset
         cs = init.delete("configSets") # TODO: when metadata doesnt have configSets order but is flat structure
         @configSets[name] = cs["default"].map {|c| "#{i}_#{c}" }
         init.transform_keys! { |c| "#{i}_#{c}" }
-        @metadata.merge!(init)
+        @metadata["AWS::CloudFormation::Init"].merge!(init)
         @map[resource] = @metadata
       end
       @map
