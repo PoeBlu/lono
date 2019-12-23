@@ -1,0 +1,2 @@
+module Lono::Configset
+end
