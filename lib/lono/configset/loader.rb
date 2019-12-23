@@ -4,25 +4,49 @@ class Lono::Configset
   class Loader
     extend Memoist
 
-    def initialize(name, resource)
-      @name, @resource = name, resource
+    def initialize(options={})
+      @options = options
+      @name, @resource = options[:name], options[:resource]
     end
 
     def load
-      configset_root = Find.find(@name)
-      path = "#{configset_root}/lib/configset.json"
-      raise "configset #{path} not found" unless File.exist?(path)
+      path = find_path
+      unless path
+        raise "Unable to find lib/configset.yml or configset.json in #{configset_root}"
+      end
 
-      JSON.load(IO.read(path))
+      copy_instance_variables
+      content = RenderMePretty.result(path, context: self)
+      if File.extname(path) == ".yml"
+        YAML.load(content)
+      else
+        JSON.load(content)
+      end
     end
     memoize :load
+
+    def copy_instance_variables
+      @options.each do |k,v|
+        instance_variable_set("@#{k}", v)
+      end
+    end
+
+    def find_path
+      paths = %w[configset.yml configset.json].map { |p| "#{configset_root}/lib/#{p}" }
+      paths.find { |path| File.exist?(path) }
+    end
+
+    def configset_root
+      Find.find(@name)
+    end
+    memoize :configset_root
 
     class << self
       def combined_metadata_map
         combiner = Combiner.new
         Register.configsets.each do |c|
-          loader = Loader.new(c[:name], c[:resource])
-          combiner.add(c[:name], c[:resource], loader.load)
+          loader = Loader.new(c)
+          combiner.add(c, loader.load)
         end
         combiner.combine
       end

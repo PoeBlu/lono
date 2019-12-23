@@ -35,18 +35,11 @@ class Lono::Configset
       if @demo
         options = {}
       else
-        create_file "#{@cwd}/#{configset_name}/lib/configset.json"
-        options = {exclude_pattern: %r{configset\.json}}
+        create_file "#{@cwd}/#{configset_name}/lib/configset.yml"
+        options = {exclude_pattern: %r{configset\.yml}}
       end
 
       directory ".", "#{@cwd}/#{configset_name}", options
-    end
-
-    def create_configset_json
-      if @demo
-        # directory "../configset_types/#{@options[:type]}", "#{@cwd}/#{configset_name}"
-      else
-      end
     end
 
     def create_license

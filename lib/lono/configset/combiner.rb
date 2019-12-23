@@ -9,13 +9,15 @@ class Lono::Configset
       @map = {} # stores resource logical id => metadata cfn-init
     end
 
-    def add(name, resource, metadata)
-      @sets << [name, resource, metadata.dup]
+    def add(options, metadata)
+      @sets << [options, metadata.dup]
     end
 
     def combine
       @sets.each_with_index do |a, i|
-        name, resource, metadata = a
+        options, metadata = a
+        name, resource = options[:name], options[:resource]
+
         @configSets["default"] ||= []
         @configSets["default"] << {"ConfigSet" => name}
 

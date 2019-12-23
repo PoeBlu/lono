@@ -24,9 +24,9 @@ class Lono::Configset
     end
 
     # DSL
-    def configset(name, resource:)
+    def configset(name, options={})
       validate_configset!(name)
-      self.class.configsets << {name: name, resource: resource}
+      self.class.configsets << options.merge(name: name)
     end
 
     # Validate the configset at register time. So user finds out about error earlier.
