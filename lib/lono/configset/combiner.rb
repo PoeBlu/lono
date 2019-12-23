@@ -6,24 +6,27 @@ module Lono::Configset
       @sets = []
       @metadata = {"AWS::CloudFormation::Init" => {"configSets" => {}}}
       @configSets = @metadata["AWS::CloudFormation::Init"]["configSets"]
+      @map = {} # stores resource logical id => metadata cfn-init
     end
 
-    def add(name, resource, configset)
-      @sets << [name, resource, configset.dup]
+    def add(name, resource, metadata)
+      @sets << [name, resource, metadata.dup]
     end
 
     def combine
       @sets.each_with_index do |a, i|
-        name, _, configset = a
+        name, resource, metadata = a
         @configSets["default"] ||= []
         @configSets["default"] << {"ConfigSet" => name}
-        init = configset["AWS::CloudFormation::Init"]
-        cs = init.delete("configSets") # TODO: handle cases when configset doesnt have configSet order but is flat structure
+
+        init = metadata["AWS::CloudFormation::Init"]
+        cs = init.delete("configSets") # TODO: when metadata doesnt have configSets order but is flat structure
         @configSets[name] = cs["default"].map {|c| "#{i}_#{c}" }
         init.transform_keys! { |c| "#{i}_#{c}" }
-        @configSets.merge!(init)
+        @metadata.merge!(init)
+        @map[resource] = @metadata
       end
-      @metadata
+      @map
     end
 
     def configset

@@ -9,7 +9,8 @@ module Lono
     desc "list", "Lists project blueprints"
     long_desc Help.text("blueprint/new")
     def list
-      List.available
+      puts "Current available blueprints:"
+      Find.list_all
     end
   end
 end

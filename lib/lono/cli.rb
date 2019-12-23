@@ -9,10 +9,18 @@ module Lono
     end
     register(New, "new", "new NAME", "Generates new lono project.")
 
-    desc "blueprints", "Lists project blueprints"
+    desc "blueprints", "Lists blueprints"
     long_desc Help.text(:blueprints)
     def blueprints
-      Blueprint::List.available
+      puts "Current available blueprints:"
+      Blueprint::Find.list_all
+    end
+
+    desc "configsets", "Lists configsets"
+    long_desc Help.text(:configsets)
+    def configsets
+      puts "Current available configsets:"
+      Configset::Find.list_all
     end
 
     desc "generate", "Generate both CloudFormation templates and parameters files."

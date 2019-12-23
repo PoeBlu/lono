@@ -21,7 +21,8 @@ module Lono::Configset
       def all
         Register.configsets.each do |c|
           puts "c #{c}"
-          puts Loader.new(c[:name], c[:resource]).load
+          loader = Loader.new(c[:name], c[:resource])
+          # Combiner.each
         end
       end
     end
