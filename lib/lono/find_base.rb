@@ -14,6 +14,10 @@ module Lono
     extend Memoist
 
     class << self
+      def one_or_all(component)
+        component ? [component] : all_components
+      end
+
       def find(component)
         new.find(component)
       end
