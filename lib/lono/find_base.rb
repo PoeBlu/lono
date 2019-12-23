@@ -1,12 +1,12 @@
 require "text-table"
 
-# Subclass must implement initialize and set @type and @name_key. Example:
+# Subclass must implement initialize and set @type and @detection_path. Example:
 #
-#     class Lono::Configset
+#     class Lono::Blueprint
 #       class Find < Lono::FindBase
 #         def initialize
-#           @type = "configsets"
-#           @name_key = "configset_name"
+#           @type = "blueprints"
+#           @detection_path = "app/templates"
 #         end
 #       end
 #     end
@@ -39,9 +39,9 @@ module Lono
       return found["path"] if found
     end
 
-    # Returns: [component,...]
+    # Returns: [Component,...]
     #
-    # component structure:
+    # Component structure:
     #
     #     {
     #       "name" => "vpc", # blueprint or configset name
