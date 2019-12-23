@@ -26,7 +26,18 @@ module Lono::Configset
     # DSL
     def configset(name, resource:)
       puts "Register configset name #{name} resource #{resource}".color(:yellow)
+      validate_configset!(name)
       self.class.configsets << {name: name, resource: resource}
+    end
+
+    # Validate the configset at register time. So user finds out about error earlier.
+    def validate_configset!(name)
+      configset_root = Find.find(name)
+      unless configset_root
+        # TODO: put exact line where configset is invalid
+        puts "ERORR: Configset with name #{name} not found. Double check your configs/#{@blueprint}/configsets files.".color(:red)
+        raise "Configset #{name} not found"
+      end
     end
   end
 end

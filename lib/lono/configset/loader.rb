@@ -4,7 +4,7 @@ module Lono::Configset
   class Loader
     extend Memoist
 
-    def initialize(name:, resource:)
+    def initialize(name, resource)
       @name, @resource = name, resource
     end
 
@@ -16,5 +16,14 @@ module Lono::Configset
       JSON.load(IO.read(path))
     end
     memoize :load
+
+    class << self
+      def all
+        Register.configsets.each do |c|
+          puts "c #{c}"
+          puts Loader.new(c[:name], c[:resource]).load
+        end
+      end
+    end
   end
 end

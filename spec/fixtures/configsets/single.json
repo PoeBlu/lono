@@ -1,0 +1,22 @@
+{
+  "AWS::CloudFormation::Init": {
+    "1": {
+      "commands": {
+        "test": {
+          "command": "echo \"$MAGIC\" > test.txt",
+          "env": { "MAGIC": "I come from the environment!" },
+          "cwd": "~"
+        }
+      }
+    },
+    "2": {
+      "commands": {
+        "test": {
+          "command": "echo \"$MAGIC\" >> test.txt",
+          "env": { "MAGIC": "I am test 2!" },
+          "cwd": "~"
+        }
+      }
+    }
+  }
+}

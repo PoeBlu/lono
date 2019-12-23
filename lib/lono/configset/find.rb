@@ -5,18 +5,20 @@ module Lono::Configset
     class << self
       extend Memoist
 
+      # Returns configset_root path
       def find(configset)
         # Check project configsets first
         info = all_project_configsets.find { |i| i["configset_name"] == configset }
         return info["path"] if info
 
         # Check gem specs
-        result = specs.find do |spec|
-          dot_meta = dot_meta_path(spec)
+        spec = specs.find do |s|
+          dot_meta = dot_meta_path(s)
+          next unless File.exist?(dot_meta)
           config = YAML.load_file(dot_meta)
           config["configset_name"] == configset
         end
-        result.full_gem_path if result
+        spec.full_gem_path if spec
       end
 
       def all_project_configsets
