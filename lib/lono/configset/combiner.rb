@@ -2,7 +2,9 @@ require "yaml"
 
 class Lono::Configset
   class Combiner
-    def initialize
+    def initialize(options={})
+      @options = options
+
       @sets = []
       @metadata = {"AWS::CloudFormation::Init" => {"configSets" => {}}}
       @configSets = @metadata["AWS::CloudFormation::Init"]["configSets"]
@@ -14,6 +16,7 @@ class Lono::Configset
     end
 
     def combine
+      puts "@sets #{@sets}".color(:purple)
       @sets.each_with_index do |a, i|
         options, metadata = a
         name, resource = options[:name], options[:resource]
@@ -33,6 +36,24 @@ class Lono::Configset
 
     def configset
       @metadata
+    end
+
+    ########
+    def metadata_map
+      Register.configsets.each do |c|
+        puts "metadata_map c #{c}"
+        loader = Loader.new(c, @options)
+        metdata_configset = loader.load
+        puts "metdata_configset #{metdata_configset}"
+        if metdata_configset
+          add(c, metdata_configset)
+        else
+          puts "WARN: metdata_configset is nil!!!".color(:yellow)
+        end
+      end
+      combine
+      Register.clear! # in case of lono generate for all templates
+      @map
     end
   end
 end

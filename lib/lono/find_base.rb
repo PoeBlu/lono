@@ -82,7 +82,6 @@ module Lono
     end
 
     def yaml_load_file(path)
-      # puts "yaml_load_file #{path}"
       return unless File.exist?(path)
 
       config = YAML.load_file(path)

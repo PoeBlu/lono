@@ -2,12 +2,16 @@ class Lono::Template::Strategy::Dsl::Finalizer
   class Configset
     extend Memoist
 
-    def initialize(cfn)
-      @cfn = cfn
+    def initialize(cfn, options={})
+      @cfn, @options = cfn, options
+      @blueprint = options[:blueprint]
     end
 
     def run
-      metadata_map = Lono::Configset::Loader.combined_metadata_map
+      combiner = Lono::Configset::Combiner.new(@options)
+      metadata_map = combiner.metadata_map
+
+      # metadata_map = Lono::Configset::Loader.combined_metadata_map(@blueprint)
       metadata_map.each do |logical_id, metadata_configset|
         resource = @cfn["Resources"][logical_id]
 

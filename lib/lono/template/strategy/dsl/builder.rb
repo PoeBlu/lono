@@ -6,8 +6,9 @@ class Lono::Template::Strategy::Dsl
     include Syntax
     extend Memoist
 
-    def initialize(path, blueprint, options={})
-      @path, @blueprint, @options = path, blueprint, options
+    def initialize(path, options={})
+      @path, @options = path, options
+      @blueprint = options[:blueprint]
       @template = @path.sub("#{Lono.config.templates_path}/",'').sub(/\.rb$/,'')
       @parameters = [] # registry
       @cfn = {}
@@ -24,7 +25,8 @@ class Lono::Template::Strategy::Dsl
     end
 
     def finalize
-      @cfn = Finalizer.new(@cfn, parameters: @parameters).run
+      o = @options.merge(parameters: @parameters)
+      @cfn = Finalizer.new(@cfn, o).run
     end
 
     def to_yaml

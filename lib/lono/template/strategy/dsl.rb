@@ -14,7 +14,7 @@ module Lono::Template::Strategy
     end
 
     def build_template(path)
-      builder = Builder.new(path, @blueprint, @options)
+      builder = Builder.new(path, @options)
       builder.build
     end
   end
