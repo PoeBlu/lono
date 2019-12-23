@@ -40,12 +40,12 @@ module Helper
   # Copies spec/fixtures/lono_project to tmp/lono_project,
   # Main fixture we'll use because it's faster
   def copy_lono_project
-    destroy_lono_project # just in case KEEP_TMP_PROJECT is used
+    destroy_lono_project(true)
     FileUtils.cp_r("spec/fixtures/lono_project", "tmp/lono_project")
   end
 
-  def destroy_lono_project
-    return if ENV['KEEP_TMP_PROJECT']
+  def destroy_lono_project(force=false)
+    return if ENV['KEEP_TMP_PROJECT'] && !force
     # Only use KEEP_TMP_PROJECT if you are testing exactly 1 spec for debugging
     # or it'll affect other tests.
     FileUtils.rm_rf(Lono.root)

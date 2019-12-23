@@ -8,7 +8,8 @@ class Lono::Template::Strategy::Dsl::Finalizer
 
     def run
       puts "Finalizer Configset".color(:purple)
-      pp Lono::Configset::Register.configsets
+
+      Lono::Configset::Find.find("ssm-configset")
 
       # lookup configset path - blueprints or configsets
       # load the JSON from file

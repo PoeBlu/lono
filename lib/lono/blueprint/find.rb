@@ -14,8 +14,8 @@ class Lono::Blueprint
         project_blueprints = all_project_blueprint_infos.map { |info| info.name }
 
         gem_blueprints = specs.map do |spec|
-          dot_lono = dot_meta_path(spec)
-          config = YAML.load_file(dot_lono)
+          dot_meta = dot_meta_path(spec)
+          config = YAML.load_file(dot_meta)
           config["blueprint_name"]
         end
 
@@ -30,13 +30,13 @@ class Lono::Blueprint
       #
       def find(blueprint)
         # Check projects blueprints
-        info = all_project_blueprint_infos.find { |info| info.name == blueprint}
+        info = all_project_blueprint_infos.find { |i| i.name == blueprint }
         return info.path if info
 
         # Check gem specs
         result = specs.find do |spec|
-          dot_lono = dot_meta_path(spec)
-          config = YAML.load_file(dot_lono)
+          dot_meta = dot_meta_path(spec)
+          config = YAML.load_file(dot_meta)
           config["blueprint_name"] == blueprint
         end
         result.full_gem_path if result
@@ -53,9 +53,9 @@ class Lono::Blueprint
       def all_project_blueprint_infos
         infos = []
         Dir.glob("#{Lono.root}/blueprints/*").select do |p|
-          dot_lono = dot_meta_path(p)
-          next unless File.exist?(dot_lono)
-          config = YAML.load_file(dot_lono)
+          dot_meta = dot_meta_path(p)
+          next unless File.exist?(dot_meta)
+          config = YAML.load_file(dot_meta)
           infos << Info.new(config["blueprint_name"], p)
         end
         infos
