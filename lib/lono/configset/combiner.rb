@@ -35,6 +35,7 @@ class Lono::Configset
       @sets << [registry, metadata.dup]
     end
 
+    # Normalized/convert cfn template to mimic the registry format
     def existing_configsets
       configsets = []
       @cfn["Resources"].each do |logical_id, attributes|

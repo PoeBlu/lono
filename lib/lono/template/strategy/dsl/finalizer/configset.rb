@@ -8,9 +8,6 @@ class Lono::Template::Strategy::Dsl::Finalizer
     end
 
     def run
-      puts "metadata_map #{metadata_map}"
-      puts "@cfn #{@cfn}"
-
       metadata_map.each do |logical_id, metadata_configset|
         resource = @cfn["Resources"][logical_id]
 
@@ -21,10 +18,7 @@ class Lono::Template::Strategy::Dsl::Finalizer
 
         metdata = resource["Metadata"] ||= {}
         metdata["AWS::CloudFormation::Init"] ||= {}
-        unless metdata["AWS::CloudFormation::Init"].empty?
-          puts "WARN: Resources.#{logical_id} already has a AWS::CloudFormation::Init".color(:yellow)
-          puts "Lono processing will override it because with the configured configsets."
-        end
+        # The metadata_configset has been combined with the original AWS::CloudFormation::Init if it exists
         metdata["AWS::CloudFormation::Init"] = metadata_configset["AWS::CloudFormation::Init"]
       end
 
