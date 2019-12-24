@@ -22,30 +22,31 @@ module Lono::Finder
 
     def project
       roots = path_roots("#{@lono_root}/app/#{type.pluralize}")
-      configsets(roots, "project-local")
+      components(roots, "project-local")
     end
 
     def vendor
       roots = path_roots("#{@lono_root}/vendor/#{type.pluralize}")
-      configsets(roots, "vendor-local")
+      components(roots, "vendor-local")
     end
 
     def gems
-      configsets(gem_roots, "gem-remote")
+      components(gem_roots, "gem-remote")
     end
 
-    def configsets(roots, source_type)
-      configsets = []
+    # Components: blueprints or configsets
+    def components(roots, source_type)
+      components = []
       roots.each do |root|
         config = yaml_load_file(dot_meta_path(root))
         next unless config
         config["path"] = root
         config["source_type"] = source_type
-        configsets << config
+        components << config
       end
-      configsets
+      components
     end
-    memoize :configsets
+    memoize :components
 
   private
     def path_roots(path)
