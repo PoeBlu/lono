@@ -67,7 +67,8 @@ class Lono::Configset
         init = metadata["AWS::CloudFormation::Init"]
 
         if init.key?("configSets")
-          cs = init.delete("configSets") # TODO: when metadata doesnt have configSets order but is flat structure
+          cs = init.delete("configSets") # Only support configSets with simple Array of Strings
+          validate_simple!(registry, cs)
           @configSets[name] = cs["default"].map {|c| "#{i}_#{c}" }
           init.transform_keys! { |c| "#{i}_#{c}" }
         else # simple config
@@ -80,6 +81,26 @@ class Lono::Configset
         @map[resource] = @metadata
       end
       @map
+    end
+
+    def validate_simple!(registry, cs)
+      has_complex_type = cs["default"].detect { |s| !s.is_a?(String) }
+      if has_complex_type
+        message =<<~EOL
+          ERROR: The configset #{registry[:name]} has a configSets property with a complex type.
+          configSets:
+
+              #{cs}
+
+          lono configsets only supports combining configSets with an Array of Strings.
+        EOL
+        if ENV['LONO_TEST']
+          raise message
+        else
+          puts message.color(:red)
+          exit 1
+        end
+      end
     end
 
     def configset
