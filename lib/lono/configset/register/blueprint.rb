@@ -21,7 +21,7 @@ class Lono::Configset::Register
     end
 
     def download
-      downloader = Downloader.new(@options)
+      downloader = Lono::Configset::Blueprint::Downloader.new(@options)
       downloader.run
     end
 
@@ -33,7 +33,7 @@ class Lono::Configset::Register
     def validate!
       errors = []
       self.class.validations.each do |state|
-        finder = Lono::Configset::Register::Blueprint::Finder.new(@options)
+        finder = Lono::Configset::Blueprint::Finder.new(@options)
         configset_root = finder.find(state[:name])
         errors << state unless configset_root
       end

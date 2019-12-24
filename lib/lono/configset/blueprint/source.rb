@@ -1,4 +1,4 @@
-class Lono::Configset::Register::Blueprint
+module Lono::Configset::Blueprint
   class Source
     def initialize(lono_settings=nil)
       @lono_settings = lono_settings || Lono::Setting.new.data

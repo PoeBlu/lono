@@ -1,6 +1,6 @@
 require "bundler"
 
-class Lono::Configset::Register::Blueprint
+module Lono::Configset::Blueprint
   class Finder
     extend Memoist
 
