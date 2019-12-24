@@ -16,7 +16,6 @@ class Lono::Configset
     end
 
     def combine
-      puts "@sets #{@sets}".color(:purple)
       @sets.each_with_index do |a, i|
         options, metadata = a
         name, resource = options[:name], options[:resource]
@@ -40,19 +39,20 @@ class Lono::Configset
 
     ########
     def metadata_map
-      Register.configsets.each do |c|
-        puts "metadata_map c #{c}"
+      Register::Project.configsets.each do |c|
+        # puts "metadata_map c #{c}"
         loader = Loader.new(c, @options)
         metdata_configset = loader.load
-        puts "metdata_configset #{metdata_configset}"
+        # puts "metdata_configset #{metdata_configset}"
         if metdata_configset
           add(c, metdata_configset)
         else
           puts "WARN: metdata_configset is nil!!!".color(:yellow)
         end
       end
+      # puts "@sets #{@sets}".color(:purple)
       combine
-      Register.clear! # in case of lono generate for all templates
+      Register::Project.clear! # in case of lono generate for all templates
       @map
     end
   end

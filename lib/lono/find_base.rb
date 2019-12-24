@@ -1,4 +1,5 @@
 require "text-table"
+require "bundler"
 
 # Subclass must implement initialize and set @type and @detection_path. Example:
 #

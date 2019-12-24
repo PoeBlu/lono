@@ -30,8 +30,8 @@ class Lono::Configset
 
     def find_path
       paths = %w[configset.yml configset.json].map { |p| "#{configset_root}/lib/#{p}" }
-      puts "find_path paths".color(:yellow)
-      pp paths
+      # puts "find_path paths".color(:yellow)
+      # pp paths
       paths.find { |path| File.exist?(path) }
     end
 
