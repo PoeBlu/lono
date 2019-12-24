@@ -12,7 +12,7 @@ class Lono::Configset
     end
 
     def materialize
-      Lono::Configset::Blueprint::Downloader.new(@options).run
+      Lono::Blueprint::Configset::Downloader.new(@options).run
     end
 
     def validate!

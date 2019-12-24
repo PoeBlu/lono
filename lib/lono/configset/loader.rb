@@ -36,9 +36,13 @@ class Lono::Configset
     end
 
     def configset_root
-      Lono::Finder::Configset.find(@name)
+      finder_class.find(@name)
     end
     memoize :configset_root
+
+    def finder_class
+      Lono::Finder::Configset
+    end
 
     # Copy options from the original configset call as instance variables so its available. So:
     #

@@ -19,7 +19,7 @@ class Lono::Configset
       end
 
       Register::Blueprint.configsets.each do |registry|
-        loader = Blueprint::Loader.new(registry, @options)
+        loader = Lono::Blueprint::Configset::Loader.new(registry, @options)
         add(registry, loader.metdata_configset)
       end
       Register::Project.configsets.each do |registry|

@@ -1,6 +1,6 @@
 require "bundler"
 
-module Lono::Configset::Blueprint
+module Lono::Blueprint::Configset
   class Downloader
     extend Memoist
 
