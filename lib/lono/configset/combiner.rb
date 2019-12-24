@@ -39,6 +39,8 @@ class Lono::Configset
 
     ########
     def metadata_map
+      puts "Register::Blueprint.configsets #{Register::Blueprint.configsets}"
+
       Register::Project.configsets.each do |c|
         puts "metadata_map c #{c}"
         loader = Loader.new(c, @options)

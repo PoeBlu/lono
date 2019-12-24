@@ -54,7 +54,7 @@ module Lono
       components = []
 
       # local components
-      Dir.glob("#{Lono.root}/app/#{@type}/*").select do |root|
+      Dir.glob("#{Lono.root}/app/#{@type}/*").each do |root|
         next unless correct_component?(root)
         config = yaml_load_file(dot_meta_path(root))
         next unless config
@@ -64,7 +64,7 @@ module Lono
       end
 
       # gem components
-      specs.each do |spec|
+      gemspecs.each do |spec|
         root = component_root(spec)
         next unless correct_component?(root)
         config = yaml_load_file(dot_meta_path(root))
@@ -94,10 +94,10 @@ module Lono
     end
 
     # Only the component specs
-    def specs
+    def gemspecs
       Bundler.load.specs
     end
-    memoize :specs
+    memoize :gemspecs
 
     def dot_meta_path(root)
       "#{root}/.meta/config.yml"

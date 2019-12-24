@@ -2,18 +2,25 @@ require "bundler"
 
 class Lono::Configset::Register::Blueprint
   class Downloader
+    extend Memoist
+
     def initialize(options={})
       @options = options
       @blueprint = options[:blueprint]
-
       @configsets = Lono::Configset::Register::Blueprint.configsets
-      @source = ENV["LONO_BLUEPRINT_CONFIGSET_SOURCE"] || Lono::Configset::Register::Blueprint.source
     end
 
+    def source
+      Source.new
+    end
+    memoize :source
+
     def run
-      return unless @source
+      return if @configsets.empty?
       puts "Downloading configsets from blueprint #{@blueprint}"
+      clean_gemfile
       gemfile = build_gemfile
+      return unless gemfile
       write(gemfile)
       bundle
     end
@@ -21,17 +28,17 @@ class Lono::Configset::Register::Blueprint
     def build_gemfile
       lines = []
       @configsets.each do |c|
-        lines << %Q|gem "#{c[:name]}", #{source_option(c)}|
+        next if local_configset?(c[:name])
+        options = source.options(c)
+        args = options.inject([]) { |r,(k,v)| r << %Q|#{k}: "#{v}"| }.join(', ')
+        lines << %Q|gem "#{c[:name]}", #{args}|
       end
       lines.join("\n") + "\n"
     end
 
-    def source_option(c)
-      if @source.include?("git@") || @source.include?("https")
-        %Q|git: "#{@source}/#{c[:name]}"|
-      else
-        %Q|path: "#{@source}/#{c[:name]}"|
-      end
+    def local_configset?(name)
+      finder = Finder.new(@options)
+      !!finder.find_local(name)
     end
 
     def write(gemfile)
@@ -43,9 +50,22 @@ class Lono::Configset::Register::Blueprint
     def bundle
       Dir.chdir("tmp/configsets/") do
         Bundler.with_clean_env do
-          system("bundler install")
+          sh("bundler install")
         end
       end
+    end
+
+    def sh(command)
+      puts "=> #{command}"
+      system(command)
+      unless $?.success?
+        puts "FAILED: #{command}".color(:red)
+        exit 1
+      end
+    end
+
+    def clean_gemfile
+      FileUtils.rm_f("tmp/configsets/Gemfile")
     end
   end
 end

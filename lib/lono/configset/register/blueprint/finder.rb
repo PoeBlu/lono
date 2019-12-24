@@ -16,6 +16,17 @@ class Lono::Configset::Register::Blueprint
 
     def all
       configsets = []
+
+      # local components
+      Dir.glob("#{Lono.blueprint_root}/app/configsets/*").each do |root|
+        config = yaml_load_file(dot_meta_path(root))
+        next unless config
+        config["path"] = root
+        config["source_type"] = "local"
+        configsets << config
+      end
+
+      # gem configsets
       gemspecs.each do |spec|
         spec.__materialize__
         root = spec.full_gem_path
@@ -28,8 +39,22 @@ class Lono::Configset::Register::Blueprint
       configsets
     end
 
+    def find_local(name)
+      local_configset_paths.find do |root|
+        config = yaml_load_file(dot_meta_path(root))
+        next unless config
+        config["name"] == name
+      end
+    end
+
+    def local_configset_paths
+      Dir.glob("#{Lono.blueprint_root}/app/configsets/*").to_a
+    end
+    memoize :local_configset_paths
+
     def gemspecs
       lockfile = "#{Lono.root}/tmp/configsets/Gemfile.lock"
+      return [] unless File.exist?(lockfile)
       parser = Bundler::LockfileParser.new(Bundler.read_file(lockfile))
       parser.specs
     end
