@@ -40,6 +40,7 @@ class Lono::Configset
     end
     memoize :configset_root
 
+    # Allow overriding in subclasses
     def finder_class
       Lono::Finder::Configset
     end
