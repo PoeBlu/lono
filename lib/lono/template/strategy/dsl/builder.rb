@@ -15,12 +15,16 @@ class Lono::Template::Strategy::Dsl
 
     def build
       load_context
-      regsiter_configsets
+      prepare_configsets
       evaluate_template_path(@path) # modifies @cfn
       finalize
       to_yaml
       write_output
       @cfn
+    end
+
+    def prepare_configsets
+      Lono::Configset::Preparer.new(@options).run
     end
 
     def finalize
@@ -55,12 +59,6 @@ class Lono::Template::Strategy::Dsl
     def load_context
       load_variables
       load_project_helpers
-    end
-
-    def regsiter_configsets
-      Lono::Configset::Register.new(@options).run
-      Lono::Configset::Register::Blueprint.new(@options).validate!
-      Lono::Configset::Register::Project.new(@options).validate!
     end
   end
 end

@@ -1,4 +1,5 @@
 require "bundler"
+require "text-table"
 
 module Lono::Finder
   class Base
@@ -14,6 +15,20 @@ module Lono::Finder
     def find(name)
       found = all.find { |i| i["name"] == name }
       return found["path"] if found
+    end
+
+    def list
+      puts "Available #{type.pluralize}:"
+      table = Text::Table.new
+      table.head = ["Name", "Path", "Type"]
+
+      components = all
+      components.each do |c|
+        pretty_path = c["path"].sub("#{Lono.root}/", "")
+        table.rows << [c["name"], pretty_path, c["source_type"]]
+      end
+
+      puts table
     end
 
     def all

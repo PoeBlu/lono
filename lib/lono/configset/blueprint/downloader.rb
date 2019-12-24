@@ -7,17 +7,12 @@ module Lono::Configset::Blueprint
     def initialize(options={})
       @options = options
       @blueprint = options[:blueprint]
-      @configsets = Lono::Configset::Register::Blueprint.configsets
+      @configsets = options[:configsets] || Lono::Configset::Register::Blueprint.configsets
     end
-
-    def source
-      Source.new
-    end
-    memoize :source
 
     def run
       return if @configsets.empty?
-      puts "Downloading configsets from blueprint #{@blueprint}"
+      puts "Downloading configsets for blueprint #{@blueprint}"
       clean_gemfile
       gemfile = build_gemfile
       return unless gemfile
@@ -54,6 +49,11 @@ module Lono::Configset::Blueprint
         end
       end
     end
+
+    def source
+      Source.new
+    end
+    memoize :source
 
     def sh(command)
       puts "=> #{command}"

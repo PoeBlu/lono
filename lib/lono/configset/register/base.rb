@@ -1,6 +1,6 @@
 require "active_support/core_ext/class"
 
-class Lono::Configset::Register
+module Lono::Configset::Register
   class Base < Lono::AbstractBase
     class_attribute :configsets
     class_attribute :validations
@@ -22,6 +22,26 @@ class Lono::Configset::Register
       self.class.validations << {name: name, caller_line: caller_line}
     end
 
+    def validate!
+      errors = []
+      self.class.validations.each do |state|
+        configset_root = finder_class.find(state[:name]) # finder_class implemented in subclass
+        errors << state unless configset_root
+      end
+
+      return if errors.empty? # all good
+      show_errors_and_exit!(errors)
+    end
+
+    def show_errors_and_exit!(errors)
+      errors.each do |state|
+        name, caller_line = state[:name], state[:caller_line]
+        puts "ERROR: Configset with name #{name} not found. Double check the configsets file.".color(:red)
+        pretty_trace(caller_line)
+      end
+      exit 1
+    end
+
     def pretty_trace(caller_line)
       md = caller_line.match(/(.*\.rb):(\d+):/)
       path, error_line_number = md[1], md[2].to_i
@@ -40,15 +60,6 @@ class Lono::Configset::Register
           printf("%#{spacing}d %s\n", current_line_number, line_content)
         end
       end
-    end
-
-    def show_errors_and_exit!(errors)
-      errors.each do |state|
-        name, caller_line = state[:name], state[:caller_line]
-        puts "ERROR: Configset with name #{name} not found. Double check the configsets file.".color(:red)
-        pretty_trace(caller_line)
-      end
-      exit 1
     end
 
     # DSL

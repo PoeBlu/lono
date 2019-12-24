@@ -1,4 +1,4 @@
-class Lono::Configset::Register
+module Lono::Configset::Register
   class Blueprint < Base
     self.configsets = []
     self.validations = []
@@ -6,7 +6,6 @@ class Lono::Configset::Register
 
     def run
       evaluate
-      download
     end
 
     def evaluate
@@ -20,26 +19,14 @@ class Lono::Configset::Register
       path if File.exist?(path)
     end
 
-    def download
-      downloader = Lono::Configset::Blueprint::Downloader.new(@options)
-      downloader.run
-    end
-
     # DSL
     def source(v)
       self.class.source = v
     end
 
-    def validate!
-      errors = []
-      self.class.validations.each do |state|
-        finder = Lono::Configset::Blueprint::Finder.new(@options)
-        configset_root = finder.find(state[:name])
-        errors << state unless configset_root
-      end
-
-      return if errors.empty? # all good
-      show_errors_and_exit!(errors)
+    # Used in Base#validate!
+    def finder_class
+      Lono::Finder::Blueprint::Configset
     end
   end
 end
