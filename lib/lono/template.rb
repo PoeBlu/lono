@@ -7,7 +7,7 @@ module Lono
     long_desc Lono::Help.text("template/generate")
     option :clean, type: :boolean, desc: "remove all output files before generating"
     def generate(blueprint=nil)
-      Blueprint::Find.one_or_all(blueprint).each do |b|
+      Finder::Blueprint.one_or_all(blueprint).each do |b|
         Generator.new(options.merge(blueprint: b)).run
       end
     end

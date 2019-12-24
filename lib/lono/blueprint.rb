@@ -9,7 +9,7 @@ module Lono
     desc "list", "Lists project blueprints"
     long_desc Help.text("blueprint/new")
     def list
-      Find.list_all
+      Finder::Blueprint.list
     end
   end
 end

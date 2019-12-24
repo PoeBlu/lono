@@ -9,7 +9,7 @@ module Lono
     desc "list", "Lists project configsets"
     long_desc Help.text("configset/new")
     def list
-      Find.list_all
+      Finder::Configset.list
     end
   end
 end

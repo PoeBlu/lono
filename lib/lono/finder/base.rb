@@ -5,6 +5,16 @@ module Lono::Finder
   class Base
     extend Memoist
 
+    class << self
+      def one_or_all(component)
+        component ? [component] : all
+      end
+
+      def list
+        new.list
+      end
+    end
+
     def initialize(options={})
       @options = options
       @blueprint = options[:blueprint]

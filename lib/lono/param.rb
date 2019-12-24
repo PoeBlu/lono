@@ -8,7 +8,7 @@ module Lono
     long_desc Lono::Help.text("param/generate")
     option :stack, desc: "stack name. defaults to blueprint name."
     def generate(blueprint=nil)
-      Blueprint::Find.one_or_all(blueprint).each do |b|
+      Finder::Blueprint.one_or_all(blueprint).each do |b|
         Generator.new(options.merge(blueprint: b)).generate
       end
     end

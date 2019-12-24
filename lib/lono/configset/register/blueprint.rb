@@ -24,9 +24,5 @@ module Lono::Configset::Register
       self.class.source = v
     end
 
-    # Used in Base#validate!
-    def finder_class
-      Lono::Finder::Blueprint::Configset
-    end
   end
 end

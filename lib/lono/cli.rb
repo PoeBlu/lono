@@ -12,13 +12,13 @@ module Lono
     desc "blueprints", "Lists blueprints"
     long_desc Help.text(:blueprints)
     def blueprints
-      Blueprint::Find.list_all
+      Finder::Blueprint.list
     end
 
     desc "configsets", "Lists configsets"
     long_desc Help.text(:configsets)
     def configsets
-      Configset::Find.list_all
+      Finder::Configset.list
     end
 
     desc "generate", "Generate both CloudFormation templates and parameters files."
@@ -28,7 +28,7 @@ module Lono
     option :stack, desc: "stack name. defaults to blueprint name."
     options.source
     def generate(blueprint=nil)
-      Blueprint::Find.one_or_all(blueprint).each do |b|
+      Finder::Blueprint.one_or_all(blueprint).each do |b|
         o = options.merge(blueprint: b)
         Script::Build.new(o).run
         Template::Generator.new(o).run

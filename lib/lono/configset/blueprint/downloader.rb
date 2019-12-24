@@ -28,11 +28,12 @@ module Lono::Configset::Blueprint
         args = options.inject([]) { |r,(k,v)| r << %Q|#{k}: "#{v}"| }.join(', ')
         lines << %Q|gem "#{c[:name]}", #{args}|
       end
+      return if lines.empty?
       lines.join("\n") + "\n"
     end
 
     def local_configset?(name)
-      finder = Finder.new(@options)
+      finder = Lono::Finder::Blueprint::Configset.new(@options)
       !!finder.find_local(name)
     end
 
@@ -66,6 +67,7 @@ module Lono::Configset::Blueprint
 
     def clean_gemfile
       FileUtils.rm_f("tmp/configsets/Gemfile")
+      FileUtils.rm_f("tmp/configsets/Gemfile.lock")
     end
   end
 end
