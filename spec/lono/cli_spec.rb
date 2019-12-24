@@ -28,7 +28,7 @@ describe Lono::CLI do
       # NOTE: LONO_ROOT modified in the spec_helper.rb
       execute("cd tmp && ../exe/lono new lono_project --no-bundle")
       execute("exe/lono generate")
-      success = $?.exitstatus == 0
+      success = $?.success?
       expect(success).to be true
 
       exist = File.exist?("#{Lono.root}/configs/settings.yml")

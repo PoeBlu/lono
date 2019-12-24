@@ -7,7 +7,8 @@ module Lono::Finder
 
     class << self
       def one_or_all(component)
-        component ? [component] : all
+        components = new.all.map { |i| i["name"] }
+        component ? [component] : components
       end
 
       def find(name)
