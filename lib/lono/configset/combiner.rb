@@ -39,21 +39,17 @@ class Lono::Configset
 
     ########
     def metadata_map
-      puts "Register::Blueprint.configsets #{Register::Blueprint.configsets}"
-
-      Register::Project.configsets.each do |c|
-        puts "metadata_map c #{c}"
-        loader = Loader.new(c, @options)
-        metdata_configset = loader.load
-        # puts "metdata_configset #{metdata_configset}"
-        if metdata_configset
-          add(c, metdata_configset)
-        else
-          puts "WARN: metdata_configset is nil!!!".color(:yellow)
-        end
+      Register::Blueprint.configsets.each do |c|
+        loader = Blueprint::Loader.new(c, @options)
+        add(c, loader.metdata_configset)
       end
-      # puts "@sets #{@sets}".color(:purple)
+      Register::Project.configsets.each do |c|
+        loader = Loader.new(c, @options)
+        add(c, loader.metdata_configset)
+      end
+
       combine
+      Register::Blueprint.clear! # in case of lono generate for all templates
       Register::Project.clear! # in case of lono generate for all templates
       @map
     end

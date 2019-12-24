@@ -10,6 +10,10 @@ class Lono::Configset
       @blueprint = options[:blueprint]
     end
 
+    def metdata_configset
+      load
+    end
+
     def load
       path = find_path
       unless path
