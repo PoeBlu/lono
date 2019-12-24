@@ -14,18 +14,29 @@ module Lono::Configset::Blueprint
       return found["path"] if found
     end
 
-    def all
+    def configsets(path, source_type)
       configsets = []
-
-      # local components
-      Dir.glob("#{Lono.blueprint_root}/app/configsets/*").each do |root|
+      Dir.glob("#{path}/*").each do |root|
         config = yaml_load_file(dot_meta_path(root))
         next unless config
         config["path"] = root
-        config["source_type"] = "local"
+        config["source_type"] = source_type
         configsets << config
       end
+      configsets
+    end
+    memoize :configsets
 
+    def blueprint_configsets
+      configsets("#{Lono.blueprint_root}/app/configsets", "blueprint-local")
+    end
+
+    def all
+      blueprint_configsets + gem_configsets
+    end
+
+    def gem_configsets
+      configsets = []
       # gem configsets
       gemspecs.each do |spec|
         spec.__materialize__
@@ -38,19 +49,6 @@ module Lono::Configset::Blueprint
       end
       configsets
     end
-
-    def find_local(name)
-      local_configset_paths.find do |root|
-        config = yaml_load_file(dot_meta_path(root))
-        next unless config
-        config["name"] == name
-      end
-    end
-
-    def local_configset_paths
-      Dir.glob("#{Lono.blueprint_root}/app/configsets/*").to_a
-    end
-    memoize :local_configset_paths
 
     def gemspecs
       lockfile = "#{Lono.root}/tmp/configsets/Gemfile.lock"

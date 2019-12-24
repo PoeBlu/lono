@@ -12,6 +12,8 @@ class Lono::Configset
     end
 
     def metadata_map
+      return {} unless additional_configsets?
+
       existing_configsets.each do |data|
         add(data[:registry], data[:metdata_configset])
       end
@@ -33,6 +35,10 @@ class Lono::Configset
 
     def add(registry, metadata)
       @sets << [registry, metadata.dup]
+    end
+
+    def additional_configsets?
+      !Register::Blueprint.configsets.empty? || !Register::Project.configsets.empty?
     end
 
     # Normalized/convert cfn template to mimic the registry format

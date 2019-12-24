@@ -1,0 +1,4 @@
+---
+blueprint_name: ec2
+template_type: dsl
+auto_camelize: false

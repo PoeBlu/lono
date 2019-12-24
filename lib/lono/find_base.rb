@@ -76,6 +76,7 @@ module Lono
 
       components.sort_by { |c| c ["name"] }
     end
+    memoize :all
 
     def correct_component?(root)
       expr = "#{root}/#{@detection_path}"
@@ -128,10 +129,11 @@ module Lono
 
     @@deprecation_warnings = []
     def deprecation_warning(message)
-      return if ENV["LONO_MUTE_DEPRECATION"]
-      message = "#{message} export LONO_MUTE_DEPRECATION=1 to mute"
-      puts message unless @@deprecation_warnings.include?(message)
-      @@deprecation_warnings << message
+      # comment out for now
+      # return if ENV["LONO_MUTE_DEPRECATION"]
+      # message = "#{message} export LONO_MUTE_DEPRECATION=1 to mute"
+      # puts message unless @@deprecation_warnings.include?(message)
+      # @@deprecation_warnings << message
     end
   end
 end
