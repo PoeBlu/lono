@@ -11,5 +11,11 @@ module Lono
     def list
       Finder::Blueprint.list
     end
+
+    desc "configsets", "List blueprints configsets"
+    long_desc Help.text("blueprint/new")
+    def configsets(blueprint)
+      Configset::List.new(options.merge(blueprint: blueprint)).run
+    end
   end
 end
