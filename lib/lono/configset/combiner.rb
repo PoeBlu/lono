@@ -57,17 +57,25 @@ class Lono::Configset
     end
 
     def combine
-      @sets.each_with_index do |a, i|
-        registry, metadata = a
+      @sets.each_with_index do |array, i|
+        registry, metadata = array
         name, resource = registry[:name], registry[:resource]
 
         @configSets["default"] ||= []
         @configSets["default"] << {"ConfigSet" => name}
 
         init = metadata["AWS::CloudFormation::Init"]
-        cs = init.delete("configSets") # TODO: when metadata doesnt have configSets order but is flat structure
-        @configSets[name] = cs["default"].map {|c| "#{i}_#{c}" }
-        init.transform_keys! { |c| "#{i}_#{c}" }
+
+        if init.key?("configSets")
+          cs = init.delete("configSets") # TODO: when metadata doesnt have configSets order but is flat structure
+          @configSets[name] = cs["default"].map {|c| "#{i}_#{c}" }
+          init.transform_keys! { |c| "#{i}_#{c}" }
+        else # simple config
+          config_key = "#{i}_single_generated"
+          @configSets[name] = [config_key]
+          init = {config_key => init["config"]}
+        end
+
         @metadata["AWS::CloudFormation::Init"].merge!(init)
         @map[resource] = @metadata
       end

@@ -4,8 +4,14 @@ describe Lono::Configset::Combiner do
   end
 
   def load_configset(name)
-    JSON.load(IO.read("spec/fixtures/configsets/#{name}"))
+    data = IO.read("spec/fixtures/configsets/#{name}")
+    if File.extname(name) == ".yml"
+      YAML.load(data)
+    else
+      JSON.load(data)
+    end
   end
+
   def load_template(name)
     YAML.load(IO.read("spec/fixtures/configsets/templates/#{name}"))
   end
@@ -120,6 +126,70 @@ describe Lono::Configset::Combiner do
         }
       EOL
       expect(data).to eq(JSON.load(json))
+    end
+  end
+
+  context("no existing metadata") do
+    let(:cfn)  { load_template("ec2-no-metadata.yml") }
+    let(:configset1) { load_configset("single.yml") }
+
+    it "combine with single config structure" do
+      combiner.add({name: "simple", resource: "Instance"}, configset1)
+      map = combiner.combine
+      data = map["Instance"]
+      yaml =<<~EOL
+      ---
+      AWS::CloudFormation::Init:
+        configSets:
+          default:
+          - ConfigSet: simple
+          simple:
+          - 0_single_generated
+        0_single_generated:
+          commands:
+            c1:
+              command: echo c1 >> test.txt
+            c2:
+              command: echo c2 >> test.txt
+      EOL
+      expect(data).to eq(YAML.load(yaml))
+    end
+  end
+
+  context("existing metadata single configsets") do
+    let(:cfn)  { load_template("ec2-single.yml") }
+    let(:configset1) { load_configset("single.yml") }
+
+    it "combines" do
+      combiner.existing_configsets.each do |data|
+        combiner.add(data[:registry], data[:metdata_configset])
+      end
+      combiner.add({name: "ssm", resource: "Instance"}, configset1)
+      map = combiner.combine
+      data = map["Instance"]
+      yaml =<<~EOL
+        ---
+        AWS::CloudFormation::Init:
+          configSets:
+            default:
+            - ConfigSet: original
+            - ConfigSet: ssm
+            original:
+            - 0_single_generated
+            ssm:
+            - 1_single_generated
+          0_single_generated:
+            commands:
+              existing:
+                command: existing >> test.txt
+          1_single_generated:
+            commands:
+              c1:
+                command: echo c1 >> test.txt
+              c2:
+                command: echo c2 >> test.txt
+      EOL
+      expect(data).to eq(YAML.load(yaml))
     end
   end
 end
