@@ -97,7 +97,6 @@ module Lono::Finder
     #
     def gem_roots
       gemspecs.map do |spec|
-        spec.__materialize__ if spec.respond_to?(:__materialize__) # only exists on Gem::LazySpecification and not on Gem::Specification
         spec.full_gem_path
       end
     end

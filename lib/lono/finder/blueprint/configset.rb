@@ -16,10 +16,6 @@ class Lono::Finder::Blueprint
     end
 
     def all
-      puts "Lono::Finder::Blueprint::Configset:"
-      puts "blueprint: #{blueprint}"
-      puts "vendor: #{vendor}"
-      puts "materialized: #{materialized}"
       blueprint + vendor + materialized
     end
 
@@ -30,8 +26,19 @@ class Lono::Finder::Blueprint
 
     # Folders that each materialized gems to tmp/configsets
     def materialized
-      roots = path_roots("#{@lono_root}/tmp/#{type.pluralize}")
-      components(roots, "materialized-local")
+      components(gem_roots, "materialized-local")
     end
+
+    # Override Base
+    def gemspecs
+      lockfile = "#{Lono.root}/tmp/configsets/Gemfile.lock"
+      return [] unless File.exist?(lockfile)
+      parser = Bundler::LockfileParser.new(Bundler.read_file(lockfile))
+      specs = parser.specs
+      # __materialize__ only exists in Gem::LazySpecification and not in Gem::Specification
+      specs.each { |spec| spec.__materialize__ }
+      specs
+    end
+    memoize :gemspecs
   end
 end
