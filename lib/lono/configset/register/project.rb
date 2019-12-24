@@ -3,7 +3,7 @@ module Lono::Configset::Register
     self.configsets = []
     self.validations = []
 
-    def run
+    def register
       evaluate
     end
 

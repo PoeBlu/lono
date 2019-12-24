@@ -1,14 +1,20 @@
 class Lono::Configset
   class Preparer < Lono::AbstractBase
+    def initialize(options={})
+      super
+      @blueprint = Lono::Configset::Register::Blueprint.new(options)
+      @project   = Lono::Configset::Register::Project.new(options)
+    end
+
     def run
-      regsiter
+      register
       materialize
       validate!
     end
 
-    def regsiter
-      Lono::Configset::Register::Blueprint.new(@options).run
-      Lono::Configset::Register::Project.new(@options).run
+    def register
+      @blueprint.register
+      @project.register
     end
 
     def materialize
@@ -16,8 +22,8 @@ class Lono::Configset
     end
 
     def validate!
-      Lono::Configset::Register::Blueprint.new(@options).validate!
-      Lono::Configset::Register::Project.new(@options).validate!
+      @blueprint.validate!
+      @project.validate!
     end
   end
 end

@@ -4,7 +4,7 @@ module Lono::Configset::Register
     self.validations = []
     class_attribute :source
 
-    def run
+    def register
       evaluate
     end
 
