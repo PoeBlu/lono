@@ -32,7 +32,7 @@ describe Lono::Template::Strategy::Dsl::Finalizer::Configset do
 
   context "existing multiple" do
     let(:cfn) do
-      YAML.load_file("spec/fixtures/configsets/templates/ec2-existing-multiple.yml")
+      YAML.load_file("spec/fixtures/configsets/templates/ec2-multiple.yml")
     end
     it "adds cfn-init metadata" do
       allow(configset).to receive(:metadata_map).and_return(metadata_map)
