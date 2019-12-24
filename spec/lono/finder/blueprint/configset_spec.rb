@@ -37,7 +37,7 @@ describe Lono::Finder::Blueprint::Configset do
       allow(configset).to receive(:gem_roots).and_return(["spec/fixtures/finder/blueprint-configset/materialized_only"])
 
       root_path = configset.find("ssm")
-      expect(root_path).to include "materialized_only/tmp/configsets/ssm"
+      expect(root_path).to eq "spec/fixtures/finder/blueprint-configset/materialized_only"
     end
 
     it "find_local" do
