@@ -40,7 +40,7 @@ class Lono::Configset
     ########
     def metadata_map
       Register::Project.configsets.each do |c|
-        # puts "metadata_map c #{c}"
+        puts "metadata_map c #{c}"
         loader = Loader.new(c, @options)
         metdata_configset = loader.load
         # puts "metdata_configset #{metdata_configset}"

@@ -29,5 +29,17 @@ class Lono::Configset::Register
     def source(v)
       self.class.source = v
     end
+
+    def validate!
+      errors = []
+      self.class.validations.each do |state|
+        finder = Lono::Configset::Register::Blueprint::Finder.new(@options)
+        configset_root = finder.find(state[:name])
+        errors << state unless configset_root
+      end
+
+      return if errors.empty? # all good
+      show_errors_and_exit!(errors)
+    end
   end
 end

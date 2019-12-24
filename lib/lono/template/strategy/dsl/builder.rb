@@ -60,10 +60,8 @@ class Lono::Template::Strategy::Dsl
 
     def regsiter_configsets
       Lono::Configset::Register.new(@options).run
-      puts "Blueprint.validations"
-      pp Lono::Configset::Register::Blueprint.validations
-      puts "Project.validations"
-      pp Lono::Configset::Register::Project.validations
+      Lono::Configset::Register::Blueprint.new(@options).validate!
+      Lono::Configset::Register::Project.new(@options).validate!
     end
   end
 end
