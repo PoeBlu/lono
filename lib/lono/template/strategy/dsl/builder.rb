@@ -6,9 +6,8 @@ class Lono::Template::Strategy::Dsl
     include Syntax
     extend Memoist
 
-    def initialize(path, options={})
-      @path, @options = path, options
-      @blueprint = options[:blueprint]
+    def initialize(path, blueprint, options={})
+      @path, @blueprint, @options = path, blueprint, options
       @template = @path.sub("#{Lono.config.templates_path}/",'').sub(/\.rb$/,'')
       @parameters = [] # registry
       @cfn = {}
