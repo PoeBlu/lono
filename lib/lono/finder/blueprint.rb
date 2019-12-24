@@ -3,5 +3,9 @@ module Lono::Finder
     def type
       "blueprint"
     end
+
+    def detection_path
+      "app/templates"
+    end
   end
 end

@@ -3,5 +3,9 @@ module Lono::Finder
     def type
       "configset"
     end
+
+    def detection_path
+      "lib/configset.*"
+    end
   end
 end

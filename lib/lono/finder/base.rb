@@ -27,20 +27,6 @@ module Lono::Finder
       return found["path"] if found
     end
 
-    def list
-      puts "Available #{type.pluralize}:"
-      table = Text::Table.new
-      table.head = ["Name", "Path", "Type"]
-
-      components = all
-      components.each do |c|
-        pretty_path = c["path"].sub("#{Lono.root}/", "")
-        table.rows << [c["name"], pretty_path, c["source_type"]]
-      end
-
-      puts table
-    end
-
     def all
       project + vendor + gems
     end
@@ -63,6 +49,7 @@ module Lono::Finder
     def components(roots, source_type)
       components = []
       roots.each do |root|
+        next unless detect?(root)
         config = yaml_load_file(dot_meta_path(root))
         next unless config
         config["path"] = root
@@ -72,6 +59,25 @@ module Lono::Finder
       components
     end
     memoize :components
+
+    def detect?(root)
+      expr = "#{root}/#{detection_path}"
+      Dir.glob(expr).size > 0
+    end
+
+    def list
+      puts "Available #{type.pluralize}:"
+      table = Text::Table.new
+      table.head = ["Name", "Path", "Type"]
+
+      components = all
+      components.each do |c|
+        pretty_path = c["path"].sub("#{Lono.root}/", "")
+        table.rows << [c["name"], pretty_path, c["source_type"]]
+      end
+
+      puts table
+    end
 
   private
     def path_roots(path)
