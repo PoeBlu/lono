@@ -14,7 +14,7 @@ class Lono::Blueprint
           with the correct blueprint_name in .meta/config.yml?
         EOL
         Lono::Finder::Blueprint.list
-        exit 1
+        ENV['LONO_TEST'] ? raise("Unable to find blueprint") : exit(1)
       end
     end
 
