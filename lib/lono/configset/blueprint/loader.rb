@@ -4,6 +4,5 @@ module Lono::Configset::Blueprint
       finder = Finder.new(@options)
       finder.find(@name)
     end
-    memoize :configset_root
   end
 end

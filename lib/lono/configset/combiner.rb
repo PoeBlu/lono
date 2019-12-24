@@ -2,8 +2,8 @@ require "yaml"
 
 class Lono::Configset
   class Combiner
-    def initialize(options={})
-      @options = options
+    def initialize(cfn, options={})
+      @cfn, @options = cfn, options
 
       @sets = []
       @metadata = {"AWS::CloudFormation::Init" => {"configSets" => {}}}
@@ -11,14 +11,48 @@ class Lono::Configset
       @map = {} # stores resource logical id => metadata cfn-init
     end
 
-    def add(options, metadata)
-      @sets << [options, metadata.dup]
+    def metadata_map
+      existing_configsets.each do |data|
+        add(data[:registry], data[:metdata_configset])
+      end
+
+      Register::Blueprint.configsets.each do |registry|
+        loader = Blueprint::Loader.new(registry, @options)
+        add(registry, loader.metdata_configset)
+      end
+      Register::Project.configsets.each do |registry|
+        loader = Loader.new(registry, @options)
+        add(registry, loader.metdata_configset)
+      end
+
+      combine
+      Register::Blueprint.clear! # in case of lono generate for all templates
+      Register::Project.clear! # in case of lono generate for all templates
+      @map
+    end
+
+    def add(registry, metadata)
+      @sets << [registry, metadata.dup]
+    end
+
+    def existing_configsets
+      configsets = []
+      @cfn["Resources"].each do |logical_id, attributes|
+        init = attributes.dig("Metadata", "AWS::CloudFormation::Init")
+        next unless init
+        data = {
+          registry: {name: "original", resource: logical_id},
+          metdata_configset: attributes["Metadata"]
+        }
+        configsets << data
+      end
+      configsets
     end
 
     def combine
       @sets.each_with_index do |a, i|
-        options, metadata = a
-        name, resource = options[:name], options[:resource]
+        registry, metadata = a
+        name, resource = registry[:name], registry[:resource]
 
         @configSets["default"] ||= []
         @configSets["default"] << {"ConfigSet" => name}
@@ -35,23 +69,6 @@ class Lono::Configset
 
     def configset
       @metadata
-    end
-
-    ########
-    def metadata_map
-      Register::Blueprint.configsets.each do |c|
-        loader = Blueprint::Loader.new(c, @options)
-        add(c, loader.metdata_configset)
-      end
-      Register::Project.configsets.each do |c|
-        loader = Loader.new(c, @options)
-        add(c, loader.metdata_configset)
-      end
-
-      combine
-      Register::Blueprint.clear! # in case of lono generate for all templates
-      Register::Project.clear! # in case of lono generate for all templates
-      @map
     end
   end
 end

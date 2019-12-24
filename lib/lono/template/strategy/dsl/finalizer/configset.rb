@@ -8,8 +8,8 @@ class Lono::Template::Strategy::Dsl::Finalizer
     end
 
     def run
-      combiner = Lono::Configset::Combiner.new(@options)
-      metadata_map = combiner.metadata_map
+      puts "metadata_map #{metadata_map}"
+      puts "@cfn #{@cfn}"
 
       metadata_map.each do |logical_id, metadata_configset|
         resource = @cfn["Resources"][logical_id]
@@ -30,5 +30,11 @@ class Lono::Template::Strategy::Dsl::Finalizer
 
       @cfn
     end
+
+    def metadata_map
+      combiner = Lono::Configset::Combiner.new(@cfn, @options)
+      combiner.metadata_map
+    end
+    memoize :metadata_map
   end
 end

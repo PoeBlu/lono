@@ -17,9 +17,7 @@ class Lono::Configset
     def load
       path = find_path
       unless path
-        puts "WARN: Unable to find configset.yml or configset.json in #{configset_root}".color(:yellow)
-        return
-        # raise "Unable to find configset.yml or configset.json in #{configset_root}"
+        raise "Unable to find configset.yml or configset.json in #{configset_root}"
       end
 
       copy_registry_instance_variables
@@ -34,8 +32,6 @@ class Lono::Configset
 
     def find_path
       paths = %w[configset.yml configset.json].map { |p| "#{configset_root}/lib/#{p}" }
-      # puts "find_path paths".color(:yellow)
-      # pp paths
       paths.find { |path| File.exist?(path) }
     end
 
