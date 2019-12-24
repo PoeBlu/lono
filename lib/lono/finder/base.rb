@@ -10,6 +10,10 @@ module Lono::Finder
         component ? [component] : all
       end
 
+      def find(name)
+        new.find(name)
+      end
+
       def list
         new.list
       end

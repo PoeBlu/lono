@@ -1,5 +1,5 @@
 class Lono::Configset
-  class Register < Lono::AbstractBase
+  class Preparer < Lono::AbstractBase
     def run
       regsiter
       materialize

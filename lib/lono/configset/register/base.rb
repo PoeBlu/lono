@@ -25,6 +25,8 @@ module Lono::Configset::Register
     def validate!
       errors = []
       self.class.validations.each do |state|
+        puts "state #{state}"
+        puts "finder_class #{finder_class}"
         configset_root = finder_class.find(state[:name]) # finder_class implemented in subclass
         errors << state unless configset_root
       end

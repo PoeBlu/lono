@@ -9,7 +9,7 @@ class Lono::Blueprint
     end
 
     def data
-      blueprint_location = Find.find(@blueprint)
+      blueprint_location = Lono::Finder::Blueprint.find(@blueprint)
       meta_config = "#{blueprint_location}/.meta/config.yml"
       YAML.load_file(meta_config)
     end

@@ -4,10 +4,6 @@ class Lono::Blueprint
   module Root
     # Switch the lono root
     def set_blueprint_root(blueprint)
-      # TODO: remove
-      # puts "blueprint #{blueprint}"
-      # puts caller[0..2]
-
       blueprint_root = find_blueprint_root(blueprint)
       if blueprint_root
         Lono.blueprint_root = blueprint_root
@@ -25,7 +21,7 @@ class Lono::Blueprint
     def find_blueprint_root(blueprint)
       require_bundle_gems # ensures that gem will be found so we can switch to it
 
-      Find.find(blueprint) # blueprint_root
+      Lono::Finder::Blueprint.find(blueprint) # blueprint_root
     end
 
     def bundler_groups

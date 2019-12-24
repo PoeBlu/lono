@@ -19,10 +19,14 @@ module Lono::Configset::Register
       path if File.exist?(path)
     end
 
+    # Used in Base#validate!
+    def finder_class
+      Lono::Finder::Blueprint::Configset
+    end
+
     # DSL
     def source(v)
       self.class.source = v
     end
-
   end
 end

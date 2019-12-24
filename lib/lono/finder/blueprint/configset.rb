@@ -16,6 +16,10 @@ class Lono::Finder::Blueprint
     end
 
     def all
+      puts "Lono::Finder::Blueprint::Configset:"
+      puts "blueprint: #{blueprint}"
+      puts "vendor: #{vendor}"
+      puts "materialized: #{materialized}"
       blueprint + vendor + materialized
     end
 
