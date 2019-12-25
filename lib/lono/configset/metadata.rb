@@ -11,8 +11,9 @@ class Lono::Configset
 
     def register
       configsets.each do |registry|
-        puts "registry: #{registry}"
-        path = find_metadata(registry)
+        config = find_config(registry)
+        @parent_configset = config["name"] # must be set here for depends_on to see
+        path = "#{config["root"]}/lib/metadata.rb"
         evaluate_file(path)
       end
 
@@ -25,12 +26,9 @@ class Lono::Configset
       Lono::Configset::Register::Project.configsets
     end
 
-    def find_metadata(registry)
+    def find_config(registry)
       finder = finder_class_for(registry[:from_registry_class])
-      config = finder.find(registry[:name])
-      @configset_name = config["name"]
-      puts "@configset_name #{@configset_name}"
-      "#{config["root"]}/lib/metadata.rb"
+      finder.find(registry[:name])
     end
 
     def configset_name(root)
