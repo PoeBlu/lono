@@ -10,14 +10,14 @@ module Lono::Blueprint::Configset
       finder = Lono::Finder::Configset.new
       finder.list("Configsets available to project and can used with configs:") unless @options[:quiet]
       puts "Configsets project is using for the #{@blueprint} blueprint:" unless @options[:quiet]
-      show(project.configsets, finder.all)
+      show(project.configsets, finder.all, "project")
 
       blueprint = Lono::Configset::Register::Blueprint.new(@options)
       blueprint.register
       finder = Lono::Finder::Blueprint::Configset.new
       finder.list("Configsets available to #{@blueprint} blueprint:") unless @options[:quiet]
       puts "Configsets built into the blueprint:" unless @options[:quiet]
-      show(blueprint.configsets, finder.all)
+      show(blueprint.configsets, finder.all, "blueprint")
 
       table = Text::Table.new
       table.head = ["Name", "Path", "Type", "From"]
@@ -31,12 +31,12 @@ module Lono::Blueprint::Configset
       puts "Use `lono generate #{@blueprint}` to materialize them."
     end
 
-    def show(configsets, all)
+    def show(configsets, all, from)
       configsets.each do |c|
         puts "    #{c[:name]}" unless @options[:quiet]
         found = all.find { |i| i["name"] == c[:name] }
         next unless found
-        found["from"] = "blueprint"
+        found["from"] = from
         @final << found
       end
       puts "" unless @options[:quiet]
