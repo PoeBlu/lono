@@ -14,6 +14,8 @@ module Lono
 
     desc "configsets", "List blueprints configsets"
     long_desc Help.text("blueprint/new")
+    option :stack, desc: "stack name. defaults to blueprint name."
+    option :quiet
     def configsets(blueprint)
       Configset::List.new(options.merge(blueprint: blueprint)).run
     end

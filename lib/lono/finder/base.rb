@@ -15,8 +15,8 @@ module Lono::Finder
         new.find(name)
       end
 
-      def list
-        new.list
+      def list(message=nil)
+        new.list(message)
       end
     end
 
@@ -70,8 +70,8 @@ module Lono::Finder
       Dir.glob(expr).size > 0
     end
 
-    def list
-      puts "Available #{type.pluralize}:"
+    def list(message=nil)
+      puts(message || "Available #{type.pluralize}:")
       table = Text::Table.new
       table.head = ["Name", "Path", "Type"]
 
