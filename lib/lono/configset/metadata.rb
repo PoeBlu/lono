@@ -27,10 +27,10 @@ class Lono::Configset
 
     def find_metadata(registry)
       finder = finder_class_for(registry[:from_registry_class])
-      configset_root = finder.find(registry[:name])
-      @configset_name = configset_name(configset_root)
-      puts "configset_root #{configset_root}"
-      "#{configset_root}/lib/metadata.rb"
+      config = finder.find(registry[:name])
+      @configset_name = config["name"]
+      puts "@configset_name #{@configset_name}"
+      "#{config["root"]}/lib/metadata.rb"
     end
 
     def configset_name(root)

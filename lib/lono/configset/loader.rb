@@ -36,7 +36,8 @@ class Lono::Configset
     end
 
     def configset_root
-      finder_class.find(@name)
+      config = finder_class.find(@name)
+      config["root"] if config
     end
     memoize :configset_root
 

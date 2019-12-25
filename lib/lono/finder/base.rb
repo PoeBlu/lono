@@ -29,7 +29,7 @@ module Lono::Finder
     # Returns root path of component: blueprint or configset
     def find(name)
       found = all.find { |i| i["name"] == name }
-      return found["path"] if found
+      found if found
     end
 
     def all
@@ -57,7 +57,7 @@ module Lono::Finder
         next unless detect?(root)
         config = yaml_load_file(dot_meta_path(root))
         next unless config
-        config["path"] = root
+        config["root"] = root
         config["source_type"] = source_type
         components << config
       end
