@@ -4,14 +4,13 @@ module Lono::Configset::Register
   class Base < Lono::AbstractBase
     class_attribute :configsets
     class_attribute :validations
+    class_attribute :source
+
+    include Dsl
 
     def self.clear!
       self.configsets = []
       self.validations = []
-    end
-
-    def configset
-      self.class.configsets
     end
 
     def evaluate_file(path)
@@ -65,13 +64,5 @@ module Lono::Configset::Register
         end
       end
     end
-
-    # DSL
-    def configset(name, options={})
-      o = options.merge(name: name)
-      self.class.configsets << o
-      store_for_validation(name)
-    end
-
   end
 end

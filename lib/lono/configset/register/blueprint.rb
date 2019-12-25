@@ -2,7 +2,6 @@ module Lono::Configset::Register
   class Blueprint < Base
     self.configsets = []
     self.validations = []
-    class_attribute :source
 
     def register
       evaluate
@@ -22,11 +21,6 @@ module Lono::Configset::Register
     # Used in Base#validate!
     def finder_class
       Lono::Finder::Blueprint::Configset
-    end
-
-    # DSL
-    def source(v)
-      self.class.source = v
     end
   end
 end

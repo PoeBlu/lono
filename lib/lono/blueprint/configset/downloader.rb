@@ -12,7 +12,7 @@ module Lono::Blueprint::Configset
 
     def run
       return if @configsets.empty?
-      puts "Downloading configsets for blueprint #{@blueprint}"
+      puts "Materializing configsets for blueprint #{@blueprint}"
       clean_gemfile
       gemfile = build_gemfile
       return unless gemfile
