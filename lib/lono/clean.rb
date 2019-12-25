@@ -7,8 +7,8 @@ class Lono::Clean
   end
 
   def run
-    puts "Cleaning up"
-    puts "Removing output/ folder"
+    puts "Clean: removing output/ and tmp/ folder"
     FileUtils.rm_rf("#{Lono.config.output_path}")
+    FileUtils.rm_rf("#{Lono.root}/tmp")
   end
 end
