@@ -4,6 +4,7 @@ class Lono::Configset
       super
       @blueprint = Lono::Configset::Register::Blueprint.new(options)
       @project   = Lono::Configset::Register::Project.new(options)
+      @metadata   = Lono::Configset::Metadata.new(options)
     end
 
     def run
@@ -15,6 +16,7 @@ class Lono::Configset
     def register
       @blueprint.register
       @project.register
+      @metadata.register # run after blueprint and projects configsets are registered
     end
 
     def materialize

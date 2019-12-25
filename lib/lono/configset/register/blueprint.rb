@@ -9,7 +9,6 @@ module Lono::Configset::Register
 
     def evaluate
       path = find_configsets
-      return unless path
       evaluate_file(path)
     end
 

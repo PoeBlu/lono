@@ -2,6 +2,8 @@ require "active_support/core_ext/class"
 
 module Lono::Configset::Register
   class Base < Lono::AbstractBase
+    include Lono::Configset::EvaluateFile
+
     class_attribute :configsets
     class_attribute :validations
     class_attribute :source
@@ -11,11 +13,6 @@ module Lono::Configset::Register
     def self.clear!
       self.configsets = []
       self.validations = []
-    end
-
-    def evaluate_file(path)
-      return unless File.exist?(path)
-      instance_eval(IO.read(path), path)
     end
 
     # Validate the configset at register time. So user finds out about error earlier.
