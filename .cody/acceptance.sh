@@ -14,7 +14,7 @@ lono new infra
 cd infra
 lono blueprint new demo
 # Very simply template with just a security group
-cp ../.cody/demo.rb blueprints/demo/app/templates/demo.rb
+cp ../.cody/demo.rb app/blueprints/demo/app/templates/demo.rb
 
 # Rewrite the Gemfile to use the local lono gem for testing
 cat << EOF > Gemfile
