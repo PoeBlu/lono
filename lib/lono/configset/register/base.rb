@@ -5,14 +5,18 @@ module Lono::Configset::Register
     class_attribute :configsets
     class_attribute :validations
 
-    def evaluate_file(path)
-      return unless File.exist?(path)
-      instance_eval(IO.read(path), path)
-    end
-
     def self.clear!
       self.configsets = []
       self.validations = []
+    end
+
+    def configset
+      self.class.configsets
+    end
+
+    def evaluate_file(path)
+      return unless File.exist?(path)
+      instance_eval(IO.read(path), path)
     end
 
     # Validate the configset at register time. So user finds out about error earlier.
