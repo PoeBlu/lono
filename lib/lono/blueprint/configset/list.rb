@@ -18,6 +18,7 @@ module Lono::Blueprint::Configset
         found["from"] = "project"
         final << found
       end
+      puts "" unless @options[:quiet]
 
       finder = Lono::Finder::Blueprint::Configset.new
       finder.list("Configsets available to #{@blueprint} blueprint:") unless @options[:quiet]
@@ -32,10 +33,10 @@ module Lono::Blueprint::Configset
         found["from"] = "blueprint"
         final << found
       end
+      puts "" unless @options[:quiet]
 
       table = Text::Table.new
       table.head = ["Name", "Path", "Type", "From"]
-      puts "" unless @options[:quiet]
       puts "Final configsets being used for #{@blueprint} blueprint:"
       final.each do |c|
         table.rows << [c["name"], c["path"], c["source_type"], c["from"]]
