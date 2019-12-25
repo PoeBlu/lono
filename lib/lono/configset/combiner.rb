@@ -58,6 +58,7 @@ class Lono::Configset
 
     def combine
       @sets.each_with_index do |array, i|
+        padded_i = "%03d" % i
         registry, metadata = array
         name, resource = registry[:name], registry[:resource]
 
@@ -69,10 +70,10 @@ class Lono::Configset
         if init.key?("configSets")
           cs = init.delete("configSets") # Only support configSets with simple Array of Strings
           validate_simple!(registry, cs)
-          @configSets[name] = cs["default"].map {|c| "#{i}_#{c}" }
-          init.transform_keys! { |c| "#{i}_#{c}" }
+          @configSets[name] = cs["default"].map {|c| "#{padded_i}_#{c}" }
+          init.transform_keys! { |c| "#{padded_i}_#{c}" }
         else # simple config
-          config_key = "#{i}_single_generated"
+          config_key = "#{padded_i}_single_generated"
           @configSets[name] = [config_key]
           init = {config_key => init["config"]}
         end

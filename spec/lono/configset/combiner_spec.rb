@@ -30,31 +30,31 @@ describe Lono::Configset::Combiner do
         "AWS::CloudFormation::Init": {
           "configSets": {
             "default": [{"ConfigSet": "ssm"},{"ConfigSet": "httpd"}],
-            "ssm": ["0_aaa1","0_aaa2"],
-            "httpd": ["1_bbb1","1_bbb2"]
+            "ssm": ["000_aaa1","000_aaa2"],
+            "httpd": ["001_bbb1","001_bbb2"]
           },
-          "0_aaa1": {
+          "000_aaa1": {
             "commands": {
               "test": {
                 "command": "echo from-aaa1 > test1.txt"
               }
             }
           },
-          "0_aaa2": {
+          "000_aaa2": {
             "commands": {
               "test": {
                 "command": "echo from-aaa2 > test1.txt"
               }
             }
           },
-          "1_bbb1": {
+          "001_bbb1": {
             "commands": {
               "test": {
                 "command": "echo from-bbb1 > test2.txt"
               }
             }
           },
-          "1_bbb2": {
+          "001_bbb2": {
             "commands": {
               "test": {
                 "command": "echo from-bbb2 > test2.txt"
@@ -94,28 +94,28 @@ describe Lono::Configset::Combiner do
                 }
               ],
               "original": [
-                "0_existing"
+                "000_existing"
               ],
               "ssm": [
-                "1_aaa1",
-                "1_aaa2"
+                "001_aaa1",
+                "001_aaa2"
               ]
             },
-            "0_existing": {
+            "000_existing": {
               "commands": {
                 "test": {
                   "command": "echo existing >> /tmp/test.txt"
                 }
               }
             },
-            "1_aaa1": {
+            "001_aaa1": {
               "commands": {
                 "test": {
                   "command": "echo from-aaa1 > test1.txt"
                 }
               }
             },
-            "1_aaa2": {
+            "001_aaa2": {
               "commands": {
                 "test": {
                   "command": "echo from-aaa2 > test1.txt"
@@ -144,8 +144,8 @@ describe Lono::Configset::Combiner do
           default:
           - ConfigSet: simple
           simple:
-          - 0_single_generated
-        0_single_generated:
+          - 000_single_generated
+        000_single_generated:
           commands:
             c1:
               command: echo c1 >> test.txt
@@ -175,14 +175,14 @@ describe Lono::Configset::Combiner do
             - ConfigSet: original
             - ConfigSet: ssm
             original:
-            - 0_single_generated
+            - 000_single_generated
             ssm:
-            - 1_single_generated
-          0_single_generated:
+            - 001_single_generated
+          000_single_generated:
             commands:
               existing:
                 command: existing >> test.txt
-          1_single_generated:
+          001_single_generated:
             commands:
               c1:
                 command: echo c1 >> test.txt
