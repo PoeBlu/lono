@@ -11,7 +11,7 @@ module Lono::Finder
     # Special method for Downloader. Does not consider materialized configsets
     def find_local(name)
       jade = local.find { |j| j.name == name }
-      return jade.path if found
+      return jade.path if jade
     end
 
     def local

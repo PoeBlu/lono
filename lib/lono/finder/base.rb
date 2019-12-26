@@ -28,8 +28,8 @@ module Lono::Finder
 
     # Returns root path of component: blueprint or configset
     def find(name)
-      found = all.find { |jade| jade.name == name }
-      found if found
+      jade = all.find { |j| j.name == name }
+      jade if jade
     end
 
     def all

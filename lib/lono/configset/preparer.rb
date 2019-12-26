@@ -17,11 +17,11 @@ class Lono::Configset
     def register
       @project.register
       @blueprint.register
-      @metadata.register
+      # @metadata.register
     end
 
     def resolve_dependencies
-      DependencyResolver.new(@options).resolve(@metadata.metas)
+      # DependencyResolver.new(@options).resolve(@metadata.metas)
     end
 
     def materialize
