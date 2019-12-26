@@ -7,7 +7,7 @@ module Lono::Finder
 
     class << self
       def one_or_all(component)
-        components = new.all.map { |jade| jade.name }
+        components = new.all.map { |c| jade_class.get(c[:name]) }
         component ? [component] : components
       end
 
@@ -15,8 +15,25 @@ module Lono::Finder
         new.find(name)
       end
 
+      def find_config(name)
+        new.find_config(name)
+      end
+
       def list(message=nil)
         new.list(message)
+      end
+
+      def jade_class
+        case self.to_s
+        when "Lono::Finder::Blueprint"
+          Lono::Blueprint::Jade
+        when "Lono::Finder::Configset"
+          Lono::Configset::Jade
+        when "Lono::Finder::Blueprint::Configset"
+          Lono::Blueprint::Configset::Jade
+        else
+          raise "should never get here"
+        end
       end
     end
 
@@ -28,8 +45,12 @@ module Lono::Finder
 
     # Returns root path of component: blueprint or configset
     def find(name)
-      jade = all.find { |j| j.name == name }
-      jade if jade
+      config = find_config(name)
+      self.class.jade_class.get(name) if config
+    end
+
+    def find_config(name)
+      all.find { |c| c[:name] == name }
     end
 
     def all
@@ -51,18 +72,48 @@ module Lono::Finder
     end
 
     # Components: blueprints or configsets
-    def components(roots, source_type)
+    # Returns array of config Hashes. Example structure:
+    #
+    #     [{
+    #       name: "cfn-hup",
+    #       root: "/path/to/gem/root",
+    #       source_type: "project-local",
+    #     },...]
+    #
+  def components(roots, source_type)
       components = []
       roots.each do |root|
         next unless detect?(root)
         meta_path = dot_meta_path(root)
         next unless File.exist?(meta_path)
-        jade = Lono::Jade.new(meta_path, root: root, source_type: source_type)
-        components << jade
+        config = load_yaml_file(meta_path)
+        config.symbolize_keys!
+        config[:root] = root
+        config[:source_type] = source_type
+        components << config
       end
       components
     end
     memoize :components
+
+    def load_yaml_file(dot_meta_path)
+      return {} unless File.exist?(dot_meta_path)
+      config = YAML.load_file(dot_meta_path)
+      if config.key?("blueprint_name")
+        deprecation_warning("blueprint name in #{dot_meta_path} is DEPRECATED. Please rename blueprint_name to name.")
+        config["name"] = config["blueprint_name"]
+      end
+      config
+    end
+
+    @@deprecation_warnings = []
+    def deprecation_warning(message)
+      # comment out for now
+      # return if ENV["LONO_MUTE_DEPRECATION"]
+      # message = "#{message} export LONO_MUTE_DEPRECATION=1 to mute"
+      # puts message unless @@deprecation_warnings.include?(message)
+      # @@deprecation_warnings << message
+    end
 
     def dot_meta_path(root)
       "#{root}/.meta/config.yml"

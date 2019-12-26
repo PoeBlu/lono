@@ -2,59 +2,73 @@ module Lono
   # Hodgepodge of .meta/config.yml and extra decorated methods like root and dependencies.
   class Jade
     extend Memoist
-    # class_attribute :tracked
-    # self.tracked = []
+    class_attribute :tracked
+    self.tracked = {}
 
-    # class << self
-    #   def get(name)
-    #     return tracked[name] if tracked[name]
-    #     Find...
-    #   end
-    # end
+    class << self
+      def get(name)
+        jade = self.tracked[name]
+        return jade if jade
 
-    attr_accessor :dependencies, :from
-    def initialize(config_path, attrs={})
-      @config_path, @attrs = config_path, attrs
-      @dependencies = []
+        jade = new(name)
+        self.tracked[name] = jade
+        jade
+      end
     end
 
-    def exist?
-      !data.empty?
+    attr_accessor :dependencies, :from, :depends_ons
+    def initialize(name)
+      @name = name
+      @materialized = false
+      @resolved = false
+      @depends_ons = []
     end
 
-    def data
-      hash = load_yaml_file
-      hash.merge(@attrs)
+    def dependencies
+      @depends_ons.map do |o|
+        self.class.get(o[:depends_on])
+      end
     end
-    memoize :data
 
     def method_missing(name, *args, &block)
-      data.symbolize_keys!
-      if data.key?(name)
-        data[name]
+      @config.symbolize_keys!
+      if @config.key?(name)
+        @config[name]
       else
         super
       end
     end
 
-  private
-    def load_yaml_file
-      return {} unless File.exist?(@config_path)
-      config = YAML.load_file(@config_path)
-      if config.key?("blueprint_name")
-        deprecation_warning("blueprint name in #{@config_path} is DEPRECATED. Please rename blueprint_name to name.")
-        config["name"] = config["blueprint_name"]
-      end
-      config
+    # root is kind of special. root is needed for materialization but can accidentally get called too early
+    # before materialization. So treat it specially with an error.
+    def root
+      raise "ERROR: root is not available until jade has been materialized" unless @config
+      @config[:root]
     end
 
-    @@deprecation_warnings = []
-    def deprecation_warning(message)
-      # comment out for now
-      # return if ENV["LONO_MUTE_DEPRECATION"]
-      # message = "#{message} export LONO_MUTE_DEPRECATION=1 to mute"
-      # puts message unless @@deprecation_warnings.include?(message)
-      # @@deprecation_warnings << message
+    def materialize
+      @config = find_config
+      @config = download unless @config
+      return false unless @config
+      true
+    end
+    memoize :materialize
+
+    def download
+      # noop - only for blueprint configset materialized-remote
+    end
+
+    def resolved!
+      @resolved = true
+    end
+
+    def resolved?
+      @resolved
+    end
+
+  private
+    def find_config
+      finder_class.find_config(@name)
     end
   end
 end

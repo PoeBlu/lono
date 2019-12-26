@@ -4,47 +4,49 @@ class Lono::Configset
       super
       @blueprint = Register::Blueprint.new(options)
       @project   = Register::Project.new(options)
-      @metadata   = Metadata.new(options)
+      @meta      = Meta.new(options)
     end
 
     def run
       register
-      materialize_current_registered
-
-      # resolve_dependencies
-      validate!
+      materialize_jades
+      validate_all!
+      resolve_dependencies
     end
 
-    def materialize_current_registered
-      puts "materialize_current_registered"
-      configset_registries.each do |registry|
-        pp registry
-      end
-    end
-
+    # Create configsets registry items
     def register
       @project.register
       @blueprint.register
-      # @metadata.register
+    end
+
+    def materialize_jades
+      # Create lazy jades
+      Register::Blueprint.configsets.each do |registry|
+        Lono::Blueprint::Configset::Jade.get(registry[:name])
+      end
+      Register::Project.configsets.each do |registry|
+        Lono::Configset::Jade.get(registry[:name])
+      end
+      # Materialize current jades
+      Lono::Jade.tracked.each do |name, jade|
+        jade.materialize
+      end
     end
 
     def resolve_dependencies
-      DependencyResolver.new(@options).resolve(@metadata.metas)
+      jades = Lono::Jade.tracked.values
+      puts "resolve_dependencies 1 jades #{jades.map(&:name)}"
+      Dependencies.new.resolve(jades)
     end
 
     def download
       Lono::Blueprint::Configset::Downloader.new(@options).run
     end
 
-    def validate!
+    def validate_all!
       @blueprint.validate!
       @project.validate!
-    end
-
-  private
-    def configset_registries
-      Lono::Configset::Register::Blueprint.configsets +
-      Lono::Configset::Register::Project.configsets
     end
   end
 end

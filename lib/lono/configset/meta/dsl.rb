@@ -1,13 +1,11 @@
-class Lono::Configset::Metadata
+class Lono::Configset::Meta
   module Dsl
     def depends_on(configset, options={})
       o = options.merge(
         from_method: __method__,
         depends_on: configset,
-        name: @parent_configset,
-        finder_class: @finder_class,
       )
-      self.class.registries << o
+      @jade.depends_ons << o
     end
   end
 end
