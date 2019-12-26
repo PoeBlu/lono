@@ -1,4 +1,4 @@
-class Lono::Configset
+module Lono
   # Hodgepodge of .meta/config.yml and extra decorated methods like root and dependencies.
   class Jade
     extend Memoist

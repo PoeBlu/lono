@@ -57,7 +57,7 @@ module Lono::Finder
         next unless detect?(root)
         meta_path = dot_meta_path(root)
         next unless File.exist?(meta_path)
-        jade = Lono::Configset::Jade.new(meta_path, root: root, source_type: source_type)
+        jade = Lono::Jade.new(meta_path, root: root, source_type: source_type)
         components << jade
       end
       components

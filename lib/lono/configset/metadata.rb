@@ -10,7 +10,7 @@ class Lono::Configset
     self.registries = []
 
     def register
-      configsets.each do |registry|
+      configset_registries.each do |registry|
         puts "registry #{registry}"
         @finder_class = finder_class_for(registry[:from_registry_class])
         puts "@finder_class #{@finder_class}"
@@ -28,13 +28,9 @@ class Lono::Configset
     end
 
     # configset registry entries
-    def configsets
+    def configset_registries
       Lono::Configset::Register::Blueprint.configsets +
       Lono::Configset::Register::Project.configsets
-    end
-
-    def configset_name(root)
-      "#{root}/.meta/config.yml"
     end
 
     def finder_class_for(from_registry_class)
