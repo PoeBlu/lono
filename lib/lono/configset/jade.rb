@@ -5,7 +5,11 @@ class Lono::Configset
     end
 
     def materialize
-      super
+      # super
+      @config = find_config
+      @config = download unless @config
+
+
       evaluate_meta_rb
       true
     end
@@ -13,11 +17,6 @@ class Lono::Configset
     def evaluate_meta_rb
       meta = Lono::Configset::Meta.new(self)
       meta.evaluate
-    end
-
-    def download
-      puts "TODO: store error if download is unsuccessful"
-      exit 1
     end
   end
 end

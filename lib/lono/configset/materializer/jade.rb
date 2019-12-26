@@ -1,18 +1,15 @@
 require "bundler"
 
-module Lono::Blueprint::Configset
-  class Downloader
+module Lono::Configset::Materializer
+  class Jade
     extend Memoist
 
-    def initialize(options={})
-      @options = options
-      @blueprint = options[:blueprint]
-      @configsets = options[:configsets] || Lono::Configset::Register::Blueprint.configsets
+    def initialize(jade)
+      @jade = jade
     end
 
-    def run
-      return if @configsets.empty?
-      puts "Downloading configsets for blueprint #{@blueprint}"
+    def install
+      puts "Materializing #{@jade.name}"
       clean_gemfile
       gemfile = build_gemfile
       return unless gemfile
@@ -21,20 +18,14 @@ module Lono::Blueprint::Configset
     end
 
     def build_gemfile
-      lines = []
-      @configsets.each do |c|
-        next if local_configset?(c[:name])
-        options = source.options(c)
-        args = options.inject([]) { |r,(k,v)| r << %Q|#{k}: "#{v}"| }.join(', ')
-        lines << %Q|gem "#{c[:name]}", #{args}|
-      end
-      return if lines.empty?
-      lines.join("\n") + "\n"
+      return if local_configset?(@jade.name)
+      options = source.options(@jade)
+      args = options.inject([]) { |r,(k,v)| r << %Q|#{k}: "#{v}"| }.join(', ')
+      %Q|gem "#{@jade.name}", #{args}\n|
     end
 
     def local_configset?(name)
-      finder = Lono::Finder::Blueprint::Configset.new(@options)
-      !!finder.find_local(name)
+      !!@jade.finder_class.find_local(name)
     end
 
     def write(gemfile)

@@ -8,10 +8,14 @@ class Lono::Configset
     end
 
     def run
+      puts "hi1"
       register
+      puts "hi2"
       materialize_jades
-      validate_all!
+      puts "hi3"
       resolve_dependencies
+      puts "hi4"
+      # validate_all!
     end
 
     # Create configsets registry items

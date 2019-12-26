@@ -17,6 +17,7 @@ module Lono
     end
 
     attr_accessor :dependencies, :from, :depends_ons
+    attr_reader :name
     def initialize(name)
       @name = name
       @materialized = false
@@ -55,8 +56,9 @@ module Lono
     memoize :materialize
 
     def download
-      # noop - only for blueprint configset materialized-remote
+      @config
     end
+    memoize :download
 
     def resolved!
       @resolved = true

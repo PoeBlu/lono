@@ -1,4 +1,4 @@
-class Lono::Configset::Materializer
+module Lono::Configset::Materializer
   class Source
     def initialize(lono_settings=nil)
       @lono_settings = lono_settings || Lono::Setting.new.data
@@ -9,11 +9,11 @@ class Lono::Configset::Materializer
     end
 
     # c - configset registry item
-    def options(c)
+    def options(jade)
       if location.include?("git@") || location.include?("https")
-        {git: "#{location}/#{c[:name]}"}
+        {git: "#{location}/#{jade.name}"}
       else
-        {path: "#{location}/#{c[:name]}"}
+        {path: "#{location}/#{jade.name}"}
       end
     end
 

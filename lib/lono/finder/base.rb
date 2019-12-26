@@ -15,6 +15,10 @@ module Lono::Finder
         new.find(name)
       end
 
+      def find_local(name)
+        new.find(name)
+      end
+
       def find_config(name)
         new.find_config(name)
       end
