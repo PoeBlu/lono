@@ -7,7 +7,7 @@ module Lono::Finder
 
     class << self
       def one_or_all(component)
-        components = new.all.map { |i| i["name"] }
+        components = new.all.map { |jade| jade.name }
         component ? [component] : components
       end
 
@@ -28,7 +28,7 @@ module Lono::Finder
 
     # Returns root path of component: blueprint or configset
     def find(name)
-      found = all.find { |i| i["name"] == name }
+      found = all.find { |jade| jade.name == name }
       found if found
     end
 
@@ -55,15 +55,18 @@ module Lono::Finder
       components = []
       roots.each do |root|
         next unless detect?(root)
-        config = yaml_load_file(dot_meta_path(root))
-        next unless config
-        config["root"] = root
-        config["source_type"] = source_type
-        components << config
+        meta_path = dot_meta_path(root)
+        next unless File.exist?(meta_path)
+        jade = Lono::Configset::Jade.new(meta_path, root: root, source_type: source_type)
+        components << jade
       end
       components
     end
     memoize :components
+
+    def dot_meta_path(root)
+      "#{root}/.meta/config.yml"
+    end
 
     def detect?(root)
       expr = "#{root}/#{detection_path}"
@@ -76,9 +79,9 @@ module Lono::Finder
       table.head = ["Name", "Path", "Type"]
 
       components = all
-      components.each do |c|
-        pretty_path = c["root"].sub("#{Lono.root}/", "")
-        table.rows << [c["name"], pretty_path, c["source_type"]]
+      components.each do |jade|
+        pretty_path = jade.root.sub("#{Lono.root}/", "")
+        table.rows << [jade.name, pretty_path, jade.source_type]
       end
 
       puts table
@@ -106,28 +109,5 @@ module Lono::Finder
       Bundler.load.specs
     end
     memoize :gemspecs
-
-    def yaml_load_file(path)
-      return unless File.exist?(path)
-      config = YAML.load_file(path)
-      if config.key?("blueprint_name")
-        deprecation_warning("blueprint name in #{path} is DEPRECATED. Please rename blueprint_name to name.")
-        config["name"] = config["blueprint_name"]
-      end
-      config
-    end
-
-    def dot_meta_path(root)
-      "#{root}/.meta/config.yml"
-    end
-
-    @@deprecation_warnings = []
-    def deprecation_warning(message)
-      # comment out for now
-      # return if ENV["LONO_MUTE_DEPRECATION"]
-      # message = "#{message} export LONO_MUTE_DEPRECATION=1 to mute"
-      # puts message unless @@deprecation_warnings.include?(message)
-      # @@deprecation_warnings << message
-    end
   end
 end

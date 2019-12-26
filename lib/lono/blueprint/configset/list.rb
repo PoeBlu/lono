@@ -22,8 +22,8 @@ module Lono::Blueprint::Configset
       table = Text::Table.new
       table.head = ["Name", "Path", "Type", "From"]
       puts "Final configsets being used for #{@blueprint} blueprint:"
-      @final.each do |c|
-        table.rows << [c["name"], c["root"], c["source_type"], c["from"]]
+      @final.each do |j|
+        table.rows << [j.name, j.root, j.source_type, j.from]
       end
       puts table
 
@@ -34,10 +34,10 @@ module Lono::Blueprint::Configset
     def show(configsets, all, from)
       configsets.each do |c|
         puts "    #{c[:name]}" unless @options[:quiet]
-        found = all.find { |i| i["name"] == c[:name] }
-        next unless found
-        found["from"] = from
-        @final << found
+        jade = all.find { |j| j.name == c[:name] }
+        next unless jade
+        jade.from = from
+        @final << jade
       end
       puts "" unless @options[:quiet]
     end

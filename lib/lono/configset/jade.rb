@@ -1,29 +1,28 @@
 class Lono::Configset
   # Hodgepodge of .meta/config.yml and extra decorated methods like root and dependencies
-  class Gem
+  class Jade
     extend Memoist
 
-    attr_accessor :dependencies
+    attr_accessor :dependencies, :from
     def initialize(config_path, attrs={})
-      @config_path = config_path
+      @config_path, @attrs = config_path, attrs
       @dependencies = []
     end
 
     def exist?
-      !!data
+      !data.empty?
     end
 
     def data
-      load_yaml_file
+      hash = load_yaml_file
+      hash.merge(@attrs)
     end
     memoize :data
 
-    def root
-    end
-
     def method_missing(name, *args, &block)
-      if data.key?(name.to_s)
-        send(name)
+      data.symbolize_keys!
+      if data.key?(name)
+        data[name]
       else
         super
       end
@@ -31,17 +30,13 @@ class Lono::Configset
 
   private
     def load_yaml_file
-      return unless File.exist?(@config_path)
+      return {} unless File.exist?(@config_path)
       config = YAML.load_file(@config_path)
       if config.key?("blueprint_name")
-        deprecation_warning("blueprint name in #{path} is DEPRECATED. Please rename blueprint_name to name.")
+        deprecation_warning("blueprint name in #{@config_path} is DEPRECATED. Please rename blueprint_name to name.")
         config["name"] = config["blueprint_name"]
       end
       config
-    end
-
-    def dot_meta_path(root)
-      "#{root}/.meta/config.yml"
     end
 
     @@deprecation_warnings = []

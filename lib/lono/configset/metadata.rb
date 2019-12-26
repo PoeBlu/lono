@@ -12,9 +12,9 @@ class Lono::Configset
     def register
       configsets.each do |registry|
         @finder_class = finder_class_for(registry[:from_registry_class])
-        config = @finder_class.find(registry[:name])
-        @parent_configset = config["name"] # must be set here for depends_on to see
-        path = "#{config["root"]}/lib/metadata.rb"
+        gem = @finder_class.find(registry[:name])
+        @parent_configset = gem.name # must be set here for depends_on to see
+        path = "#{gem.root}/lib/metadata.rb"
         evaluate_file(path)
       end
     end
