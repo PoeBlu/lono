@@ -1,5 +1,3 @@
-require "active_support/core_ext/class"
-
 module Lono::Configset::Register
   class Base < Lono::AbstractBase
     include Lono::Configset::EvaluateFile

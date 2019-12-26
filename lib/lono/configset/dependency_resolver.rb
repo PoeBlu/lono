@@ -1,5 +1,3 @@
-require "active_support/core_ext/class"
-
 class Lono::Configset
   class DependencyResolver < Lono::AbstractBase
     def resolve(metas)

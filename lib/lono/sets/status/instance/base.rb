@@ -1,5 +1,3 @@
-require "active_support/core_ext/class"
-
 # The Completed and Deleted classes inherit from Base.
 # They implement `tail` and should not override `show`.
 #

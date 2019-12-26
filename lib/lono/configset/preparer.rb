@@ -9,9 +9,17 @@ class Lono::Configset
 
     def run
       register
-      resolve_dependencies
-      materialize
+      materialize_current_registered
+
+      # resolve_dependencies
       validate!
+    end
+
+    def materialize_current_registered
+      puts "materialize_current_registered"
+      configset_registries.each do |registry|
+        pp registry
+      end
     end
 
     def register
@@ -21,16 +29,22 @@ class Lono::Configset
     end
 
     def resolve_dependencies
-      # DependencyResolver.new(@options).resolve(@metadata.metas)
+      DependencyResolver.new(@options).resolve(@metadata.metas)
     end
 
-    def materialize
+    def download
       Lono::Blueprint::Configset::Downloader.new(@options).run
     end
 
     def validate!
       @blueprint.validate!
       @project.validate!
+    end
+
+  private
+    def configset_registries
+      Lono::Configset::Register::Blueprint.configsets +
+      Lono::Configset::Register::Project.configsets
     end
   end
 end

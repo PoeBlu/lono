@@ -1,5 +1,3 @@
-require "active_support/core_ext/class"
-
 class Lono::Configset
   class Metadata < Lono::AbstractBase
     extend Memoist

@@ -2,6 +2,15 @@ module Lono
   # Hodgepodge of .meta/config.yml and extra decorated methods like root and dependencies.
   class Jade
     extend Memoist
+    # class_attribute :tracked
+    # self.tracked = []
+
+    # class << self
+    #   def get(name)
+    #     return tracked[name] if tracked[name]
+    #     Find...
+    #   end
+    # end
 
     attr_accessor :dependencies, :from
     def initialize(config_path, attrs={})
