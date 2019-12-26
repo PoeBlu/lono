@@ -1,9 +1,13 @@
 class Lono::Configset::Metadata
   module Dsl
     def depends_on(configset, options={})
-      puts "depends_on @parent_configset: #{@parent_configset.inspect}".color(:purple)
-      o = options.merge(from_method: __method__, name: @parent_configset, depends_on: configset)
-      self.class.registry << o
+      o = options.merge(
+        from_method: __method__,
+        depends_on: configset,
+        name: @parent_configset,
+        finder_class: @finder_class,
+      )
+      self.class.registries << o
     end
   end
 end

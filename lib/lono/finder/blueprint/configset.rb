@@ -5,12 +5,6 @@ class Lono::Finder::Blueprint
       @blueprint_root = options[:blueprint_root] || Lono.blueprint_root
     end
 
-    # Special method for Downloader. Does not consider materialized configsets
-    def find_local(name)
-      found = local.find { |i| i["name"] == name }
-      return found["path"] if found
-    end
-
     def local
       blueprint + vendor
     end

@@ -77,7 +77,7 @@ module Lono::Finder
 
       components = all
       components.each do |c|
-        pretty_path = c["path"].sub("#{Lono.root}/", "")
+        pretty_path = c["root"].sub("#{Lono.root}/", "")
         table.rows << [c["name"], pretty_path, c["source_type"]]
       end
 

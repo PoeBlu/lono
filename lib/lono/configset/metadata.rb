@@ -6,29 +6,29 @@ class Lono::Configset
     include EvaluateFile
     include Dsl
 
-    class_attribute :registry
-    self.registry = []
+    class_attribute :registries
+    self.registries = []
 
     def register
       configsets.each do |registry|
-        config = find_config(registry)
+        @finder_class = finder_class_for(registry[:from_registry_class])
+        config = @finder_class.find(registry[:name])
         @parent_configset = config["name"] # must be set here for depends_on to see
         path = "#{config["root"]}/lib/metadata.rb"
         evaluate_file(path)
       end
+    end
 
-      puts "self.class.registry #{self.class.registry}"
+    def metas
+      puts "registries:".color(:yellow)
+      pp self.class.registries
+      []
     end
 
     # configset registry entries
     def configsets
       Lono::Configset::Register::Blueprint.configsets +
       Lono::Configset::Register::Project.configsets
-    end
-
-    def find_config(registry)
-      finder = finder_class_for(registry[:from_registry_class])
-      finder.find(registry[:name])
     end
 
     def configset_name(root)

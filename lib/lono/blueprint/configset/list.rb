@@ -23,7 +23,7 @@ module Lono::Blueprint::Configset
       table.head = ["Name", "Path", "Type", "From"]
       puts "Final configsets being used for #{@blueprint} blueprint:"
       @final.each do |c|
-        table.rows << [c["name"], c["path"], c["source_type"], c["from"]]
+        table.rows << [c["name"], c["root"], c["source_type"], c["from"]]
       end
       puts table
 

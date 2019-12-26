@@ -2,21 +2,26 @@ class Lono::Configset
   class Preparer < Lono::AbstractBase
     def initialize(options={})
       super
-      @blueprint = Lono::Configset::Register::Blueprint.new(options)
-      @project   = Lono::Configset::Register::Project.new(options)
-      @metadata   = Lono::Configset::Metadata.new(options)
+      @blueprint = Register::Blueprint.new(options)
+      @project   = Register::Project.new(options)
+      @metadata   = Metadata.new(options)
     end
 
     def run
       register
+      resolve_dependencies
       materialize
       validate!
     end
 
     def register
-      @blueprint.register
       @project.register
-      @metadata.register # run after blueprint and projects configsets are registered
+      @blueprint.register
+      @metadata.register
+    end
+
+    def resolve_dependencies
+      DependencyResolver.new(@options).resolve(@metadata.metas)
     end
 
     def materialize
