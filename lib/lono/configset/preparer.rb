@@ -8,13 +8,13 @@ class Lono::Configset
     end
 
     def run
-      puts "hi1"
       register
       puts "hi2"
       materialize_jades
       puts "hi3"
       resolve_dependencies
-      puts "hi4"
+      puts "hi4 EXIT EARLY"
+      exit
       # validate_all!
     end
 
@@ -27,20 +27,19 @@ class Lono::Configset
     def materialize_jades
       # Create lazy jades
       Register::Blueprint.configsets.each do |registry|
-        Lono::Blueprint::Configset::Jade.get(registry[:name])
+        Lono::Jade.new(registry[:name], "blueprint")
       end
       Register::Project.configsets.each do |registry|
-        Lono::Configset::Jade.get(registry[:name])
+        Lono::Jade.new(registry[:name], "configset")
       end
       # Materialize current jades
-      Lono::Jade.tracked.each do |name, jade|
+      Lono::Jade.tracked do |jade|
         jade.materialize
       end
     end
 
     def resolve_dependencies
-      jades = Lono::Jade.tracked.values
-      puts "resolve_dependencies 1 jades #{jades.map(&:name)}"
+      jades = Lono::Jade.tracked
       Dependencies.new.resolve(jades)
     end
 

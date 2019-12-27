@@ -17,7 +17,7 @@ class Lono::Configset
     def load
       path = find_path
       unless path
-        raise "Unable to find configset.yml or configset.json in #{configset_root}"
+        raise "Unable to find configset.yml or configset.json in configset_root: #{configset_root.inspect}"
       end
 
       copy_registry_instance_variables
@@ -36,8 +36,8 @@ class Lono::Configset
     end
 
     def configset_root
-      jade = finder_class.find(@name)
-      jade.root if jade
+      config = finder_class.find(@name)
+      config[:root] if config
     end
     memoize :configset_root
 

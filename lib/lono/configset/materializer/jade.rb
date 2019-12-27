@@ -25,7 +25,7 @@ module Lono::Configset::Materializer
     end
 
     def local_configset?(name)
-      !!@jade.finder_class.find_local(name)
+      !!@jade.finder.find_local(name)
     end
 
     def write(gemfile)

@@ -7,7 +7,7 @@ module Lono::Finder
 
     class << self
       def one_or_all(component)
-        components = new.all.map { |c| jade_class.get(c[:name]) }
+        components = new.all.map { |c| c[:name] }
         component ? [component] : components
       end
 
@@ -15,30 +15,20 @@ module Lono::Finder
         new.find(name)
       end
 
-      def find_local(name)
-        new.find(name)
-      end
-
-      def find_config(name)
-        new.find_config(name)
-      end
-
       def list(message=nil)
         new.list(message)
       end
 
-      def jade_class
-        case self.to_s
-        when "Lono::Finder::Blueprint"
-          Lono::Blueprint::Jade
-        when "Lono::Finder::Configset"
-          Lono::Configset::Jade
-        when "Lono::Finder::Blueprint::Configset"
-          Lono::Blueprint::Configset::Jade
-        else
-          raise "should never get here"
-        end
-      end
+      # # Automatically set the jade type correctly
+      # def new_jade(name)
+      #   # jade_class one of: Lono::Finder::Blueprint, Lono::Finder::Configset, Lono::Finder::Blueprint::Configset
+      #   jade_class = self.to_s.gsub('Finder::','')
+      #   # jade_type one of: blueprint, configset, blueprint/configset
+      #   jade_type = jade_class.underscore
+      #   jade = Lono::Jade.new(name, jade_type)
+      #   jade.materialize
+      #   jade
+      # end
     end
 
     def initialize(options={})
@@ -49,11 +39,6 @@ module Lono::Finder
 
     # Returns root path of component: blueprint or configset
     def find(name)
-      config = find_config(name)
-      self.class.jade_class.get(name) if config
-    end
-
-    def find_config(name)
       all.find { |c| c[:name] == name }
     end
 

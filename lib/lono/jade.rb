@@ -3,40 +3,43 @@ module Lono
   class Jade
     extend Memoist
     class_attribute :tracked
-    self.tracked = {}
-
-    class << self
-      def get(name)
-        jade = self.tracked[name]
-        return jade if jade
-
-        jade = new(name)
-        self.tracked[name] = jade
-        jade
-      end
-    end
+    self.tracked = []
 
     attr_accessor :dependencies, :from, :depends_ons
-    attr_reader :name
-    def initialize(name)
-      @name = name
+    attr_reader :name, :type
+    def initialize(name, type)
+      # type: one of blueprint, configset, blueprint/configset
+      @name, @type = name, type
       @materialized = false
       @resolved = false
       @depends_ons = []
+      self.class.tracked << self
     end
 
     def dependencies
       @depends_ons.map do |o|
-        self.class.get(o[:depends_on])
+        self.class.new(o[:depends_on], "blueprint/configset")
       end
     end
 
-    def method_missing(name, *args, &block)
-      @config.symbolize_keys!
-      if @config.key?(name)
-        @config[name]
-      else
-        super
+    # def method_missing(name, *args, &block)
+    #   if @config.nil?
+    #     raise "Called '#{name}' method but need to materialize the jade first!"
+    #   end
+    #   @config.symbolize_keys!
+    #   if @config.key?(name)
+    #     @config[name]
+    #   else
+    #     super
+    #   end
+    # end
+
+    %w[name template_type auto_camelize source_type].each do |meth|
+      define_method(name) do
+        if @config.nil?
+          raise "Called '#{name}' method but need to materialize the jade first!"
+        end
+        @config[name.to_sym]
       end
     end
 
@@ -48,17 +51,30 @@ module Lono
     end
 
     def materialize
-      @config = find_config
+      @config = find
       @config = download unless @config
       return false unless @config
+      evaluate_meta_rb
       true
     end
     memoize :materialize
 
+    # Must return config to set @config in materialize
+    # Only allow download of Lono::Blueprint::Configset::Jade
+    # Other configsets should be configured in project Gemfile.
     def download
-      @config
+      return @config unless @type == "blueprint/configset"
+      jade = Lono::Configset::Materializer::Jade.new(self)
+      jade.install
+      find # returns config
     end
     memoize :download
+
+    def evaluate_meta_rb
+      return unless %w[blueprint/configset configset].include?(@type)
+      meta = Lono::Configset::Meta.new(self)
+      meta.evaluate
+    end
 
     def resolved!
       @resolved = true
@@ -68,9 +84,13 @@ module Lono
       @resolved
     end
 
-  private
-    def find_config
-      finder_class.find_config(@name)
+    def find
+      finder.find(@name)
     end
+
+    def finder
+      "Lono::Finder::#{@type.camelize}".constantize.new
+    end
+    memoize :finder
   end
 end

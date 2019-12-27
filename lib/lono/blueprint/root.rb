@@ -20,7 +20,7 @@ class Lono::Blueprint
     def find_blueprint_root(blueprint)
       require_bundle_gems # ensures that gem will be found so we can switch to it
 
-      config = Lono::Finder::Blueprint.find_config(blueprint) # blueprint_root
+      config = Lono::Finder::Blueprint.find(blueprint) # blueprint_root
       config[:root] if config
     end
 

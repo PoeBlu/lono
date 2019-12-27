@@ -8,13 +8,13 @@ class Lono::Blueprint
       @blueprint = blueprint
     end
 
-    def jade
+    def config
       Lono::Finder::Blueprint.find(@blueprint)
     end
-    memoize :jade
+    memoize :config
 
     def auto_camelize?(target_section)
-      auto_camelize = jade.auto_camelize
+      auto_camelize = config[:auto_camelize]
       # auto_camelize.nil? for backward compatibility
       return true if auto_camelize.nil? || auto_camelize == true
 
