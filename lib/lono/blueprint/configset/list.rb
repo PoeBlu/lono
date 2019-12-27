@@ -34,10 +34,10 @@ module Lono::Blueprint::Configset
     def show(configsets, all, from)
       configsets.each do |c|
         puts "    #{c[:name]}" unless @options[:quiet]
-        jade = all.find { |config| config[:name] == c[:name] }
-        next unless jade
-        jade[:from] = from
-        @final << jade
+        config = all.find { |config| config[:name] == c[:name] }
+        next unless config
+        config[:from] = from
+        @final << config
       end
       puts "" unless @options[:quiet]
     end

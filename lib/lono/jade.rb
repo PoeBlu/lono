@@ -22,18 +22,7 @@ module Lono
       end
     end
 
-    # def method_missing(name, *args, &block)
-    #   if @config.nil?
-    #     raise "Called '#{name}' method but need to materialize the jade first!"
-    #   end
-    #   @config.symbolize_keys!
-    #   if @config.key?(name)
-    #     @config[name]
-    #   else
-    #     super
-    #   end
-    # end
-
+    # method_missing implmentation proved tricky to debug. Thinking its more productive to to be explicitly.
     %w[name template_type auto_camelize source_type].each do |meth|
       define_method(name) do
         if @config.nil?
