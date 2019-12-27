@@ -69,7 +69,7 @@ module Lono
     # Only allow download of Lono::Blueprint::Configset::Jade
     # Other configsets should be configured in project Gemfile.
     def download
-      return @config unless @type == "blueprint/configset"
+      return @config unless @type == "blueprint/configset" # depends_on are always set to blueprint/configset
       jade = Lono::Configset::Materializer::Jade.new(self)
       jade.build
       # Pretty tricky. Need to flush memoized finder since the jade.build changes files
