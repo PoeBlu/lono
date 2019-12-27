@@ -8,12 +8,17 @@ class Lono::Configset
     end
 
     def run
+      clean
       register
       create_top_level_jades
       resolve_dependencies
       materialize_final
-      # validate_all! # run after final materializer
+      validate_all! # run after final materializer
       exit
+    end
+
+    def clean
+      Materializer::GemfileBuilder.new.clean_gemfile
     end
 
     # Create configsets registry items
@@ -38,7 +43,8 @@ class Lono::Configset
     end
 
     def materialize_final
-      Materializer::Final.new.build
+      jades = Lono::Jade.materialized
+      Materializer::Final.new.build(jades)
     end
 
     def validate_all!

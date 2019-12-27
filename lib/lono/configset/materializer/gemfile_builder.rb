@@ -7,7 +7,7 @@ module Lono::Configset::Materializer
     end
 
     def build
-      puts "Materializing final #{@jades.map(&:name)}"
+      puts "Materializing #{@jades.map(&:name)}"
       clean_gemfile
       gemfile = create_gemfile(@jades)
       return unless gemfile
@@ -23,9 +23,10 @@ module Lono::Configset::Materializer
         return if local_exist?(jade)
         options = source.options(jade)
         args = options.inject([]) { |r,(k,v)| r << %Q|#{k}: "#{v}"| }.join(', ')
-        lines << %Q|gem "#{jade.name}", #{args}|
+        line = %Q|gem "#{jade.name}", #{args}|
+        lines << line unless lines.include?(line)
       end
-      lines.join("\n") + "\n"
+      lines.sort.join("\n") + "\n"
     end
 
     def local_exist?(jade)

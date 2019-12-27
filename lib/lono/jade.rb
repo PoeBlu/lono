@@ -4,6 +4,8 @@ module Lono
     extend Memoist
     class_attribute :tracked
     self.tracked = []
+    class_attribute :materialized
+    self.materialized = []
 
     attr_accessor :dependencies, :from, :depends_ons
     attr_reader :name, :type
@@ -55,6 +57,7 @@ module Lono
       return @config unless @type == "blueprint/configset"
       jade = Lono::Configset::Materializer::Jade.new(self)
       jade.build
+      self.class.materialized << self
       find # returns config
     end
     memoize :download
