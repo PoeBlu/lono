@@ -8,19 +8,31 @@ module Lono
     self.downloaded = []
 
     attr_accessor :dependencies, :from, :depends_ons
-    attr_reader :name, :type
-    def initialize(name, type)
+    attr_reader :name, :type, :state
+    def initialize(name, type, state={})
       # type: one of blueprint, configset, blueprint/configset
-      @name, @type = name, type
+      # state holds either original registry from configset definition or parent jade which can be used to get the original configset defintion
+      @name, @type, @state = name, type, state
       @materialized = false
       @resolved = false
       @depends_ons = []
       self.class.tracked << self
     end
 
+    def resource_from_parent
+      parent = state[:parent]
+      resource = nil
+      while parent
+        resource = parent.state[:resource]
+        parent = parent.state[:parent]
+      end
+      resource
+    end
+
     def dependencies
+      puts "dependencies!!!"
       @depends_ons.map do |o|
-        self.class.new(o[:depends_on], "blueprint/configset")
+        self.class.new(o[:depends_on], "blueprint/configset", parent: o[:parent])
       end
     end
 

@@ -8,9 +8,15 @@ module Lono::Configset::Register
 
     include Dsl
 
-    def self.clear!
-      self.configsets = []
-      self.validations = []
+    class << self
+      def clear!
+        self.configsets = []
+        self.validations = []
+      end
+
+      def prepend(registry)
+        self.configsets.unshift(registry) unless configsets.include?(registry)
+      end
     end
 
     # Validate the configset at register time. So user finds out about error earlier.
