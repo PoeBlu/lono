@@ -18,17 +18,6 @@ module Lono::Finder
       def list(message=nil)
         new.list(message)
       end
-
-      # # Automatically set the jade type correctly
-      # def new_jade(name)
-      #   # jade_class one of: Lono::Finder::Blueprint, Lono::Finder::Configset, Lono::Finder::Blueprint::Configset
-      #   jade_class = self.to_s.gsub('Finder::','')
-      #   # jade_type one of: blueprint, configset, blueprint/configset
-      #   jade_type = jade_class.underscore
-      #   jade = Lono::Jade.new(name, jade_type)
-      #   jade.materialize
-      #   jade
-      # end
     end
 
     def initialize(options={})
@@ -119,9 +108,9 @@ module Lono::Finder
       table.head = ["Name", "Path", "Type"]
 
       components = all
-      components.each do |jade|
-        pretty_path = jade.root.sub("#{Lono.root}/", "")
-        table.rows << [jade.name, pretty_path, jade.source_type]
+      components.each do |config|
+        pretty_path = config[:root].sub("#{Lono.root}/", "")
+        table.rows << [config[:name], pretty_path, config[:source_type]]
       end
 
       puts table
