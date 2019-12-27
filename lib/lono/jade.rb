@@ -4,8 +4,8 @@ module Lono
     extend Memoist
     class_attribute :tracked
     self.tracked = []
-    class_attribute :materialized
-    self.materialized = []
+    class_attribute :downloaded
+    self.downloaded = []
 
     attr_accessor :dependencies, :from, :depends_ons
     attr_reader :name, :type
@@ -42,9 +42,12 @@ module Lono
     end
 
     def materialize
-      @config = find
+      @config = finder.find(@name)
       @config = download unless @config
       return false unless @config
+      if @config[:source_type] == "materialized-local"
+        self.class.downloaded << self
+      end
       evaluate_meta_rb
       true
     end
@@ -57,8 +60,9 @@ module Lono
       return @config unless @type == "blueprint/configset"
       jade = Lono::Configset::Materializer::Jade.new(self)
       jade.build
-      self.class.materialized << self
-      find # returns config
+      # Pretty tricky. Need to flush memoized finder since the jade.build changes files
+      # If we dont memoist at all, build process is 2x slower
+      finder(true).find(@name)
     end
     memoize :download
 
@@ -74,10 +78,6 @@ module Lono
 
     def resolved?
       @resolved
-    end
-
-    def find
-      finder.find(@name)
     end
 
     def finder
