@@ -1,8 +1,10 @@
 class Lono::Finder::Blueprint
   class Configset < Lono::Finder::Configset
+    attr_accessor :gemfile_lock
     def initialize(options={})
       super
       @blueprint_root = options[:blueprint_root] || Lono.blueprint_root
+      @gemfile_lock = "#{Lono.root}/tmp/configsets/Gemfile.lock"
     end
 
     def local
@@ -25,9 +27,8 @@ class Lono::Finder::Blueprint
 
     # Override Base
     def gemspecs
-      lockfile = "#{Lono.root}/tmp/configsets/Gemfile.lock"
-      return [] unless File.exist?(lockfile)
-      parser = Bundler::LockfileParser.new(Bundler.read_file(lockfile))
+      return [] unless File.exist?(@gemfile_lock)
+      parser = Bundler::LockfileParser.new(Bundler.read_file(@gemfile_lock))
       specs = parser.specs
       # __materialize__ only exists in Gem::LazySpecification and not in Gem::Specification
       specs.each { |spec| spec.__materialize__ }

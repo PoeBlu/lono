@@ -23,7 +23,7 @@ module Lono::Configset::Register
     def validate!
       errors = []
       self.class.validations.each do |state|
-        config = finder_class.find_config(state[:name]) # finder_class implemented in subclass
+        config = finder_class.find(state[:name]) # finder_class implemented in subclass
         errors << state unless config
       end
 

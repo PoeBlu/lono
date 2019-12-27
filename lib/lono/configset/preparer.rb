@@ -9,13 +9,11 @@ class Lono::Configset
 
     def run
       register
-      puts "hi2"
-      materialize_jades
-      puts "hi3"
+      create_top_level_jades
       resolve_dependencies
-      puts "hi4 EXIT EARLY"
+      materialize_final
+      # validate_all! # run after final materializer
       exit
-      # validate_all!
     end
 
     # Create configsets registry items
@@ -24,27 +22,23 @@ class Lono::Configset
       @blueprint.register
     end
 
-    def materialize_jades
-      # Create lazy jades
+    def create_top_level_jades
       Register::Blueprint.configsets.each do |registry|
-        Lono::Jade.new(registry[:name], "blueprint")
+        Lono::Jade.new(registry[:name], "blueprint").materialize
       end
       Register::Project.configsets.each do |registry|
-        Lono::Jade.new(registry[:name], "configset")
-      end
-      # Materialize current jades
-      Lono::Jade.tracked do |jade|
-        jade.materialize
+        Lono::Jade.new(registry[:name], "configset").materialize
       end
     end
 
+    # Creates lower-level dependency jades
     def resolve_dependencies
       jades = Lono::Jade.tracked
       Dependencies.new.resolve(jades)
     end
 
-    def download
-      Lono::Blueprint::Configset::Downloader.new(@options).run
+    def materialize_final
+      Materializer::Final.new.build
     end
 
     def validate_all!

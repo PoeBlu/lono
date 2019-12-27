@@ -65,7 +65,7 @@ module Lono
     def download
       return @config unless @type == "blueprint/configset"
       jade = Lono::Configset::Materializer::Jade.new(self)
-      jade.install
+      jade.build
       find # returns config
     end
     memoize :download
