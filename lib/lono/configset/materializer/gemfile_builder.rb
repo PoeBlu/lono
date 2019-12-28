@@ -30,7 +30,7 @@ module Lono::Configset::Materializer
     end
 
     def local_exist?(jade)
-      !!jade.finder.find_local(jade.name)
+      !!jade.finder.find(jade.name, local_only: true)
     end
 
     def write(gemfile)

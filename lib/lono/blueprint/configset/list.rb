@@ -10,14 +10,14 @@ module Lono::Blueprint::Configset
       finder = Lono::Finder::Configset.new
       finder.list("Configsets available to project and can used with configs:") unless @options[:quiet]
       puts "Configsets project is using for the #{@blueprint} blueprint:" unless @options[:quiet]
-      show(project.configsets, finder.all, "project")
+      show(project.configsets, finder.find_all, "project")
 
       blueprint = Lono::Configset::Register::Blueprint.new(@options)
       blueprint.register
       finder = Lono::Finder::Blueprint::Configset.new
       finder.list("Configsets available to #{@blueprint} blueprint:") unless @options[:quiet]
       puts "Configsets built into the blueprint:" unless @options[:quiet]
-      show(blueprint.configsets, finder.all, "blueprint")
+      show(blueprint.configsets, finder.find_all, "blueprint")
 
       table = Text::Table.new
       table.head = ["Name", "Path", "Type", "From"]

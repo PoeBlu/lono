@@ -13,12 +13,18 @@ module Lono::Finder
     end
 
     # Returns root path of component: blueprint or configset
-    def find(name)
+    def find(name, local_only: false)
+      all = find_all(local_only: local_only)
       all.find { |c| c[:name] == name }
     end
 
-    def all
-      project + vendor + gems + materialized
+    def find_all(local_only: false)
+      local = project + vendor + gems
+      if local_only
+        local
+      else
+        local + materialized
+      end
     end
 
     def project
@@ -140,7 +146,7 @@ module Lono::Finder
   public
     class << self
       def one_or_all(component)
-        components = new.all.map { |c| c[:name] }
+        components = new.find_all.map { |c| c[:name] }
         component ? [component] : components
       end
 

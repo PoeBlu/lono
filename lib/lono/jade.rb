@@ -69,7 +69,7 @@ module Lono
     # Only allow download of Lono::Blueprint::Configset::Jade
     # Other configsets should be configured in project Gemfile.
     def download
-      return if finder.find_local(@name)
+      return if finder.find(@name, local_only: true)
       return unless %w[blueprint/configset configset].include?(@type) # TODO: support materializing nested blueprints later
       jade = Lono::Configset::Materializer::Jade.new(self)
       jade.build
