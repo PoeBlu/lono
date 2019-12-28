@@ -32,8 +32,6 @@ module Lono
   class Command < Thor
     class << self
       def dispatch(m, args, options, config)
-        Lono::Bundle.require
-
         # Allow calling for help via:
         #   lono command help
         #   lono command -h
