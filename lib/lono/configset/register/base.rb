@@ -37,12 +37,12 @@ module Lono::Configset::Register
     end
 
     # Store to be able to provide the validation errors altogether later.
-    def store_for_validation(name)
+    def store_for_validation(options={})
       # save caller line to use later for pointing to exactly line
       caller_line = caller.grep(/evaluate_file/).first
       # huge performance improvement by only validating the first configset registration of duplicate gems
       names = self.class.validations.map {|v| v[:name] }
-      self.class.validations << {name: name, caller_line: caller_line} unless names.include?(name)
+      self.class.validations << options.merge(caller_line: caller_line) unless names.include?(options[:name])
     end
 
     # Validate the configset before building templates. So user finds out about errors early.

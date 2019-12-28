@@ -21,12 +21,14 @@ module Lono::Configset::Materializer
     def create_gemfile(jades)
       return if jades.empty?
 
-      lines = []
+      lines = ['source "https://rubygems.org"']
       jades.each do |jade|
         return if local_exist?(jade)
+        args = source.args(jade)
+        args = args.map { |s| %Q|"#{s}"| }.join(', ')
         options = source.options(jade)
-        args = options.inject([]) { |r,(k,v)| r << %Q|#{k}: "#{v}"| }.join(', ')
-        line = %Q|gem "#{jade.name}", #{args}|
+        options = options.inject([]) { |r,(k,v)| r << %Q|#{k}: "#{v}"| }.join(', ')
+        line = %Q|gem #{args}, #{options}|
         lines << line unless lines.include?(line)
       end
       lines.sort.join("\n") + "\n"

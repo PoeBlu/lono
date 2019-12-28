@@ -11,10 +11,24 @@ module Lono::Configset::Materializer
     # c - configset registry item
     def options(jade)
       if location.include?("git@") || location.include?("https")
-        {git: "#{location}/#{jade.name}"}
+        options = git_options(jade.state) # merge original git related options from configset
+        {git: "#{location}/#{jade.name}"}.merge(options)
       else
         {path: "#{location}/#{jade.name}"}
       end
+    end
+
+    def args(jade)
+      jade.state[:args]
+    end
+
+    def git_options(registry)
+      o = {}
+      o[:branch] = registry[:branch]
+      o[:ref] = registry[:ref]
+      o[:tag] = registry[:tag]
+      o.delete_if { |k, v| v.nil? }
+      o
     end
 
     def location

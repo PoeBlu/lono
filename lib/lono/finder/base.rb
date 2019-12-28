@@ -99,7 +99,6 @@ module Lono::Finder
     end
 
     def list(options={})
-      puts(options[:message] || "Available #{type.pluralize}:")
       table = Text::Table.new
       table.head = ["Name", "Path", "Type"]
 
@@ -111,7 +110,12 @@ module Lono::Finder
         end
       end
 
-      puts table
+      if table.rows.empty?
+        puts "No #{type.pluralize} found."
+      else
+        puts(options[:message] || "Available #{type.pluralize}:")
+        puts table
+      end
     end
 
   private
