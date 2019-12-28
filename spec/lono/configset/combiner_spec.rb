@@ -192,4 +192,50 @@ describe Lono::Configset::Combiner do
       expect(data).to eq(YAML.load(yaml))
     end
   end
+
+  #########
+  context("duplicate configset added") do
+    let(:cfn)  { load_template("ec2-no-metadata.yml") }
+    let(:configset1) { load_configset("config1.json") }
+    let(:configset2) { load_configset("config1.json") }
+
+    it "combines" do
+      combiner.add({name: "ssm", resource: "Instance"}, configset1)
+      combiner.add({name: "ssm", resource: "Instance"}, configset2)
+      map = combiner.combine
+      json =<<~EOL
+        {
+          "AWS::CloudFormation::Init": {
+            "configSets": {
+              "default": [
+                {
+                  "ConfigSet": "ssm"
+                }
+              ],
+              "ssm": [
+                "000_aaa1",
+                "000_aaa2"
+              ]
+            },
+            "000_aaa1": {
+              "commands": {
+                "test": {
+                  "command": "echo from-aaa1 > test1.txt"
+                }
+              }
+            },
+            "000_aaa2": {
+              "commands": {
+                "test": {
+                  "command": "echo from-aaa2 > test1.txt"
+                }
+              }
+            }
+          }
+        }
+      EOL
+      data = map["Instance"]
+      expect(data).to eq(JSON.load(json))
+    end
+  end
 end

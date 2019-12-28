@@ -57,6 +57,13 @@ class Lono::Configset
     end
 
     def combine
+      # Remove duplicate configsets. Can happen if same configset is in blueprint and project.
+      # Ugly because of the sets structure.
+      @sets.uniq! do |array|
+        registry, _ = array
+        registry[:name]
+      end
+
       @sets.each_with_index do |array, i|
         padded_i = "%03d" % i
         registry, metadata = array
