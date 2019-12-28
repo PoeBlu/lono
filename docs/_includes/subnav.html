@@ -40,7 +40,16 @@
             <ul>
               {% assign docs = site.docs | where: "categories","configsets" | sort: "order" %}
               {% for doc in docs -%}
-                <li><a href='{{doc.url}}'>{{doc.title}}</a></li>
+                {% if doc.title == "Project vs Blueprint Configsets" %}
+                <li><a href='{{doc.url}}'>{{doc.nav_text}}</a>
+                    <ul>
+                        <li><a href='{% link _docs/configsets/project.md %}'>Project</a></li>
+                        <li><a href='{% link _docs/configsets/blueprint.md %}'>Blueprint</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li><a href='{{doc.url}}'>{{doc.nav_text}}</a></li>
+                {% endif %}
               {% endfor %}
             </ul>
         </li>

@@ -1,7 +1,7 @@
 ---
 title: Components
 categories: erb
-nav_order: 76
+nav_order: 78
 ---
 
 Lono has a few main conceptual components:
