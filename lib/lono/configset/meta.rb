@@ -13,6 +13,7 @@ class Lono::Configset
 
     def evaluate
       path = "#{@jade.root}/lib/meta.rb"
+      puts "evaluate_file path #{path}"
       evaluate_file(path) # DSL depends_on sets @jade.depends_on decorated options
     end
   end

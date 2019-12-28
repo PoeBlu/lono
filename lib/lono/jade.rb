@@ -19,6 +19,23 @@ module Lono
       self.class.tracked << self
     end
 
+    # method_missing implmentation proved tricky to debug. Thinking its more productive to to be explicitly.
+    %w[template_type auto_camelize source_type].each do |meth|
+      define_method(meth.to_sym) do
+        if @config.nil?
+          raise "Called '#{meth}' method but need to materialize the jade first!"
+        end
+        @config[meth.to_sym]
+      end
+    end
+
+    # root is kind of special. root is needed for materialization but can accidentally get called too early
+    # before materialization. So treat it specially with an error.
+    def root
+      raise "ERROR: root is not available until jade has been materialized" unless @config
+      @config[:root]
+    end
+
     def resource_from_parent
       parent = state[:parent]
       resource = nil
@@ -30,34 +47,17 @@ module Lono
     end
 
     def dependencies
-      puts "dependencies!!!"
       @depends_ons.map do |o|
-        self.class.new(o[:depends_on], "blueprint/configset", parent: o[:parent])
+        parent = o[:parent]
+        self.class.new(o[:depends_on], parent.type, parent: parent)
       end
-    end
-
-    # method_missing implmentation proved tricky to debug. Thinking its more productive to to be explicitly.
-    %w[name template_type auto_camelize source_type].each do |meth|
-      define_method(name) do
-        if @config.nil?
-          raise "Called '#{name}' method but need to materialize the jade first!"
-        end
-        @config[name.to_sym]
-      end
-    end
-
-    # root is kind of special. root is needed for materialization but can accidentally get called too early
-    # before materialization. So treat it specially with an error.
-    def root
-      raise "ERROR: root is not available until jade has been materialized" unless @config
-      @config[:root]
     end
 
     def materialize
       @config = finder.find(@name)
       @config = download unless @config
       return false unless @config
-      if @config[:source_type] == "materialized-local"
+      if @config[:source_type] == "materialized"
         self.class.downloaded << self
       end
       evaluate_meta_rb
@@ -69,12 +69,15 @@ module Lono
     # Only allow download of Lono::Blueprint::Configset::Jade
     # Other configsets should be configured in project Gemfile.
     def download
-      return @config unless @type == "blueprint/configset" # depends_on are always set to blueprint/configset
+      return if finder.find_local(@name)
+      return unless %w[blueprint/configset configset].include?(@type) # TODO: support materializing nested blueprints later
       jade = Lono::Configset::Materializer::Jade.new(self)
       jade.build
-      # Pretty tricky. Need to flush memoized finder since the jade.build changes files
+      # Pretty tricky. Flush memoized finder since jade.build changes filesystem.
       # If we dont memoist at all, build process is 2x slower
-      finder(true).find(@name)
+      x = finder(true).find(@name)
+      puts "download x #{x.inspect}"
+      x
     end
     memoize :download
 

@@ -5,25 +5,11 @@ module Lono::Finder
   class Base
     extend Memoist
 
-    class << self
-      def one_or_all(component)
-        components = new.all.map { |c| c[:name] }
-        component ? [component] : components
-      end
-
-      def find(name)
-        new.find(name)
-      end
-
-      def list(message=nil)
-        new.list(message)
-      end
-    end
-
     def initialize(options={})
       @options = options
       @blueprint = options[:blueprint]
       @lono_root = options[:lono_root] || Lono.root
+      @gemfile_lock = "#{Lono.root}/tmp/configsets/Gemfile.lock"
     end
 
     # Returns root path of component: blueprint or configset
@@ -32,21 +18,26 @@ module Lono::Finder
     end
 
     def all
-      project + vendor + gems
+      project + vendor + gems + materialized
     end
 
     def project
       roots = path_roots("#{@lono_root}/app/#{type.pluralize}")
-      components(roots, "project-local")
+      components(roots, "project")
     end
 
     def vendor
       roots = path_roots("#{@lono_root}/vendor/#{type.pluralize}")
-      components(roots, "vendor-local")
+      components(roots, "vendor")
     end
 
     def gems
-      components(gem_roots, "gem-remote")
+      components(gem_roots, "gem")
+    end
+
+    # Folders that each materialized gems to tmp/configsets
+    def materialized
+      components(materialized_gem_roots, "materialized")
     end
 
     # Components: blueprints or configsets
@@ -55,10 +46,10 @@ module Lono::Finder
     #     [{
     #       name: "cfn-hup",
     #       root: "/path/to/gem/root",
-    #       source_type: "project-local",
+    #       source_type: "project",
     #     },...]
     #
-  def components(roots, source_type)
+    def components(roots, source_type)
       components = []
       roots.each do |root|
         next unless detect?(root)
@@ -129,14 +120,37 @@ module Lono::Finder
     #     ]
     #
     def gem_roots
-      gemspecs.map do |spec|
+      Bundler.load.specs.map do |spec|
         spec.full_gem_path
       end
     end
 
-    def gemspecs
-      Bundler.load.specs
+    def materialized_gem_roots
+      return [] unless File.exist?(@gemfile_lock)
+      parser = Bundler::LockfileParser.new(Bundler.read_file(@gemfile_lock))
+      specs = parser.specs
+      # __materialize__ only exists in Gem::LazySpecification and not in Gem::Specification
+      specs.each { |spec| spec.__materialize__ }
+      specs.map do |spec|
+        spec.full_gem_path
+      end
     end
-    memoize :gemspecs
+    memoize :materialized_gem_roots
+
+  public
+    class << self
+      def one_or_all(component)
+        components = new.all.map { |c| c[:name] }
+        component ? [component] : components
+      end
+
+      def find(name)
+        new.find(name)
+      end
+
+      def list(message=nil)
+        new.list(message)
+      end
+    end
   end
 end

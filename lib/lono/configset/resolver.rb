@@ -9,7 +9,8 @@ class Lono::Configset
       unresolved.flatten! # initially only top-level
       puts "Resolving dependencies... #{unresolved.map(&:name)}".color(:yellow)
       unresolved.each do |jade|
-        jade.materialize # top-level already materialized but depends_on levels are not yet
+        jade.materialize
+        puts "unresolved.each jade name #{jade.name} dependencies #{jade.dependencies.map(&:name)}"
         jade.dependencies.each do |j|
           self.class.dependencies << j
           unless j.resolved? or unresolved.include?(j)

@@ -14,14 +14,14 @@ module Lono::Finder
       "lib/configset.*"
     end
 
-    # Special method for Materializer. Does not consider materialized configsets
+    # Special method for Materializer. Does not consider materialized files
     def find_local(name)
       config = local.find { |c| c[:name] == name }
       return config[:root] if config
     end
 
     def local
-      project + vendor
+      project + vendor + gems
     end
   end
 end
