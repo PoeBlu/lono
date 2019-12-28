@@ -5,7 +5,7 @@ class Lono::Configset::Meta
         depends_on: configset,
         parent: @jade,
       )
-      @jade.depends_ons << o
+      @jade.depends_ons << o unless @jade.depends_ons.include?(o)
     end
   end
 end

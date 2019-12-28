@@ -58,6 +58,7 @@ module Lono
       @config = download unless @config
       return false unless @config
       if @config[:source_type] == "materialized"
+        # can include jade instances with same name but will uniq in final materialized Gemfile
         self.class.downloaded << self
       end
       evaluate_meta_rb
