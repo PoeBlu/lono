@@ -6,6 +6,7 @@ module Lono::Configset::Materializer
 
     def initialize(*jades)
       @jades = jades.flatten
+      @build_root = "#{Lono.root}/tmp/configsets"
     end
 
     def build
@@ -36,16 +37,14 @@ module Lono::Configset::Materializer
     end
 
     def write(gemfile)
-      path = "tmp/configsets/Gemfile"
+      path = "#{@build_root}/Gemfile"
       FileUtils.mkdir_p(File.dirname(path))
       IO.write(path, gemfile)
     end
 
     def bundle
-      Dir.chdir("tmp/configsets/") do
-        Bundler.with_clean_env do
-          bundle_install
-        end
+      Bundler.with_original_env do
+        bundle_install
       end
     end
 
@@ -55,9 +54,10 @@ module Lono::Configset::Materializer
     memoize :source
 
     def bundle_install
-      command = "bundle install"
+      command = "cd #{@build_root} && bundle install"
       puts "=> #{command}" if ENV['LONO_DEBUG']
       stdout, stderr, status = Open3.capture3(command)
+
       puts stdout if ENV['LONO_DEBUG']
       unless status.success?
         puts "Fail to materialize gems #{@jades.map(&:name).join(', ')}".color(:red)
@@ -71,8 +71,8 @@ module Lono::Configset::Materializer
     end
 
     def clean_gemfile
-      FileUtils.rm_f("tmp/configsets/Gemfile")
-      FileUtils.rm_f("tmp/configsets/Gemfile.lock")
+      FileUtils.rm_f("#{@build_root}/Gemfile")
+      FileUtils.rm_f("#{@build_root}/Gemfile.lock")
     end
   end
 end

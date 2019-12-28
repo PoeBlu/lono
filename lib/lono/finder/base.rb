@@ -9,7 +9,6 @@ module Lono::Finder
       @options = options
       @blueprint = options[:blueprint]
       @lono_root = options[:lono_root] || Lono.root
-      @gemfile_lock = "#{Lono.root}/tmp/configsets/Gemfile.lock"
     end
 
     # Returns root path of component: blueprint or configset
@@ -130,10 +129,12 @@ module Lono::Finder
         spec.full_gem_path
       end
     end
+    memoize :gem_roots
 
     def materialized_gem_roots
-      return [] unless File.exist?(@gemfile_lock)
-      parser = Bundler::LockfileParser.new(Bundler.read_file(@gemfile_lock))
+      gemfile_lock = "#{Lono.root}/tmp/configsets/Gemfile.lock"
+      return [] unless File.exist?(gemfile_lock)
+      parser = Bundler::LockfileParser.new(Bundler.read_file(gemfile_lock))
       specs = parser.specs
       # __materialize__ only exists in Gem::LazySpecification and not in Gem::Specification
       specs.each { |spec| spec.__materialize__ }

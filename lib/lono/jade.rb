@@ -55,14 +55,16 @@ module Lono
 
     def materialize
       @config = finder.find(@name)
-      @config = download unless @config
-      return false unless @config
+      download unless @config
+      # Pretty tricky. Flush memoized finder(true) since download changes filesystem. Not memoizing at all is 2x slower
+      @config = finder(true).find(@name)
+      return nil unless @config
       if @config[:source_type] == "materialized"
-        # can include jade instances with same name but will uniq in final materialized Gemfile
+        # possible "duplicated" jade instances with same name but will uniq in final materialized Gemfile
         self.class.downloaded << self
       end
       evaluate_meta_rb
-      true
+      @config
     end
     memoize :materialize
 
@@ -74,9 +76,6 @@ module Lono
       return unless %w[blueprint/configset configset].include?(@type) # TODO: support materializing nested blueprints later
       jade = Lono::Configset::Materializer::Jade.new(self)
       jade.build
-      # Pretty tricky. Flush memoized finder since jade.build changes filesystem.
-      # If we dont memoist at all, build process is 2x slower
-      finder(true).find(@name)
     end
     memoize :download
 

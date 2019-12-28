@@ -16,10 +16,6 @@ class Lono::Configset
 
     def load
       path = find_path
-      unless path
-        raise "Unable to find configset.yml or configset.json for configset #{@name} in configset_root: #{configset_root.inspect}"
-      end
-
       copy_registry_instance_variables
       content = RenderMePretty.result(path, context: self)
       if File.extname(path) == ".yml"
@@ -32,14 +28,17 @@ class Lono::Configset
 
     def find_path
       paths = %w[configset.yml configset.json].map { |p| "#{configset_root}/lib/#{p}" }
-      paths.find { |path| File.exist?(path) }
+      paths.find { |p| File.exist?(p) }
     end
 
     def configset_root
       config = finder_class.find(@name)
-      config[:root] if config
+      unless config
+        puts "finder_class #{finder_class}"
+        raise "Unable to find configset #{@name}."
+      end
+      config[:root]
     end
-    memoize :configset_root
 
     # Allow overriding in subclasses
     def finder_class
