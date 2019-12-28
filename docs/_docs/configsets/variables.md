@@ -11,10 +11,10 @@ When you use the `configset` method to add a configset to your blueprint, you ca
 configs/ec2/configsets/base.rb:
 
 ```ruby
-configset("httpd", resource: "Instance", var1: "foo", var2: "bar")
+configset("httpd", resource: "Instance", var1: "foo", var2: "bar", html: "<h2>html content</h2>")
 ```
 
-This makes `var1` and `var2` available as instance variables in the `configset.yml` definition.
+This makes `var1`, `var2`, and `html` available as instance variables in the `configset.yml` definition.
 
 ## Configset ERB
 
@@ -28,11 +28,28 @@ AWS::CloudFormation::Init:
     packages:
       yum:
         httpd: []
+    files:
+      "/var/www/html/index.html":
+        content: |
+<%= indent(@html, 10) %>
     services:
       sysvinit:
        httpd:
         enabled: 'true'
         ensureRunning: 'true'
 ```
+
+Since configset.yml is YAML, the `indent` method is ueful to help the text correctly.
+
+## Configset Predefined Variables
+
+Configsets can have predefined variables in their `lib/variables.rb` file.  Example:
+
+app/configsets/httpd/lib/variables.rb:
+
+@html =<<-EOL
+<h1>hello there from variables.rb</h1>
+<p>This is my page</p>
+EOL
 
 {% include prev_next.md %}
