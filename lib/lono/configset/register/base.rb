@@ -36,13 +36,14 @@ module Lono::Configset::Register
       end
     end
 
-    # Validate the configset at register time. So user finds out about error earlier.
+    # Store to to be able to provide the validation errors altogether later.
     def store_for_validation(name)
       # save caller line to use later for pointing to exactly line
       caller_line = caller.grep(/evaluate_file/).first
       self.class.validations << {name: name, caller_line: caller_line}
     end
 
+    # Validate the configset before building templates. So user finds out about errors early.
     def validate!
       errors = []
       self.class.validations.each do |state|

@@ -12,7 +12,7 @@ class Lono::Configset
       register
       resolve_dependencies
       register_dependencies
-      materialize_final
+      materialize
       validate_all! # run after final materializer
     end
 
@@ -32,7 +32,7 @@ class Lono::Configset
       @resolver.register
     end
 
-    def materialize_final
+    def materialize
       jades = Lono::Jade.downloaded
       Materializer::Final.new.build(jades)
     end

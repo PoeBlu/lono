@@ -6,7 +6,6 @@ module Lono::Configset::Register
     def evaluate
       path = find_configsets
       evaluate_file(path)
-      jadify
     end
 
     def find_configsets

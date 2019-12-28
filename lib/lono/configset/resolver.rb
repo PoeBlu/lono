@@ -20,7 +20,7 @@ class Lono::Configset
 
     def register
       @@dependencies.each do |jade|
-        # dependency jades have minimal registry info. For additional info it'll pulls from stored reference data in
+        # dependency jades have minimal registry info. For additional info is pulled from stored reference data in
         # jade like jade.resource_from_parent.
         registry = {
           resource: jade.resource_from_parent,
