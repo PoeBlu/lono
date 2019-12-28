@@ -6,12 +6,6 @@ module Lono
     # Bundler.setup is essentially the same as `bundle exec`
     # Reference: https://www.justinweiss.com/articles/what-are-the-differences-between-irb/
     #
-    # The Bundler.setup is only necessary because we use Bundler.require after require "zeitwerk" is called.
-    #
-    # Note, this is called super early right before require "zeitwerk"
-    # The initially Bundler.setup does not include the Lono.env group.
-    # Later in Lono::Booter, Bundle.require is called and includes the Lono.env group.
-    #
     def setup
       return unless gemfile?
       Kernel.require "bundler/setup"
@@ -20,8 +14,6 @@ module Lono
       handle_error(e)
     end
 
-    # Bundler.require called early in lono.rb.  This will eagerly require all gems in the
-    # Gemfile. This means the user will not have to explictly require dependencies.
     def require
       return unless gemfile?
       Kernel.require "bundler/setup"
