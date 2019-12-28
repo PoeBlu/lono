@@ -1,3 +1,5 @@
+require 'open3'
+
 module Lono::Configset::Materializer
   class GemfileBuilder
     extend Memoist
@@ -7,7 +9,7 @@ module Lono::Configset::Materializer
     end
 
     def build
-      puts "Materializing #{@jades.map(&:name)}"
+      puts "GemfileBuilder#build materializing #{@jades.map(&:name)}" if ENV['LONO_DEBUG']
       clean_gemfile
       gemfile = create_gemfile(@jades)
       return unless gemfile
@@ -42,7 +44,7 @@ module Lono::Configset::Materializer
     def bundle
       Dir.chdir("tmp/configsets/") do
         Bundler.with_clean_env do
-          sh("bundler install")
+          bundle_install
         end
       end
     end
@@ -52,11 +54,18 @@ module Lono::Configset::Materializer
     end
     memoize :source
 
-    def sh(command)
-      puts "=> #{command}"
-      system(command)
-      unless $?.success?
-        puts "FAILED: #{command}".color(:red)
+    def bundle_install
+      command = "bundle install"
+      puts "=> #{command}" if ENV['LONO_DEBUG']
+      stdout, stderr, status = Open3.capture3(command)
+      puts stdout if ENV['LONO_DEBUG']
+      unless status.success?
+        puts "Fail to materialize gems #{@jades.map(&:name).join(', ')}".color(:red)
+        puts "Failed running => #{command}"
+        puts stderr
+        if stderr.include?("correct access rights")
+          puts "Are you sure you have access to the git repo?".color(:yellow)
+        end
         exit 1
       end
     end

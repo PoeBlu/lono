@@ -75,9 +75,7 @@ module Lono
       jade.build
       # Pretty tricky. Flush memoized finder since jade.build changes filesystem.
       # If we dont memoist at all, build process is 2x slower
-      x = finder(true).find(@name)
-      puts "download x #{x.inspect}"
-      x
+      finder(true).find(@name)
     end
     memoize :download
 

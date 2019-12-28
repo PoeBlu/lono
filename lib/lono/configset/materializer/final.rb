@@ -1,7 +1,7 @@
 module Lono::Configset::Materializer
   class Final
     def build(jades)
-      puts "Final Materialization"
+      puts "Materializing #{jades.map(&:name).join(", ")}..."
       GemfileBuilder.new(jades).build
     end
   end

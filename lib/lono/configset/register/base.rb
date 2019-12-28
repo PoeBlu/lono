@@ -1,21 +1,38 @@
+# Subclasses must implement:
+#
+#    evaluate
+#
 module Lono::Configset::Register
   class Base < Lono::AbstractBase
-    include Lono::Configset::EvaluateFile
-
     class_attribute :configsets
     class_attribute :validations
     class_attribute :source
 
     include Dsl
+    include Lono::Configset::EvaluateFile
 
-    class << self
-      def clear!
-        self.configsets = []
-        self.validations = []
+    def register
+      evaluate
+      jadify
+    end
+
+    def jadify
+      self.class.configsets.each do |registry|
+        Lono::Jade.new(registry[:name], jade_type, registry)
       end
+    end
 
-      def prepend(registry)
-        self.configsets.unshift(registry) unless configsets.include?(registry)
+    def jade_type
+      finder_class.to_s.sub('Lono::Finder::','').underscore
+    end
+
+    # Used in Base#validate!
+    def finder_class
+      case self
+      when Lono::Configset::Register::Blueprint
+        Lono::Finder::Blueprint::Configset
+      when Lono::Configset::Register::Project
+        Lono::Finder::Configset
       end
     end
 
@@ -63,6 +80,18 @@ module Lono::Configset::Register
         else
           printf("%#{spacing}d %s\n", current_line_number, line_content)
         end
+      end
+    end
+
+  public
+    class << self
+      def clear!
+        self.configsets = []
+        self.validations = []
+      end
+
+      def prepend(registry)
+        self.configsets.unshift(registry) unless configsets.include?(registry)
       end
     end
   end

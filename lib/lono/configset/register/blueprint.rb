@@ -3,23 +3,15 @@ module Lono::Configset::Register
     self.configsets = []
     self.validations = []
 
-    def register
-      evaluate
-    end
-
     def evaluate
       path = find_configsets
       evaluate_file(path)
+      jadify
     end
 
     def find_configsets
       path = "#{Lono.blueprint_root}/config/configsets.rb"
       path if File.exist?(path)
-    end
-
-    # Used in Base#validate!
-    def finder_class
-      Lono::Finder::Blueprint::Configset
     end
   end
 end
