@@ -104,7 +104,7 @@ module Lono::Finder
       table = Text::Table.new
       table.head = ["Name", "Path", "Type"]
 
-      components = all
+      components = find_all
       components.each do |config|
         pretty_path = config[:root].sub("#{Lono.root}/", "")
         table.rows << [config[:name], pretty_path, config[:source_type]]
