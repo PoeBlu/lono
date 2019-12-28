@@ -21,7 +21,7 @@ The UserData script runs at launch time automatically.  You can invoke the `cfn-
 
 The command above downloads the Configset from CloudFormation template `Instance` resource and applies it.
 
-### Where is the metadata.json?
+## Where is the metadata.json?
 
 The `cfn-init` downloads the configset metadata to:
 
@@ -47,7 +47,7 @@ And vice-versa:
 
 ## Where are the Logs?
 
-Knowing where the cfn-init related logs are can also save you a ton of time.
+Knowing where the cfn-init related logs are can save a ton of time.
 
 Path | Description
 --- | ---
@@ -62,6 +62,6 @@ The UserData script runs **only** at launch time.  This means if you make change
 
 It is recommended to set up cfn-hup reloader, so you do not have to log into the instance and kick off the cfn-init script manually.
 
-Here's an [example cfn-hup configset](https://gist.github.com/tongueroo/2c6db800d262ac87eef5196a5b5abe01) that will set up the cfn-hup reloader.  Remember to replace `RESOURCE_ID` in it with the actual CloudFormation template resource that holds the metadata.  The [cfn-hup configset] is also available as a [BoltOps Pro configset](https://github.com/boltopspro-docs/cfn-hup)
+Here's an [example cfn-hup configset](https://gist.github.com/tongueroo/2c6db800d262ac87eef5196a5b5abe01) that will set up the cfn-hup reloader.  Remember to replace `RESOURCE_ID` in the example with the actual CloudFormation template resource that holds the metadata.  The [cfn-hup configset] is also available as a [BoltOps Pro configset](https://github.com/boltopspro-docs/cfn-hup)
 
 {% include prev_next.md %}
