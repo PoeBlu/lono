@@ -13,6 +13,7 @@ blueprint subcommands
 
 ## Subcommands
 
+* [lono blueprint configsets]({% link _reference/lono-blueprint-configsets.md %}) - List blueprints configsets
 * [lono blueprint list]({% link _reference/lono-blueprint-list.md %}) - Lists project blueprints
 * [lono blueprint new]({% link _reference/lono-blueprint-new.md %}) - Generates new lono blueprint.
 

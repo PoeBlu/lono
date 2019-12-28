@@ -1,15 +1,15 @@
 ---
-title: lono blueprints
+title: lono configsets
 reference: true
 ---
 
 ## Usage
 
-    lono blueprints
+    lono configsets
 
 ## Description
 
-Lists blueprints
+Lists configsets
 
 
 ## Options

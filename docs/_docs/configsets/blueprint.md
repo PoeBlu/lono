@@ -4,11 +4,11 @@ nav_text: Blueprint
 nav_order: 24
 ---
 
-Blueprint configsets are configsets added by blueprints. Some blueprints are packaged with configsets already preconfigured.
+Blueprint configsets are configsets added by blueprints. This allows blueprint to prepackaged configsets, so you don't have to as part of your project's configsets.
 
 ## Example
 
-The blueprint preconfigures configsets to use in it `config/configsets.rb` file. Example:
+The blueprint specifies configsets to use in its `config/configsets.rb` file. Example:
 
 app/blueprints/ec2/config/configsets.rb:
 
@@ -20,7 +20,7 @@ This means the ec2 blueprint will use the httpd configset to install and run the
 
 ## List Blueprint Configsets
 
-Use the [lono blueprint configsets](https://lono.cloud/reference/lono-blueprint-configsets/) command to see what configsets the blueprint is configured with.  The command is useful to help see the configsets path resolutions.
+Use the [lono blueprint configsets](/reference/lono-blueprint-configsets/) command to see what configsets the blueprint is configured with.  The command is useful to help see the configsets path resolutions.
 
     $ lono blueprint configsets ec2
     Final configsets being used for ec2 blueprint:

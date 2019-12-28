@@ -35,6 +35,8 @@ Blog Post also covers this: [lono inspect depends Tutorial Introduction](https:/
 [--display=DISPLAY]    # graph or text
                        # Default: graph
 [--noop], [--no-noop]  # noop mode
+[--template=TEMPLATE]  # override convention and specify the template file to use
+[--source=SOURCE]      # url or path to file with template
 
 Runtime options:
 -f, [--force]                    # Overwrite files that already exist

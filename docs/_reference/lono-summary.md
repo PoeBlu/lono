@@ -5,7 +5,7 @@ reference: true
 
 ## Usage
 
-    lono summary BLUEPRINT TEMPLATE
+    lono summary BLUEPRINT
 
 ## Description
 
@@ -49,6 +49,10 @@ Blog Post also covers this: [lono summary Tutorial Introduction](https://blog.bo
 ## Options
 
 ```
+[--template=TEMPLATE]  # override convention and specify the template file to use
+[--source=SOURCE]      # url or path to file with template
+
+Runtime options:
 -f, [--force]                    # Overwrite files that already exist
 -p, [--pretend], [--no-pretend]  # Run but do not make any changes
 -q, [--quiet], [--no-quiet]      # Suppress status output

@@ -1,16 +1,20 @@
 ---
-title: lono blueprints
+title: lono configset
 reference: true
 ---
 
 ## Usage
 
-    lono blueprints
+    lono configset SUBCOMMAND
 
 ## Description
 
-Lists blueprints
+configset subcommands
 
+## Subcommands
+
+* [lono configset list]({% link _reference/lono-configset-list.md %}) - Lists project configsets
+* [lono configset new]({% link _reference/lono-configset-new.md %}) - Generates new lono configset.
 
 ## Options
 

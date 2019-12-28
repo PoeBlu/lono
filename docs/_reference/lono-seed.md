@@ -41,6 +41,7 @@ Generates starter configs for a blueprint.
 ```
 [--param=PARAM]        # override convention and specify the param file to use
 [--template=TEMPLATE]  # override convention and specify the template file to use
+[--source=SOURCE]      # url or path to file with template
 
 Runtime options:
 -f, [--force]                    # Overwrite files that already exist

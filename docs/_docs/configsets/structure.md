@@ -37,4 +37,6 @@ lib/meta.rb
 depends_on "amazon-linux-extras"
 ```
 
+The `depends_on` method allows you to further reuse configsets by including them as separate dependencies, instead of copying and pasting the configset code.
+
 {% include prev_next.md %}
