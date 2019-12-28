@@ -19,7 +19,7 @@ module Lono
       self.class.tracked << self
     end
 
-    # method_missing implmentation proved tricky to debug. Thinking its more productive to to be explicitly.
+    # method_missing implmentation proved tricky to debug. Thinking its more productive to be explicitly.
     %w[template_type auto_camelize source_type].each do |meth|
       define_method(meth.to_sym) do
         if @config.nil?

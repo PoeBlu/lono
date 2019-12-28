@@ -36,7 +36,7 @@ module Lono::Configset::Register
       end
     end
 
-    # Store to to be able to provide the validation errors altogether later.
+    # Store to be able to provide the validation errors altogether later.
     def store_for_validation(name)
       # save caller line to use later for pointing to exactly line
       caller_line = caller.grep(/evaluate_file/).first
