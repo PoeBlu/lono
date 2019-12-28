@@ -72,9 +72,15 @@ module Lono
     # Only allow download of Lono::Blueprint::Configset::Jade
     # Other configsets should be configured in project Gemfile.
     def download
-      return if finder.find(@name, local_only: true)
+      return if finder.find(@name, local_only: true) # no need to download because locally found
+      # 4 cases:
+      # 1a) blueprint/configset top-level - download
+      # 1b) blueprint/configset depends_on - download
+      # 2a) configset top-level - dont download, will report to user with validate_all!
+      # 2b) configset depends_on - download
       return unless %w[blueprint/configset configset].include?(@type) # TODO: support materializing nested blueprints later
-      return unless @state[:parent] # only download jades that came from depends_on
+      # only download jades that came from depends_on
+      return unless @state[:parent] || @type == "blueprint/configset"
       jade = Lono::Configset::Materializer::Jade.new(self)
       jade.build
     end
