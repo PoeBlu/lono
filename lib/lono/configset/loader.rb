@@ -17,7 +17,7 @@ class Lono::Configset
     def load
       path = find_path
       unless path
-        raise "Unable to find configset.yml or configset.json in configset_root: #{configset_root.inspect}"
+        raise "Unable to find configset.yml or configset.json for configset #{@name} in configset_root: #{configset_root.inspect}"
       end
 
       copy_registry_instance_variables
