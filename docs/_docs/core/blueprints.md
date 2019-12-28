@@ -5,7 +5,7 @@ order: 1
 nav_order: 11
 ---
 
-A blueprint is one of the core components of a Lono project.  Blueprints are essentially CloudFormation templates packaged up in a convenient and reusable way.   The CloudFormation code itself lives in the blueprints folder. This allows you to keep the code [DRY]({% link _docs/dry.md %}). Example:
+A blueprint is one of the core components of a Lono project.  Blueprints are essentially CloudFormation templates packaged up in a convenient and reusable way. The CloudFormation code itself lives in the blueprints folder. This allows you to keep the code [DRY]({% link _docs/dry.md %}). Example:
 
     blueprints
     ├── demo

@@ -36,6 +36,14 @@
               {% endfor %}
             </ul>
         </li>
+        <li><a href="{% link _docs/configsets.md %}">Configsets</a>
+            <ul>
+              {% assign docs = site.docs | where: "categories","configsets" %}
+              {% for doc in docs -%}
+                <li><a href='{{doc.url}}'>{{doc.title}}</a></li>
+              {% endfor %}
+            </ul>
+        </li>
         <li><a href="{% link _docs/dsl/components.md %}">DSL Components</a>
             <ul>
               {% assign docs = site.docs | where: "categories","dsl-components" %}
@@ -64,6 +72,9 @@
             <ul>
                 <li><a href="{% link _docs/lookup-locations/params.md %}">Params</a></li>
                 <li><a href="{% link _docs/lookup-locations/variables.md %}">Variables</a></li>
+                <li><a href="{% link _docs/lookup-locations/blueprints.md %}">Blueprints</a></li>
+                <li><a href="{% link _docs/lookup-locations/project-configsets.md %}">Project Configsets</a></li>
+                <li><a href="{% link _docs/lookup-locations/blueprint-configsets.md %}">Blueprint Configsets</a></li>
             </ul>
         </li>
         <li><a href="{% link _docs/conventions.md %}">Conventions</a></li>

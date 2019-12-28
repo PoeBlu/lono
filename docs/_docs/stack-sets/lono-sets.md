@@ -1,6 +1,7 @@
 ---
 title: lono sets
 categories: stack-sets
+nav_order: 66
 ---
 
 Lono supports [CloudFormation stack sets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html).  This allows you to deploy stacks to multiple accounts and regions.
