@@ -10,10 +10,6 @@ class Lono::Finder::Blueprint
       blueprint + vendor + gems
     end
 
-    def all
-      blueprint + vendor + gems + materialized
-    end
-
     def blueprint
       roots = path_roots("#{@blueprint_root}/app/#{type.pluralize}")
       components(roots, "blueprint")

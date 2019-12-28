@@ -18,7 +18,7 @@ module Lono
     desc "configsets", "Lists configsets"
     long_desc Help.text(:configsets)
     def configsets
-      Finder::Configset.list
+      Finder::Configset.list(filter_materialized: true)
     end
 
     desc "generate", "Generate both CloudFormation templates and parameters files."

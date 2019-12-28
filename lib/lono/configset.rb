@@ -7,9 +7,9 @@ module Lono
     register(New, "new", "new NAME", "Generates new lono configset.")
 
     desc "list", "Lists project configsets"
-    long_desc Help.text("configset/new")
+    long_desc Help.text("configset/list")
     def list
-      Finder::Configset.list
+      Finder::Configset.list(filter_materialized: true)
     end
   end
 end

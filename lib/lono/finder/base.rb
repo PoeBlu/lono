@@ -98,15 +98,17 @@ module Lono::Finder
       Dir.glob(expr).size > 0
     end
 
-    def list(message=nil)
-      puts(message || "Available #{type.pluralize}:")
+    def list(options={})
+      puts(options[:message] || "Available #{type.pluralize}:")
       table = Text::Table.new
       table.head = ["Name", "Path", "Type"]
 
       components = find_all
       components.each do |config|
         pretty_path = config[:root].sub("#{Lono.root}/", "")
-        table.rows << [config[:name], pretty_path, config[:source_type]]
+        unless options[:filter_materialized] && config[:source_type] == "materialized"
+          table.rows << [config[:name], pretty_path, config[:source_type]]
+        end
       end
 
       puts table
@@ -155,8 +157,8 @@ module Lono::Finder
         new.find(name)
       end
 
-      def list(message=nil)
-        new.list(message)
+      def list(options={})
+        new.list(options)
       end
     end
   end
