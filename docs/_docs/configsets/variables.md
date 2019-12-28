@@ -39,7 +39,7 @@ AWS::CloudFormation::Init:
         ensureRunning: 'true'
 ```
 
-Since configset.yml is YAML, the `indent` method is ueful to help the text correctly.
+Since configset.yml is YAML, the `indent` method is ueful to help align the text correctly.
 
 ## Configset Predefined Variables
 

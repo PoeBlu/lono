@@ -33,7 +33,7 @@ Use the [lono blueprint configsets](/reference/lono-blueprint-configsets/) comma
 
 ## Blueprint Configset Lookup Precedence
 
-The blueprint configset definitions themselves are looked up in different locations. The search order for these locations are:
+The blueprint configset definitions themselves can be in different locations. The search order for these locations are:
 
 1. BLUEPRINT/app/configsets - prepackaged with the blueprint
 2. PROJECT/vendor/configsets - vendorized configset, provides you control over the configset
