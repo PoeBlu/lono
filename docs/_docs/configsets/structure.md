@@ -25,7 +25,7 @@ httpd.gemspec | A standard gemspec definition, allows configsets to be packaged 
 
 ## lono configset new
 
-{% include lono-configset-new.md %}
+{% include configsets/lono-configset-new.md %}
 
 {% include configsets/example.md %}
 

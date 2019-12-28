@@ -10,7 +10,7 @@ Project configsets are added by you to your lono project.  There are different w
 2. PROJECT/vendor/configsets - third party vendorized configsets
 3. PROJECT/Gemfile - third party configsets as gems
 
-{% include lono-configset-new.md %}
+{% include configsets/lono-configset-new.md %}
 
 The `vendor/configsets` location provides a way to vendorize third party configsets.
 
@@ -37,6 +37,6 @@ configs/ec2/configsets/base.rb:
 
     configset("httpd", resource: "Instance")
 
-{% include cfn-init.md %}
+{% include configsets/cfn-init.md %}
 
 {% include prev_next.md %}

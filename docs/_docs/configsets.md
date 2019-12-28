@@ -43,7 +43,7 @@ More specifically, lono injects the 2 configsets to the CloudFormation template 
 
 By using `configs/ec2/configsets/base.rb`, you have full control over which configsets to use.
 
-{% include cfn-init.md %}
+{% include configsets/cfn-init.md %}
 
 The Lono configsets concept empowers you to use configsets in a reusable and easy way.
 
