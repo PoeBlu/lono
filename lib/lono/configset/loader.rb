@@ -3,6 +3,7 @@ require "json"
 class Lono::Configset
   class Loader
     extend Memoist
+    include Dsl
     include EvaluateFile
 
     def initialize(registry={}, options={})
