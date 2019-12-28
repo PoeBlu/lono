@@ -2,7 +2,7 @@
 title: Blueprint Structure
 link_text: ERB Blueprint Structure
 categories: erb blueprint-structure
-nav_order: 70
+nav_order: 75
 ---
 
 A ERB blueprint structure can look like this:

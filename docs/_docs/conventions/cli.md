@@ -2,7 +2,7 @@
 title: CLI
 category: conventions
 desc: Stack, blueprint, template, and params conventions.
-nav_order: 55
+nav_order: 60
 ---
 
 Lono follows a set of CLI naming conventions. When followed, this can dramatically shorten lono commands.

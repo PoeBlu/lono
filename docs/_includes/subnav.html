@@ -38,7 +38,7 @@
         </li>
         <li><a href="{% link _docs/configsets.md %}">Configsets</a>
             <ul>
-              {% assign docs = site.docs | where: "categories","configsets" %}
+              {% assign docs = site.docs | where: "categories","configsets" | sort: "order" %}
               {% for doc in docs -%}
                 <li><a href='{{doc.url}}'>{{doc.title}}</a></li>
               {% endfor %}
@@ -46,7 +46,7 @@
         </li>
         <li><a href="{% link _docs/dsl/components.md %}">DSL Components</a>
             <ul>
-              {% assign docs = site.docs | where: "categories","dsl-components" %}
+              {% assign docs = site.docs | where: "categories","dsl-components"" | sort: "order" %}
               {% for doc in docs -%}
                 <li><a href='{{doc.url}}'>{{doc.title}}</a></li>
               {% endfor %}
@@ -62,7 +62,7 @@
         </li>
         <li><a href="{% link _docs/intrinsic-functions.md %}">Intrinsic Functions</a>
             <ul>
-              {% assign docs = site.docs | where: "categories","intrinsic-function" %}
+              {% assign docs = site.docs | where: "categories","intrinsic-function"" | sort: "order" %}
               {% for doc in docs -%}
                 <li><a href='{{doc.url}}'>{{doc.title}}</a></li>
               {% endfor %}
