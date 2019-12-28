@@ -3,6 +3,7 @@ require "json"
 class Lono::Configset
   class Loader
     extend Memoist
+    include EvaluateFile
 
     def initialize(registry={}, options={})
       @registry, @options = registry, options
@@ -16,7 +17,7 @@ class Lono::Configset
 
     def load
       path = find_path
-      copy_registry_instance_variables
+      copy_instance_variables
       content = RenderMePretty.result(path, context: self)
       if File.extname(path) == ".yml"
         YAML.load(content)
@@ -43,6 +44,17 @@ class Lono::Configset
     # Allow overriding in subclasses
     def finder_class
       Lono::Finder::Configset
+    end
+
+    def copy_instance_variables
+      load_predefined_instance_variables
+      copy_registry_instance_variables
+    end
+
+    def load_predefined_instance_variables
+      path = "#{configset_root}/lib/variables.rb"
+      return unless File.exist?(path)
+      evaluate_file(path)
     end
 
     # Copy options from the original configset call as instance variables so its available. So:
