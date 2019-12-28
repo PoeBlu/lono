@@ -18,23 +18,8 @@ class Lono::Blueprint
     end
 
     def find_blueprint_root(blueprint)
-      require_bundle_gems # ensures that gem will be found so we can switch to it
-
       config = Lono::Finder::Blueprint.find(blueprint) # blueprint_root
       config[:root] if config
-    end
-
-    def bundler_groups
-      [:default, Lono.env.to_sym]
-    end
-
-    def require_bundle_gems
-      # NOTE: Dont think ENV['BUNDLE_GEMFILE'] is quite working right.  We still need
-      # to be in the project directory.  Leaving logic in here for when it gets fix.
-      if ENV['BUNDLE_GEMFILE'] || File.exist?("Gemfile")
-        require "bundler/setup"
-        Bundler.require(*bundler_groups)
-      end
     end
   end
 end
