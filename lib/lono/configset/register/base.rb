@@ -60,7 +60,7 @@ module Lono::Configset::Register
     def show_errors_and_exit!(errors)
       errors.each do |state|
         name, caller_line = state[:name], state[:caller_line]
-        puts "ERROR: Configset with name #{name} not found. Double check the Gemfile and configs/#{@blueprint}/configsets files.".color(:red)
+        puts "ERROR: Configset with name #{name} not found. Please double check Gemfile and configs/#{@blueprint}/configsets files.".color(:red)
         pretty_trace(caller_line)
       end
       exit 1

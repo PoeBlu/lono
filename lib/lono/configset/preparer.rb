@@ -18,8 +18,8 @@ class Lono::Configset
 
     # Stores configsets registry items
     def register
-      @project.register   # IE: looks up configs/BLUEPRINT/configsets/base.rb
-      @blueprint.register # IE: looks up BLUEPRINT/config/configsets.rb
+      @project.register   # IE: evaluates configs/BLUEPRINT/configsets/base.rb
+      @blueprint.register # IE: evaluates BLUEPRINT/config/configsets.rb
     end
 
     def resolve_dependencies

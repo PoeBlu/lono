@@ -74,6 +74,7 @@ module Lono
     def download
       return if finder.find(@name, local_only: true)
       return unless %w[blueprint/configset configset].include?(@type) # TODO: support materializing nested blueprints later
+      return unless @state[:parent] # only download jades that came from depends_on
       jade = Lono::Configset::Materializer::Jade.new(self)
       jade.build
     end
