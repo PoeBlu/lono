@@ -3,19 +3,19 @@ title: Configsets
 nav_order: 20
 ---
 
-Configsets are a way to configure your EC2 instances. They work with the [AWS::CloudFormation::Init](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-init.html) and [cfn-init](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-init.html). You can use them to configure and update your EC2 instances automatically. Lono allows you to leverage configsets in a reusable way.
+Configsets are a way to configure your EC2 instances. Configsets are essentially a configuration management tool.
+
+They work with the [AWS::CloudFormation::Init](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-init.html) and [cfn-init](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-init.html). You can use them to configure and update your EC2 instances automatically. Lono allows you to leverage configsets in a reusable way.
 
 ## Configuration Management Tool
 
-Essentially, it's a lightweight configuration management tool.  There are several configuration management tools out there: [chef](https://www.chef.io/configuration-management/), [puppet](https://puppet.com/), [ansible](https://www.ansible.com/), [salt](https://docs.saltstack.com/en/latest/).  They all, including configsets, can do these 3 steps:
+There are several configuration management tools out there: [chef](https://www.chef.io/configuration-management/), [puppet](https://puppet.com/), [ansible](https://www.ansible.com/), [salt](https://docs.saltstack.com/en/latest/).  They all, including configsets, usually perform these 3 steps:
 
 1. Install a package
 2. Configure it
 3. Run it as a Service
 
-{% include configset-example.md %}
-
-This configset installs and ensures the httpd is running, even after the server is rebooted.
+{% include configsets/example.md %}
 
 ## Lono Makes Them Reusable
 

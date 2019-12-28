@@ -47,9 +47,56 @@ Configsets can have predefined variables in their `lib/variables.rb` file.  Exam
 
 app/configsets/httpd/lib/variables.rb:
 
+```ruby
 @html =<<-EOL
-<h1>hello there from variables.rb</h1>
-<p>This is my page</p>
+<h1>configset predefined variables</h1>
+<p>Hello there from app/configsets/httpd/lib/variables.rb:</p>
 EOL
+```
+
+## Overriding Configset Variables with configset options
+
+You can override the predefined configset variables when you configure the configset.  Example:
+
+configs/ec2/configsets/base.rb:
+
+```ruby
+configset("httpd", resource: "Instance", html: "<h2>html custom content</h2>")
+```
+
+## Overriding Configset Variables
+
+You can also override configset variables with configs `variables.rb` files. You can override variables globally and override them for all configsets, or locally to the specific configset. Examples:
+
+1. configs/ec2/configsets/variables.rb - global for all configsets used in the ec2 blueprint
+2. configs/ec2/configsets/httpd/variables.rb - specific only to the httpd configset
+
+It is recommended that you override configset variables specfically for each configset. Example:
+
+configs/ec2/configsets/httpd/variables.rb
+
+```ruby
+@html =<<-EOL
+<h1>project variables.rb override</h1>
+<p>Hello there from configs/ec2/configsets/httpd/variables.rb</p>
+EOL
+```
+
+## Configsets Configs are Ruby
+
+Since the configs file is Ruby, you can use Ruby organize it however you wish. Example:
+
+configs/ec2/configsets/httpd/variables.rb
+
+```ruby
+@html = IO.read(File.expand_path("html/index.html", __dir__))
+```
+
+configs/ec2/configsets/httpd/html/index.html:
+
+```html
+<h2>My html page</h2>
+<p>Hello there from configs/ec2/configsets/httpd/html/index.html</p>
+```
 
 {% include prev_next.md %}

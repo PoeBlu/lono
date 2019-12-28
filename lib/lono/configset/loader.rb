@@ -48,14 +48,24 @@ class Lono::Configset
     end
 
     def copy_instance_variables
-      load_predefined_instance_variables
-      copy_registry_instance_variables
+      load_blueprint_predefined_variables
+      load_project_predefined_variables
+      copy_registry_variables
     end
 
-    def load_predefined_instance_variables
+    def load_blueprint_predefined_variables
       path = "#{configset_root}/lib/variables.rb"
-      return unless File.exist?(path)
       evaluate_file(path)
+    end
+
+    def load_project_predefined_variables
+      paths = [
+        "#{Lono.root}/configs/#{@blueprint}/configsets/variables.rb", # global
+        "#{Lono.root}/configs/#{@blueprint}/configsets/#{@name}/variables.rb", # configset specific
+      ]
+      paths.each do |path|
+        evaluate_file(path)
+      end
     end
 
     # Copy options from the original configset call as instance variables so its available. So:
@@ -70,7 +80,7 @@ class Lono::Configset
     #
     # So these @registry varibles are copied over to instance variables.
     #
-    def copy_registry_instance_variables
+    def copy_registry_variables
       @registry.each do |k,v|
         instance_variable_set("@#{k}", v)
       end

@@ -8,9 +8,14 @@ AWS::CloudFormation::Init:
     packages:
       yum:
         httpd: []
+    files:
+      "/var/www/html/index.html":
+        content: "<h2>html test content</h2>"
     services:
       sysvinit:
        httpd:
         enabled: 'true'
         ensureRunning: 'true'
 ```
+
+This configset installs, configures, and ensures the httpd is running, even if the server is rebooted.
