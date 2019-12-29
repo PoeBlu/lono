@@ -15,7 +15,7 @@ module Lono
     end
 
     def name
-     gemspec.name
+      gemspec.name
     end
 
     def gemspec

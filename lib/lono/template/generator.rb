@@ -15,9 +15,8 @@ class Lono::Template
       if @options[:source]
         "source"
       else
-        meta_config = "#{Lono.blueprint_root}/.meta/config.yml"
-        data = YAML.load_file(meta_config)
-        data["template_type"] || "dsl"
+        jadespec = Lono::Jadespec.new(Lono.blueprint_root, "unknown") # only using to get template_type metadata for now
+        jadespec.template_type
       end
     end
   end
