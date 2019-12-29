@@ -61,13 +61,13 @@ class Lono::Configset
       # Ugly because of the sets structure.
       @sets.uniq! do |array|
         registry, _ = array
-        registry[:name]
+        registry.name
       end
 
       @sets.each_with_index do |array, i|
         padded_i = "%03d" % i
         registry, metadata = array
-        name, resource = registry[:name], registry[:resource]
+        name, resource = registry.name, registry.resource
 
         @configSets["default"] ||= []
         @configSets["default"] << {"ConfigSet" => name}
@@ -95,7 +95,7 @@ class Lono::Configset
       has_complex_type = cs["default"].detect { |s| !s.is_a?(String) }
       if has_complex_type
         message =<<~EOL
-          ERROR: The configset #{registry[:name]} has a configSets property with a complex type.
+          ERROR: The configset #{registry.name} has a configSets property with a complex type.
           configSets:
 
               #{cs}

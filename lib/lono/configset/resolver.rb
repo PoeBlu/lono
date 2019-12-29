@@ -6,6 +6,7 @@ class Lono::Configset
 
     def resolve(*unresolved)
       unresolved.flatten! # initially only top-level
+      puts "Resolving #{unresolved.map(&:name)}" if ENV['LONO_DEBUG_CONFIGSET']
       unresolved.each do |jade|
         jade.materialize
         jade.dependencies.each do |j|
@@ -22,10 +23,8 @@ class Lono::Configset
       @@dependencies.each do |jade|
         # dependency jades have minimal registry info. For additional info is pulled from stored reference data in
         # jade like jade.resource_from_parent.
-        registry = {
-          resource: jade.resource_from_parent,
-          name: jade.name,
-        }
+        registry = jade.state
+        registry.resource = jade.resource_from_parent
         if jade.type == "blueprint/configset"
           Register::Blueprint.prepend(registry)
         elsif jade.type == "configset"

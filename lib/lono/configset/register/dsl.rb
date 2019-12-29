@@ -2,9 +2,9 @@ module Lono::Configset::Register
   module Dsl
     def configset(*args)
       options = args.last.is_a?(Hash) ? args.pop : {}
-      o = options.merge(args: args, name: args.first)
-      self.class.configsets << o unless self.class.configsets.include?(o)
-      store_for_validation(o)
+      registry = Lono::Configset::Registry.new(args, options)
+      self.class.append(registry)
+      store_for_validation(registry)
     end
 
     # DSL

@@ -47,9 +47,8 @@ module Lono
     end
 
     def dependencies
-      @depends_ons.map do |o|
-        parent = o[:parent]
-        self.class.new(o[:depends_on], parent.type, parent: parent)
+      @depends_ons.map do |registry|
+        self.class.new(registry.depends_on, registry.parent.type, registry)
       end
     end
 
@@ -80,7 +79,7 @@ module Lono
       # 2b) configset depends_on - download
       return unless %w[blueprint/configset configset].include?(@type) # TODO: support materializing nested blueprints later
       # only download jades that came from depends_on
-      return unless @state[:parent] || @type == "blueprint/configset"
+      return unless @state.parent || @type == "blueprint/configset"
       jade = Lono::Configset::Materializer::Jade.new(self)
       jade.build
     end

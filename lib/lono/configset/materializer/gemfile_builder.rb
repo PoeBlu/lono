@@ -21,7 +21,7 @@ module Lono::Configset::Materializer
     def create_gemfile(jades)
       return if jades.empty?
 
-      lines = ['source "https://rubygems.org"']
+      lines = []
       jades.each do |jade|
         return if local_exist?(jade)
         args = source.args(jade)
@@ -31,7 +31,9 @@ module Lono::Configset::Materializer
         line = %Q|gem #{args}, #{options}|
         lines << line unless lines.include?(line)
       end
-      lines.sort.join("\n") + "\n"
+      lines.sort!
+      lines.unshift('source "https://rubygems.org"')
+      lines.join("\n") + "\n"
     end
 
     def local_exist?(jade)
@@ -62,7 +64,9 @@ module Lono::Configset::Materializer
 
       puts stdout if ENV['LONO_DEBUG']
       unless status.success?
-        puts "Fail to materialize gems #{@jades.map(&:name).join(', ')}".color(:red)
+        names = @jades.map(&:name)
+        gem_text = names.size == 1 ? "gem" : "gems"
+        puts "Fail to materialize #{gem_text} #{names.join(', ')}".color(:red)
         puts "Failed running => #{command}"
         puts stderr
         if stderr.include?("correct access rights")

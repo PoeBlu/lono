@@ -18,7 +18,7 @@ module Lono::Configset::Register
 
     def jadify
       self.class.configsets.each do |registry|
-        Lono::Jade.new(registry[:name], jade_type, registry)
+        Lono::Jade.new(registry.name, jade_type, registry)
       end
     end
 
@@ -37,19 +37,20 @@ module Lono::Configset::Register
     end
 
     # Store to be able to provide the validation errors altogether later.
-    def store_for_validation(options={})
+    def store_for_validation(registry)
       # save caller line to use later for pointing to exactly line
       caller_line = caller.grep(/evaluate_file/).first
+      registry.caller_line = caller_line
       # huge performance improvement by only validating the first configset registration of duplicate gems
-      names = self.class.validations.map {|v| v[:name] }
-      self.class.validations << options.merge(caller_line: caller_line) unless names.include?(options[:name])
+      names = self.class.validations.map {|r| r.name }
+      self.class.validations << registry unless names.include?(registry.name)
     end
 
     # Validate the configset before building templates. So user finds out about errors early.
     def validate!
       errors = []
-      self.class.validations.each do |state|
-        config = finder_class.find(state[:name]) # finder_class implemented in subclass
+      self.class.validations.each do |registry|
+        config = finder_class.find(registry.name) # finder_class implemented in subclass
         errors << state unless config
       end
 
@@ -59,7 +60,7 @@ module Lono::Configset::Register
 
     def show_errors_and_exit!(errors)
       errors.each do |state|
-        name, caller_line = state[:name], state[:caller_line]
+        name, caller_line = registry.name, registry.caller_line
         puts "ERROR: Configset with name #{name} not found. Please double check Gemfile and configs/#{@blueprint}/configsets files.".color(:red)
         pretty_trace(caller_line)
       end
@@ -94,7 +95,15 @@ module Lono::Configset::Register
       end
 
       def prepend(registry)
-        self.configsets.unshift(registry) unless configsets.include?(registry)
+        self.configsets.unshift(registry) unless has?(registry)
+      end
+
+      def append(registry)
+        self.configsets << registry unless has?(registry)
+      end
+
+      def has?(registry)
+        configsets.detect { |r| r.name == registry.name && r.args == registry.args }
       end
     end
   end

@@ -1,12 +1,12 @@
 class Lono::Configset::Meta
   module Dsl
-    def depends_on(configset, options={})
-      o = options.merge(
-        depends_on: configset,
-        parent: @jade,
-      )
-      @jade.depends_ons << o unless @jade.depends_ons.include?(o)
+    def depends_on(*args)
+      options = args.last.is_a?(Hash) ? args.pop : {}
+      registry = Lono::Configset::Register.new(args, options)
+      registry.depends_on = args.first
+      registry.parent = @jade
+      already_has = @jade.depends_ons.detect { |d| d.name == registry.name && d.args == registry.args }
+      @jade.depends_ons << registry unless already_has
     end
   end
 end
-

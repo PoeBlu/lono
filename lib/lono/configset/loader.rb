@@ -8,7 +8,7 @@ class Lono::Configset
 
     def initialize(registry={}, options={})
       @registry, @options = registry, options
-      @name, @resource = registry[:name], registry[:resource]
+      @name, @resource = registry.name, registry.resource
       @blueprint = options[:blueprint]
     end
 
@@ -37,7 +37,7 @@ class Lono::Configset
       config = finder_class.find(@name)
       unless config
         puts "finder_class #{finder_class}"
-        raise "Unable to find configset #{@name}."
+        raise "Unable to find configset #{@name.inspect}"
       end
       config[:root]
     end
@@ -81,7 +81,7 @@ class Lono::Configset
     # So these @registry varibles are copied over to instance variables.
     #
     def copy_registry_variables
-      @registry.each do |k,v|
+      @registry.options.each do |k,v|
         instance_variable_set("@#{k}", v)
       end
     end
