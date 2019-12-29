@@ -37,11 +37,11 @@ module Lono
     end
 
     def resource_from_parent
-      parent = state[:parent]
+      parent = state.parent
       resource = nil
       while parent
-        resource = parent.state[:resource]
-        parent = parent.state[:parent]
+        resource = parent.state.resource
+        parent = parent.state.parent
       end
       resource
     end

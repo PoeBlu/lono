@@ -13,5 +13,9 @@ class Lono::Configset
     def resource
       @options[:resource]
     end
+
+    def resource=(v)
+      @options[:resource] = v
+    end
   end
 end

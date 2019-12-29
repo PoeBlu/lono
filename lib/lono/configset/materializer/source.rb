@@ -17,7 +17,7 @@ module Lono::Configset::Materializer
         return(options)
       end
 
-      if registry.key?(:git)
+      if registry.options.key?(:git)
         options[:git] = registry.options[:git]
         return(options)
       end
