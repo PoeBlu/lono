@@ -3,7 +3,7 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Parameter do
 
   context "short form without default" do
     let(:definition) do
-      [ :ami_id ]
+      [ :AmiId ]
     end
 
     it "produces template" do
@@ -17,7 +17,7 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Parameter do
 
   context "short form with default" do
     let(:definition) do
-      [ :ami_id, "ami-111" ]
+      [ :AmiId, "ami-111" ]
     end
 
     it "produces template" do
@@ -31,7 +31,7 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Parameter do
 
   context "medium form" do
     let(:definition) do
-      [ :company, { default: "boltops", description: "instance type" } ]
+      [ :Company, { Default: "boltops", Description: "instance type" } ]
     end
 
     it "produces template" do
@@ -45,7 +45,7 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Parameter do
 
   context "long form" do
     let(:definition) do
-      [ company: { default: "boltops", description: "instance type" } ]
+      [ Company: { Default: "boltops", Description: "instance type" } ]
     end
 
     it "produces template" do
