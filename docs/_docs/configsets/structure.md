@@ -29,14 +29,14 @@ httpd.gemspec | A standard gemspec definition, allows configsets to be packaged 
 
 {% include configsets/example.md %}
 
-## meta.rb example
+## meta.rb depends_on example
+
+Configsets can depend on other configsets. The `depends_on` method allows you to reuse configsets by including them as separate dependencies, instead of copying and pasting the configset code. Example:
 
 lib/meta.rb
 
 ```ruby
 depends_on "amazon-linux-extras"
 ```
-
-The `depends_on` method allows you to further reuse configsets by including them as separate dependencies, instead of copying and pasting the configset code.
 
 {% include prev_next.md %}

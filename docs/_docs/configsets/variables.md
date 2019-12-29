@@ -71,7 +71,7 @@ You can also override configset variables with configs `variables.rb` files. You
 1. configs/ec2/configsets/variables.rb - global for all configsets used in the ec2 blueprint
 2. configs/ec2/configsets/httpd/variables.rb - specific only to the httpd configset
 
-It is recommended that you override configset variables specfically for each configset. Example:
+It is recommended that you override configset variables specifically for each configset. Example:
 
 configs/ec2/configsets/httpd/variables.rb
 
