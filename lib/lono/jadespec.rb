@@ -15,7 +15,7 @@ module Lono
     end
 
     def name
-      gemspec.name
+     gemspec.name
     end
 
     def gemspec
@@ -27,13 +27,16 @@ module Lono
       Dir.glob("#{@root}/*.gemspec").first
     end
 
-    # TODO: REMOVE HARDCODE
     def template_type
-      "dsl"
+      metadata[:template_type] || "dsl"
     end
 
     def auto_camelize
-      false
+      metadata[:auto_camelize] || false
+    end
+
+    def metadata
+      gemspec.metadata
     end
   end
 end

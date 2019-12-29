@@ -65,29 +65,6 @@ module Lono::Finder
     end
     memoize :components
 
-    def load_yaml_file(dot_meta_path)
-      return {} unless File.exist?(dot_meta_path)
-      config = YAML.load_file(dot_meta_path)
-      if config.key?("blueprint_name")
-        deprecation_warning("blueprint name in #{dot_meta_path} is DEPRECATED. Please rename blueprint_name to name.")
-        config["name"] = config["blueprint_name"]
-      end
-      config
-    end
-
-    @@deprecation_warnings = []
-    def deprecation_warning(message)
-      # comment out for now
-      # return if ENV["LONO_MUTE_DEPRECATION"]
-      # message = "#{message} export LONO_MUTE_DEPRECATION=1 to mute"
-      # puts message unless @@deprecation_warnings.include?(message)
-      # @@deprecation_warnings << message
-    end
-
-    def dot_meta_path(root)
-      "#{root}/.meta/config.yml"
-    end
-
     def detect?(root)
       expr = "#{root}/#{detection_path}"
       Dir.glob(expr).size > 0

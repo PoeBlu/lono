@@ -1,4 +1,0 @@
----
-name: <%= blueprint_name %>
-template_type: dsl
-auto_camelize: false

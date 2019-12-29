@@ -5,7 +5,6 @@ A quick way create a project configset is with the [lono configset new](/referen
           create  app/configsets/httpd
           create  app/configsets/httpd/httpd.gemspec
           create  app/configsets/httpd/.gitignore
-          create  app/configsets/httpd/.meta/config.yml
           create  app/configsets/httpd/.rspec
           create  app/configsets/httpd/Gemfile
           create  app/configsets/httpd/README.md
