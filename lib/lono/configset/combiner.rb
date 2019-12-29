@@ -48,7 +48,7 @@ class Lono::Configset
         init = attributes.dig("Metadata", "AWS::CloudFormation::Init")
         next unless init
         data = {
-          registry: {name: "original", resource: logical_id},
+          registry: Lono::Configset::Registry.new(["original"], resource: logical_id),
           metdata_configset: attributes["Metadata"]
         }
         configsets << data

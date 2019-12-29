@@ -1,10 +1,12 @@
 describe Lono::Configset::Loader do
   let(:loader) do
-    Lono::Configset::Loader.new(options)
+    Lono::Configset::Loader.new(registry)
+  end
+  let(:registry) do
+    Lono::Configset::Registry.new(["ssm"], resource: "Instance")
   end
 
   context("example") do
-    let(:options) { { name: "ssm", resource: "Instance" } }
     it "loads metadata" do
       data = loader.load
       expect(data).to be_a(Hash)

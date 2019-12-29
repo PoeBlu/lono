@@ -16,14 +16,19 @@ describe Lono::Configset::Combiner do
     YAML.load(IO.read("spec/fixtures/configsets/templates/#{name}"))
   end
 
+  def registry(*args)
+    options = args.last.is_a?(Hash) ? args.pop : {}
+    Lono::Configset::Registry.new(args, options)
+  end
+
   context("no existing metadata") do
     let(:cfn)  { load_template("ec2-no-metadata.yml") }
     let(:configset1) { load_configset("config1.json") }
     let(:configset2) { load_configset("config2.json") }
 
     it "combines" do
-      combiner.add({name: "ssm", resource: "Instance"}, configset1)
-      combiner.add({name: "httpd", resource: "Instance"}, configset2)
+      combiner.add(registry("ssm", resource: "Instance"), configset1)
+      combiner.add(registry("httpd", resource: "Instance"), configset2)
       map = combiner.combine
       json =<<~EOL
       {
@@ -78,7 +83,7 @@ describe Lono::Configset::Combiner do
       combiner.existing_configsets.each do |data|
         combiner.add(data[:registry], data[:metdata_configset])
       end
-      combiner.add({name: "ssm", resource: "Instance"}, configset1)
+      combiner.add(registry("ssm", resource: "Instance"), configset1)
       map = combiner.combine
       data = map["Instance"]
       json =<<~EOL
@@ -134,7 +139,7 @@ describe Lono::Configset::Combiner do
     let(:configset1) { load_configset("single.yml") }
 
     it "combine with single config structure" do
-      combiner.add({name: "simple", resource: "Instance"}, configset1)
+      combiner.add(registry("simple", resource: "Instance"), configset1)
       map = combiner.combine
       data = map["Instance"]
       yaml =<<~EOL
@@ -164,7 +169,7 @@ describe Lono::Configset::Combiner do
       combiner.existing_configsets.each do |data|
         combiner.add(data[:registry], data[:metdata_configset])
       end
-      combiner.add({name: "ssm", resource: "Instance"}, configset1)
+      combiner.add(registry("ssm", resource: "Instance"), configset1)
       map = combiner.combine
       data = map["Instance"]
       yaml =<<~EOL
@@ -200,8 +205,8 @@ describe Lono::Configset::Combiner do
     let(:configset2) { load_configset("config1.json") }
 
     it "combines" do
-      combiner.add({name: "ssm", resource: "Instance"}, configset1)
-      combiner.add({name: "ssm", resource: "Instance"}, configset2)
+      combiner.add(registry("ssm", resource: "Instance"), configset1)
+      combiner.add(registry("ssm", resource: "Instance"), configset2)
       map = combiner.combine
       json =<<~EOL
         {
