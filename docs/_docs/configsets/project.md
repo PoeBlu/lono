@@ -20,7 +20,7 @@ Finally, the Gemfile allows you to use configsets as gems.  Example:
 gem "httpd", "git@github.com:boltopspro/httpd" # use httpd configset
 ```
 
-Adding the configset one of these methods makes it available for you. You can list them with the [lono configsets](https://lono.cloud/reference/lono-configsets/) command.
+After adding configset, it is available to be used in any template. You can list available configsets with the [lono configsets](https://lono.cloud/reference/lono-configsets/) command.
 
     $ lono configsets
     Available configsets:

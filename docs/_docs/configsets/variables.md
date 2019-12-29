@@ -39,7 +39,7 @@ AWS::CloudFormation::Init:
         ensureRunning: 'true'
 ```
 
-Since configset.yml is YAML, the `indent` method is ueful to help align the text correctly.
+Since `configset.yml` is YAML, the `indent` method is ueful to help align the text correctly.
 
 ## Configset Predefined Variables
 
@@ -66,12 +66,14 @@ configset("httpd", resource: "Instance", html: "<h2>html custom content</h2>")
 
 ## Overriding Configset Variables
 
-You can also override configset variables with configs `variables.rb` files. You can override variables globally and override them for all configsets, or locally to the specific configset. Examples:
+You can also override configset variables with configs `variables.rb` files. You can override variables globally or locally. Global mean all configsets. Local means only to the specified configset.
 
-1. configs/ec2/configsets/variables.rb - global for all configsets used in the ec2 blueprint
-2. configs/ec2/configsets/httpd/variables.rb - specific only to the httpd configset
+Examples:
 
-It is recommended that you override configset variables specifically for each configset. Example:
+1. configs/ec2/configsets/variables.rb - global override for all configsets used in the ec2 blueprint
+2. configs/ec2/configsets/httpd/variables.rb - local override, only to the httpd configset
+
+Local overrides are generally recommended. Example:
 
 configs/ec2/configsets/httpd/variables.rb
 
