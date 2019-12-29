@@ -14,7 +14,7 @@ module Lono::Template::Strategy::Dsl::Builder::Helpers
       if hash.is_a?(Array)
         hash = hash.inject({}) do |h,i|
           i.symbolize_keys!
-          h[i[:Key]] = i[:Value].to_s
+          h[i[:Key]] = i[:Value]
           h
         end
         return tag_list(hash) # recursive call tag_list to normalized the argument with a Hash
@@ -22,7 +22,7 @@ module Lono::Template::Strategy::Dsl::Builder::Helpers
 
       propagate = hash[:PropagateAtLaunch] # special treatment
       list = hash.map do |k,v|
-        h = {Key: k.to_s, Value: v.to_s}
+        h = {Key: k.to_s, Value: v}
         h[:PropagateAtLaunch] = propagate unless propagate.nil?
         h
       end

@@ -7,6 +7,8 @@ class TagsHelperTester
 end
 
 describe Lono::Template::Strategy::Dsl::Builder::Helpers::TagsHelper do
+  include Lono::Template::Strategy::Dsl::Builder::Fn # to test ref
+
   let(:tester) { TagsHelperTester.new }
   context "tags" do
     it "Hash convert to Array" do
@@ -32,6 +34,11 @@ describe Lono::Template::Strategy::Dsl::Builder::Helpers::TagsHelper do
     it "Hash PropagateAtLaunch special key" do
       list = tester.tags(Name: "test", PropagateAtLaunch: true)
       expect(list).to eq [{:Key=>"Name", :Value=>"test", :PropagateAtLaunch=>true}]
+    end
+
+    it "Hash with refs" do
+      list = tester.tags(Name: ref("test"))
+      expect(list).to eq [{:Key=>"Name", :Value=>{"Ref"=>"Test"}}]
     end
   end
 end
