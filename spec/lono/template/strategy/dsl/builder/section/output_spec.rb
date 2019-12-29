@@ -3,7 +3,7 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Output do
 
   context "short form without 2nd argument" do
     let(:definition) do
-      [ :elb ]
+      [ :Elb ]
     end
 
     it "produces template" do
@@ -17,7 +17,7 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Output do
 
   context "short form with 2nd argument" do
     let(:definition) do
-      [ :elb, "!Ref Elb" ]
+      [ :Elb, "!Ref Elb" ]
     end
 
     it "produces template" do
@@ -31,7 +31,7 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Output do
 
   context "medium form" do
     let(:definition) do
-      [ :stack_name, { value: "!Ref AWS::StackName" } ]
+      [ :StackName, { Value: "!Ref AWS::StackName" } ]
     end
 
     it "produces template" do
@@ -45,7 +45,7 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Output do
 
   context "long form" do
     let(:definition) do
-      [ vpc_id: { description: "vpc id", value: "!Ref VpcId" } ]
+      [ VpcId: { Description: "vpc id", Value: "!Ref VpcId" } ]
     end
 
     it "produces template" do
