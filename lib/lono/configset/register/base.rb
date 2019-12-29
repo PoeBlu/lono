@@ -51,7 +51,7 @@ module Lono::Configset::Register
       errors = []
       self.class.validations.each do |registry|
         config = finder_class.find(registry.name) # finder_class implemented in subclass
-        errors << state unless config
+        errors << registry unless config
       end
 
       return if errors.empty? # all good
@@ -59,7 +59,7 @@ module Lono::Configset::Register
     end
 
     def show_errors_and_exit!(errors)
-      errors.each do |state|
+      errors.each do |registry|
         name, caller_line = registry.name, registry.caller_line
         puts "ERROR: Configset with name #{name} not found. Please double check Gemfile and configs/#{@blueprint}/configsets files.".color(:red)
         pretty_trace(caller_line)
