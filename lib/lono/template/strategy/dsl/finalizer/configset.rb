@@ -4,7 +4,6 @@ class Lono::Template::Strategy::Dsl::Finalizer
 
     def initialize(cfn, options={})
       @cfn, @options = cfn, options
-      @blueprint = options[:blueprint]
     end
 
     def run

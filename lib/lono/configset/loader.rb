@@ -5,11 +5,12 @@ class Lono::Configset
     extend Memoist
     include Dsl
     include EvaluateFile
+    include Lono::Conventions
 
     def initialize(registry={}, options={})
       @registry, @options = registry, options
       @name, @resource = registry.name, registry.resource
-      @blueprint = options[:blueprint]
+      _, @blueprint, _, _ = naming_conventions(options)
     end
 
     def metdata_configset
