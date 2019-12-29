@@ -3,7 +3,7 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Resource do
 
   context "short form" do
     let(:definition) do
-      [ :vpc, "AWS::EC2::VPC", { cidr_block: "10.30.0.0/16" } ]
+      [ :Vpc, "AWS::EC2::VPC", { CidrBlock: "10.30.0.0/16" } ]
     end
 
     it "produces template" do
@@ -18,7 +18,7 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Resource do
 
   context "medium form" do
     let(:definition) do
-      [ :vpc, { type: "AWS::EC2::VPC", properties: {cidr_block: "10.30.0.0/16"} } ]
+      [ :Vpc, { Type: "AWS::EC2::VPC", Properties: {CidrBlock: "10.30.0.0/16"} } ]
     end
 
     it "produces template" do
@@ -32,7 +32,7 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Resource do
 
   context "long form" do
     let(:definition) do
-      [ vpc: { type: "AWS::EC2::VPC", properties: {cidr_block: "10.30.0.0/16"} } ]
+      [ Vpc: { Type: "AWS::EC2::VPC", Properties: {CidrBlock: "10.30.0.0/16"} } ]
     end
 
     it "produces template" do
@@ -46,7 +46,7 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Resource do
 
   context "clean hashes" do
     let(:definition) do
-      [ :vpc, "AWS::EC2::VPC", { cidr_block: "10.30.0.0/16", fake_property: nil } ]
+      [ :Vpc, "AWS::EC2::VPC", { CidrBlock: "10.30.0.0/16", FakeProperty: nil } ]
     end
 
     it "produces template" do
@@ -61,7 +61,7 @@ describe Lono::Template::Strategy::Dsl::Builder::Section::Resource do
 
   context "clean hashes nested in arrays" do
     let(:definition) do
-      [ :vpc, "AWS::EC2::VPC", origins: [{ cidr_block: "10.30.0.0/16", fake_property: nil }]  ]
+      [ :Vpc, "AWS::EC2::VPC", Origins: [{ CidrBlock: "10.30.0.0/16", FakeProperty: nil }]  ]
     end
 
     it "produces template" do
