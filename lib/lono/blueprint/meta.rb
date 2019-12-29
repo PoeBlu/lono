@@ -14,7 +14,7 @@ class Lono::Blueprint
     memoize :config
 
     def auto_camelize?(target_section)
-      auto_camelize = config[:auto_camelize]
+      auto_camelize = config.auto_camelize
       # auto_camelize.nil? for backward compatibility
       return true if auto_camelize.nil? || auto_camelize == true
 

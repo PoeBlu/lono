@@ -24,20 +24,20 @@ module Lono::Blueprint::Configset
       table = Text::Table.new
       table.head = ["Name", "Path", "Type", "From"]
       puts "Final configsets being used for #{@blueprint} blueprint:"
-      @final.each do |c|
-        pretty_root = c[:root].sub("#{Lono.root}/",'')
-        table.rows << [c[:name], pretty_root, c[:source_type], c[:from]]
+      @final.each do |spec|
+        pretty_root = spec.root.sub("#{Lono.root}/",'')
+        table.rows << [spec.name, pretty_root, spec.source_type, spec.from]
       end
       puts table
     end
 
     def show(configsets, all, from)
       configsets.each do |c|
-        puts "    #{c[:name]}" if @options[:verbose]
-        config = all.find { |config| config[:name] == c[:name] }
-        next unless config
-        config[:from] = from
-        @final << config
+        puts "    #{c.name}" if @options[:verbose]
+        spec = all.find { |spec| spec.name == c.name }
+        next unless spec
+        spec.from = from
+        @final << spec
       end
       puts "" if @options[:verbose]
     end

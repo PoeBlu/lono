@@ -19,7 +19,7 @@ class Lono::Blueprint
 
     def find_blueprint_root(blueprint)
       config = Lono::Finder::Blueprint.find(blueprint) # blueprint_root
-      config[:root] if config
+      config.root if config
     end
   end
 end

@@ -14,7 +14,7 @@ module Lono::Finder
     # Returns root path of component: blueprint or configset
     def find(name, local_only: false)
       all = find_all(local_only: local_only)
-      all.find { |c| c[:name] == name }
+      all.find { |spec| spec.name == name }
     end
 
     def find_all(local_only: false)
@@ -58,13 +58,8 @@ module Lono::Finder
       components = []
       roots.each do |root|
         next unless detect?(root)
-        meta_path = dot_meta_path(root)
-        next unless File.exist?(meta_path)
-        config = load_yaml_file(meta_path)
-        config.symbolize_keys!
-        config[:root] = root
-        config[:source_type] = source_type
-        components << config
+        jadespec = Lono::Jadespec.new(root, source_type)
+        components << jadespec
       end
       components
     end
@@ -103,10 +98,10 @@ module Lono::Finder
       table.head = ["Name", "Path", "Type"]
 
       components = find_all
-      components.each do |config|
-        pretty_path = config[:root].sub("#{Lono.root}/", "")
-        unless options[:filter_materialized] && config[:source_type] == "materialized"
-          table.rows << [config[:name], pretty_path, config[:source_type]]
+      components.each do |jadespec|
+        pretty_path = jadespec.root.sub("#{Lono.root}/", "")
+        unless options[:filter_materialized] && jadespec.source_type == "materialized"
+          table.rows << [jadespec.name, pretty_path, jadespec.source_type]
         end
       end
 
@@ -153,7 +148,7 @@ module Lono::Finder
   public
     class << self
       def one_or_all(component)
-        components = new.find_all.map { |c| c[:name] }
+        components = new.find_all.map { |spec| spec.name }
         component ? [component] : components
       end
 

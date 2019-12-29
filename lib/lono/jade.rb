@@ -7,8 +7,10 @@ module Lono
     class_attribute :downloaded
     self.downloaded = []
 
+    delegate :template_type, :auto_camelize, :source_type, to: :jadespec
+
     attr_accessor :dependencies, :from, :depends_ons
-    attr_reader :name, :type, :state
+    attr_reader :name, :type, :state, :jadespec
     def initialize(name, type, state={})
       # type: one of blueprint, configset, blueprint/configset
       # state holds either original registry from configset definition or parent jade which can be used to get the original configset defintion
@@ -19,21 +21,11 @@ module Lono
       self.class.tracked << self
     end
 
-    # method_missing implmentation proved tricky to debug. Thinking its more productive to be explicitly.
-    %w[template_type auto_camelize source_type].each do |meth|
-      define_method(meth.to_sym) do
-        if @config.nil?
-          raise "Called '#{meth}' method but need to materialize the jade first!"
-        end
-        @config[meth.to_sym]
-      end
-    end
-
     # root is kind of special. root is needed for materialization but can accidentally get called too early
     # before materialization. So treat it specially with an error.
     def root
-      raise "ERROR: root is not available until jade has been materialized" unless @config
-      @config[:root]
+      raise "ERROR: root is not available until jade has been materialized" unless @jadespec
+      @jadespec.root
     end
 
     def resource_from_parent
@@ -53,21 +45,21 @@ module Lono
     end
 
     def materialize
-      @config = finder.find(@name)
-      download unless @config
+      @jadespec = finder.find(@name)
+      download unless @jadespec
       # Pretty tricky. Flush memoized finder(true) since download changes filesystem. Not memoizing at all is 2x slower
-      @config = finder(true).find(@name)
-      return nil unless @config
-      if @config[:source_type] == "materialized"
+      @jadespec = finder(true).find(@name)
+      return nil unless @jadespec
+      if @jadespec.source_type == "materialized"
         # possible "duplicated" jade instances with same name but will uniq in final materialized Gemfile
         self.class.downloaded << self
       end
       evaluate_meta_rb
-      @config
+      @jadespec
     end
     memoize :materialize
 
-    # Must return config to set @config in materialize
+    # Must return config to set @jadespec in materialize
     # Only allow download of Lono::Blueprint::Configset::Jade
     # Other configsets should be configured in project Gemfile.
     def download

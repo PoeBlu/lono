@@ -39,7 +39,7 @@ class Lono::Configset
         puts "finder_class #{finder_class}"
         raise "Unable to find configset #{@name.inspect}"
       end
-      config[:root]
+      config.root
     end
 
     # Allow overriding in subclasses
