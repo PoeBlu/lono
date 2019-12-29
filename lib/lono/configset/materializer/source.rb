@@ -12,12 +12,13 @@ module Lono::Configset::Materializer
     def options(jade)
       registry = jade.state
       if registry.options.key?(:path)
-        options = git_options(registry)
+        options = {}
         options[:path] = registry.options[:path]
         return(options)
       end
 
       if registry.options.key?(:git)
+        options = git_options(registry)
         options[:git] = registry.options[:git]
         return(options)
       end
