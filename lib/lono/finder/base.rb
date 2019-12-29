@@ -7,23 +7,26 @@ module Lono::Finder
 
     def initialize(options={})
       @options = options
-      @blueprint = options[:blueprint]
       @lono_root = options[:lono_root] || Lono.root
     end
 
     # Returns root path of component: blueprint or configset
     def find(name, local_only: false)
       all = find_all(local_only: local_only)
-      all.find { |spec| spec.name == name }
+      all.find { |jadespec| jadespec.name == name }
     end
 
     def find_all(local_only: false)
-      local = project + vendor + gems
       if local_only
         local
       else
         local + materialized
       end
+    end
+
+    # overridden in finder/blueprint/configset.rb
+    def local
+      project + vendor + gems
     end
 
     def project

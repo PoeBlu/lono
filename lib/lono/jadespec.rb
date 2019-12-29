@@ -4,6 +4,8 @@ module Lono
   class Jadespec
     extend Memoist
 
+    delegate :metadata, :name, to: :gemspec
+
     attr_accessor :from
     attr_reader :root, :source_type
     def initialize(root, source_type)
@@ -12,10 +14,6 @@ module Lono
 
     def exist?
       !!gemspec_file
-    end
-
-    def name
-      gemspec.name
     end
 
     def gemspec
@@ -33,10 +31,6 @@ module Lono
 
     def auto_camelize
       metadata[:auto_camelize] || false
-    end
-
-    def metadata
-      gemspec.metadata
     end
   end
 end

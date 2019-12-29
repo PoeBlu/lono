@@ -1,6 +1,5 @@
 class Lono::Finder::Blueprint
   class Configset < Lono::Finder::Configset
-    attr_accessor :gemfile_lock
     def initialize(options={})
       super
       @blueprint_root = options[:blueprint_root] || Lono.blueprint_root

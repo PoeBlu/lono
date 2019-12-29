@@ -6,14 +6,14 @@ describe Lono::Finder::Blueprint::Configset do
   context "blueprint local" do
     let(:blueprint_root) { "spec/fixtures/finder/blueprint-configset/blueprint_only" }
     it "find" do
-      root_path = configset.find("ssm")
+      root_path = configset.find("ssm").root
       expect(root_path).to include "blueprint_only/app/configsets/ssm"
       root_path = configset.find("non-existing")
       expect(root_path).to be nil
     end
 
-    it "find_local" do
-      root_path = configset.find_local("ssm")
+    it "find local only" do
+      root_path = configset.find("ssm", local_only: true).root
       expect(root_path).to include "blueprint_only/app/configsets/ssm"
     end
   end
@@ -21,12 +21,12 @@ describe Lono::Finder::Blueprint::Configset do
   context "vendor local" do
     let(:lono_root) { "spec/fixtures/finder/blueprint-configset/vendor_only" }
     it "find" do
-      root_path = configset.find("ssm")
+      root_path = configset.find("ssm").root
       expect(root_path).to include "vendor_only/vendor/configsets/ssm"
     end
 
-    it "find_local" do
-      root_path = configset.find_local("ssm")
+    it "find local only" do
+      root_path = configset.find("ssm", local_only: true).root
       expect(root_path).to include "vendor_only/vendor/configsets/ssm"
     end
   end
@@ -34,16 +34,16 @@ describe Lono::Finder::Blueprint::Configset do
   context "materialized local" do
     let(:lono_root) { "spec/fixtures/finder/blueprint-configset/materialized_only" }
     it "find" do
-      allow(configset).to receive(:gem_roots).and_return(["spec/fixtures/finder/blueprint-configset/materialized_only"])
+      allow(configset).to receive(:materialized_gem_roots).and_return(["spec/fixtures/finder/blueprint-configset/materialized_only"])
 
-      root_path = configset.find("ssm")
+      root_path = configset.find("ssm").root
       expect(root_path).to eq "spec/fixtures/finder/blueprint-configset/materialized_only"
     end
 
-    it "find_local" do
-      allow(configset).to receive(:gem_roots).and_return(["spec/fixtures/finder/blueprint-configset/materialized_only"])
+    it "find local only" do
+      allow(configset).to receive(:materialized_gem_roots).and_return(["spec/fixtures/finder/blueprint-configset/materialized_only"])
 
-      root_path = configset.find_local("ssm")
+      root_path = configset.find("ssm", local_only: true)
       expect(root_path).to be nil
     end
   end
@@ -52,7 +52,7 @@ describe Lono::Finder::Blueprint::Configset do
     let(:blueprint_root) { "spec/fixtures/finder/blueprint-configset/both" }
     let(:lono_root) { "spec/fixtures/finder/blueprint-configset/both" }
     it "find higher precedence blueprint local" do
-      root_path = configset.find("ssm")
+      root_path = configset.find("ssm").root
       expect(root_path).to include "both/app/configsets/ssm"
     end
   end
