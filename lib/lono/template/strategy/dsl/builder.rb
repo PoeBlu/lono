@@ -15,8 +15,8 @@ class Lono::Template::Strategy::Dsl
 
     def build
       load_context
-      prepare_configsets
       evaluate_template_path(@path) # modifies @cfn
+      prepare_configsets
       finalize
       to_yaml
       write_output

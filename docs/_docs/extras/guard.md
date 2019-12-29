@@ -1,7 +1,7 @@
 ---
 title: Guard
 categories: extras
-nav_order: 67
+nav_order: 73
 ---
 
 You can generate the CloudFormation templates by running:

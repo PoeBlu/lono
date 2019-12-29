@@ -23,7 +23,6 @@ class Lono::Configset
     end
 
     def resolve_dependencies
-      puts "Resolving dependencies..."
       jades = Lono::Jade.tracked  # at this point only top-level
       @resolver.resolve(jades)
     end

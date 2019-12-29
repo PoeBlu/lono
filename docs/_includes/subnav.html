@@ -69,6 +69,14 @@
               {% endfor %}
             </ul>
         </li>
+        <li><a href="{% link _docs/dsl-extras.md %}">DSL Extras</a>
+            <ul>
+              {% assign docs = site.docs | where: "categories","dsl-extras" %}
+              {% for doc in docs -%}
+                <li><a href='{{doc.url}}'>{{doc.title}}</a></li>
+              {% endfor %}
+            </ul>
+        </li>
         <li><a href="{% link _docs/intrinsic-functions.md %}">Intrinsic Functions</a>
             <ul>
               {% assign docs = site.docs | where: "categories","intrinsic-function"" | sort: "order" %}

@@ -1,6 +1,6 @@
 ---
 title: Blueprint Lookup Locations
-nav_order: 57
+nav_order: 63
 ---
 
 Blueprints encapsulation CloudFormation templates in a convenient and reusable way.  Blueprints are searched for in a few locations:

@@ -1,7 +1,7 @@
 ---
 title: FindInMap
 categories: intrinsic-function
-nav_order: 46
+nav_order: 52
 ---
 
 The `find_in_map` method is the CloudFormation [Fn::FindInMap](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-findinmap.html) equivalent.

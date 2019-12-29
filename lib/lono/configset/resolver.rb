@@ -4,9 +4,13 @@ class Lono::Configset
 
     @@dependencies = [] # save to later regsiter configsets
 
+    @@resolving_message_shown = false
     def resolve(*unresolved)
       unresolved.flatten! # initially only top-level
+      puts "Resolving dependencies..." if !@@resolving_message_shown && !unresolved.empty?
       puts "Resolving #{unresolved.map(&:name)}" if ENV['LONO_DEBUG_CONFIGSET']
+      @@resolving_message_shown = true
+
       unresolved.each do |jade|
         jade.materialize
         jade.dependencies.each do |j|
