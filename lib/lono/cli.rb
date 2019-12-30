@@ -17,7 +17,8 @@ module Lono
 
     desc "configsets [BLUEPRINT]", "Lists configsets"
     long_desc Help.text(:configsets)
-    option :stack, desc: "stack name. defaults to blueprint name."
+    options.stack
+    options.source
     def configsets(blueprint=nil)
       Configset::List.new(options.merge(blueprint: blueprint)).run
     end
@@ -26,7 +27,7 @@ module Lono
     long_desc Help.text(:generate)
     option :clean, type: :boolean, default: false, desc: "remove all output files before generating"
     option :quiet, type: :boolean, desc: "silence the output"
-    option :stack, desc: "stack name. defaults to blueprint name."
+    options.stack
     options.source
     def generate(blueprint=nil)
       Finder::Blueprint.one_or_all(blueprint).each do |b|

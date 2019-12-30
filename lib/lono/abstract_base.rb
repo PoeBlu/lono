@@ -16,5 +16,9 @@ module Lono
       set_blueprint_root(@blueprint)
       Lono::ProjectChecker.empty_templates
     end
+
+    def template_path
+      "#{Lono.config.output_path}/#{@blueprint}/templates/#{@template}.yml"
+    end
   end
 end

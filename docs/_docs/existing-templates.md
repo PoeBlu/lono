@@ -117,7 +117,13 @@ Note, deploying without `--sure` will prompt you with the preview to spare you f
 
 Using existing templates with the `--source` option gives you access to all sorts of lono features. One interesting feature are [configsets]({% link _docs/configsets.md %}).  Configsets are essentially configuration management. It allows you to configure your EC2 instances automatically.  You can do all sorts of customizations. Some examples of things configsets can do: install packages, create files, run commands, ensure services are running.
 
-Let's add the httpd configset.  Create a [configs file]({% link _docs/configsets/project.md %}) with the following code:
+Let's add the httpd configset. Add the httpd gem to your Gemfile to make the configset available.
+
+```ruby
+gem "httpd"
+```
+
+Create a [configs file]({% link _docs/configsets/project.md %}) with the following code to use the configset with the demo blueprint:
 
 configs/demo/configsets/base.rb:
 
@@ -125,7 +131,7 @@ configs/demo/configsets/base.rb:
 configset("httpd", resource: "Instance")
 ```
 
-With that one line of configuration alone, you will install, configure, and run the httpd apache web server. Deploy when you are ready.
+With that one line of configuration alone, you will install, configure, and run the httpd or apache2 web server. Deploy when you are ready.
 
     lono cfn deploy demo --source $URL
 
@@ -135,7 +141,7 @@ You will see that lono adds the configset to the CloudFormation template for you
 
 We went through a few lono commands with an existing template. If you have existing templates that you would like to use, the `--source` option provides an excellent way to get started.
 
-We have just hardly scratched the surface of lono's power. There are many more lono features that make working with CloudFormation easier.
+We have hardly scratched the surface of lono. There are many more lono features that make working with CloudFormation easier.
 
 * [The Lono DSL]({% link _docs/dsl.md %}) - Generate templates from beautiful code.
 * [Variables]({% link _docs/configs/shared-variables.md %}) - Allows you to construct templates at compile-time where runtime Parameters do not suffice.

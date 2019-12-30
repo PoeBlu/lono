@@ -16,6 +16,12 @@ class Lono::CLI
       end
     end
 
+    def stack
+      with_cli_scope do
+        option :stack, desc: "stack name. defaults to blueprint name."
+      end
+    end
+
   private
     def with_cli_scope(&block)
       @cli.instance_eval(&block)
