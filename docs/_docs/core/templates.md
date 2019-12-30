@@ -16,7 +16,7 @@ The starter `demo.rb` template looks something like this:
 
 {% include demo_template_ruby.md %}
 
-The template gets translated to YAML as part of `lono cfn deploy` or `lono generate`.  Here's the example output:
+The template gets translated to YAML as part of [lono cfn deploy](/reference/lono-cfn-deploy/) or [lono generate](/reference/lono-generate/).  Here's the example output:
 
 {% include demo_template_output.md %}
 

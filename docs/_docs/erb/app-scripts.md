@@ -40,7 +40,7 @@ base:
 
 ## lono user_data command
 
-Typically, the `app/user_data` scripts are embedded in your CloudFormation templates with the `user_data` helper method.  You can see the generated script with `lono generate` and looking at the template in the `output/templates` folder.
+Typically, the `app/user_data` scripts are embedded in your CloudFormation templates with the `user_data` helper method.  You can see the generated script with [lono generate](/reference/lono-generate/) and looking at the template in the `output/templates` folder.
 
 The `lono user_data` command is also provided so you can see the code that `extract_script` helper produces.
 
