@@ -16,7 +16,7 @@ ERB Template Generator | ![](/img/features/yes.svg) | ![](/img/features/yes.svg)
 DSL Generator | ![](/img/features/yes.svg) | ![](/img/features/yes.svg)
 Reusable Blueprints Structure | ![](/img/features/yes.svg) | ![](/img/features/yes.svg)
 Import and Convert commands | ![](/img/features/no.svg) | ![](/img/features/yes.svg)
-BoltOps Pro related commands | ![](/img/features/no.svg) | ![](/img/features/yes.svg)
+[BoltOps Pro](https://www.boltops.com/pro) related commands | ![](/img/features/no.svg) | ![](/img/features/yes.svg)
 
 ## Lono Pro Addon: Code Import and Convert Commands
 
