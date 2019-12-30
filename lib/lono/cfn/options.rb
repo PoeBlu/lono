@@ -12,7 +12,7 @@ class Lono::Cfn
     end
 
     def deploy
-      update # not update_options intentionally
+      update
     end
 
     def delete

@@ -38,7 +38,15 @@ module Lono::Inspector
 
     def parameter_line(name)
       data = parameters[name]
-      "#{name} (#{data["Type"]})"
+      example = description_example(data["Description"])
+      if data["Default"].nil?
+        line = "#{name}=#{example} # (required)"
+      else
+        default = data["Default"]
+        line = "# #{name}=#{default}"
+        line = "#{line} # #{example}" if example
+      end
+      line
     end
 
     def description_example(description)
