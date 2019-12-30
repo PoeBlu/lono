@@ -3,7 +3,7 @@ title: Walkthrough
 nav_order: 3
 ---
 
-Here's a brief walkthrough of how lono works.
+Here's a thorough walkthrough of how lono works than the [Quick Start]({% link quick-start.md %}).
 
 1. You define blueprints that include templates written in a [DSL]({% link _docs/dsl.md %})
 2. You generate the templates and verify that they look good

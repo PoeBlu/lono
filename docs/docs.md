@@ -17,7 +17,7 @@ Here is a diagram that describes how lono works.
 ## Lono Features
 
 * Ability to [Existing CloudFormation Templates]({% link _docs/existing-templates.md %}).
-* [Lono DSL]({% link _docs/dsl.md %}) to generate your templates.
+* [The Lono DSL]({% link _docs/dsl.md %}) - Generate templates from beautiful code.
 * Write your CloudFormation parameters with [simple env-like values]({% link _docs/configs/params.md %}).
 * Preview CloudFormation changes before pressing the big red button.
 * [Layering]({% link _docs/core/layering.md %}) - Allows you to build multiple environments like development and production.

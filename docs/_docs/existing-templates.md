@@ -137,9 +137,9 @@ We went through a few lono commands with an existing template. If you have exist
 
 We have just hardly scratched the surface of lono's power. There are many more lono features that make working with CloudFormation easier.
 
-* [The Lono DSL]({% link _docs/dsl.md %}).
-* [Variables]({% link _docs/configs/shared-variables.md %}) - allow you to construct templates at compile-time where runtime Parameters do not suffice.
-* [Layering]({% link _docs/core/layering.md %})  - allows you to build multiple environments like development and production.
-* [Helpers support]({% link _docs/core/helpers.md %}) - allow you to extend Lono and simplify code further.
+* [The Lono DSL]({% link _docs/dsl.md %}) - Generate templates from beautiful code.
+* [Variables]({% link _docs/configs/shared-variables.md %}) - Allows you to construct templates at compile-time where runtime Parameters do not suffice.
+* [Layering]({% link _docs/core/layering.md %}) - Allows you to build multiple environments like development and production.
+* [Helpers support]({% link _docs/core/helpers.md %}) - Allow you to extend Lono and simplify code further.
 
 {% include prev_next.md %}
