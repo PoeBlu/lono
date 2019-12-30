@@ -28,7 +28,7 @@ The [lono code convert](https://lono.cloud/reference/lono-code-convert/) and [lo
 
 BoltOps Pro blueprints are reusable CloudFormation templates built and managed by BoltOps.  They are configurable to fit your needs. They are also documented and tested in a daily build process. Essentially, they save you time.
 
-A list of the blueprints is available at: [boltopspro-docs](https://github.com/boltopspro-docs).  Access to the [boltops private repos](https://github.com/boltopspro) is only avaiable to [BoltOps Pro subscribers](https://www.boltops.com/pro).
+A list of the blueprints is available at: [boltopspro-docs](https://github.com/boltopspro-docs).  Access to the [boltops private repos](https://github.com/boltopspro) is only available to [BoltOps Pro subscribers](https://www.boltops.com/pro).
 
 ## Docs
 
