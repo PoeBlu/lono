@@ -1,12 +1,17 @@
-class Lono::Template::Strategy::Dsl::Finalizer
-  class Configset
-    extend Memoist
-
-    def initialize(cfn, options={})
-      @cfn, @options = cfn, options
+class Lono::Template
+  class ConfigsetInjector < Lono::AbstractBase
+    def initialize(options={})
+      super
+      @cfn = load_template
     end
 
     def run
+      @cfn = inject
+      IO.write(template_path, YAML.dump(@cfn))
+    end
+
+    def inject
+      puts "metadata_map #{metadata_map}"
       metadata_map.each do |logical_id, metadata_configset|
         resource = @cfn["Resources"][logical_id]
 
@@ -29,5 +34,13 @@ class Lono::Template::Strategy::Dsl::Finalizer
       combiner.metadata_map
     end
     memoize :metadata_map
+
+    def load_template
+      YAML.load_file(template_path)
+    end
+
+    def template_path
+      "#{Lono.config.output_path}/#{@blueprint}/templates/#{@template}.yml"
+    end
   end
 end

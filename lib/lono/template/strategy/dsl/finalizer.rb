@@ -6,7 +6,6 @@ class Lono::Template::Strategy::Dsl
 
     def run
       @cfn = ParameterGroups.new(@cfn, @options[:parameters]).run
-      @cfn = Configset.new(@cfn, @options).run
       @cfn
     end
   end
