@@ -15,10 +15,11 @@ module Lono
       Finder::Blueprint.list
     end
 
-    desc "configsets", "Lists configsets"
+    desc "configsets [BLUEPRINT]", "Lists configsets"
     long_desc Help.text(:configsets)
-    def configsets
-      Finder::Configset.list(filter_materialized: true)
+    option :stack, desc: "stack name. defaults to blueprint name."
+    def configsets(blueprint=nil)
+      Configset::List.new(options.merge(blueprint: blueprint)).run
     end
 
     desc "generate", "Generate both CloudFormation templates and parameters files."

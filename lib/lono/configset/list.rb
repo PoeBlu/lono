@@ -1,8 +1,25 @@
 require "text-table"
 
-module Lono::Blueprint::Configset
-  class List < Lono::AbstractBase
+class Lono::Configset
+  class List
+    def initialize(options={})
+      @options = options
+      @stack, @blueprint, @template, @param = Lono::Conventions.new(options).values
+    end
+
     def run
+      if @blueprint
+        blueprint_configsets
+      else
+        project_configsets
+      end
+    end
+
+    def project_configsets
+      Lono::Finder::Configset.list(filter_materialized: true, message: "Project configsets:")
+    end
+
+    def blueprint_configsets
       Lono::Template::Generator.new(@options.merge(mute: true)).run
 
       @final ||= []
@@ -23,18 +40,23 @@ module Lono::Blueprint::Configset
 
       table = Text::Table.new
       table.head = ["Name", "Path", "Type", "From"]
-      puts "Final configsets being used for #{@blueprint} blueprint:"
       @final.each do |spec|
         pretty_root = spec.root.sub("#{Lono.root}/",'')
         table.rows << [spec.name, pretty_root, spec.source_type, spec.from]
       end
-      puts table
+
+      if table.rows.empty?
+        puts "No configsets being used."
+      else
+        puts "Configsets used in #{@blueprint.color(:green)} blueprint:"
+        puts table
+      end
     end
 
     def show(configsets, all, from)
       configsets.each do |c|
         puts "    #{c.name}" if @options[:verbose]
-        spec = all.find { |spec| spec.name == c.name }
+        spec = all.find { |jadespec| jadespec.name == c.name }
         next unless spec
         spec.from = from
         @final << spec

@@ -11,7 +11,6 @@ class Lono::Template
     end
 
     def inject
-      puts "metadata_map #{metadata_map}"
       metadata_map.each do |logical_id, metadata_configset|
         resource = @cfn["Resources"][logical_id]
 

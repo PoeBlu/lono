@@ -5,9 +5,8 @@ module Lono::Finder
   class Base
     extend Memoist
 
-    def initialize(options={})
-      @options = options
-      @lono_root = options[:lono_root] || Lono.root
+    def initialize(lono_root: nil)
+      @lono_root = lono_root || Lono.root
     end
 
     # Returns root path of component: blueprint or configset
@@ -73,6 +72,7 @@ module Lono::Finder
       Dir.glob(expr).size > 0
     end
 
+    # Used for blueprints, configsets, and blueprint/configsets
     def list(options={})
       table = Text::Table.new
       table.head = ["Name", "Path", "Type"]

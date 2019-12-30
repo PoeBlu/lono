@@ -1,7 +1,6 @@
 module Lono
   class ConfigLocation < AbstractBase
     extend Memoist
-    include Lono::Conventions
 
     def initialize(config, options={}, env=Lono.env, root=Lono.root)
       super(options)

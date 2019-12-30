@@ -2,7 +2,6 @@ module Lono
   class AbstractBase
     extend Memoist
     include Lono::Blueprint::Root
-    include Lono::Conventions
 
     def initialize(options={})
       reinitialize(options)
@@ -12,7 +11,7 @@ module Lono
     def reinitialize(options)
       @options = options
       Lono::ProjectChecker.check
-      @stack, @blueprint, @template, @param = naming_conventions(options)
+      @stack, @blueprint, @template, @param = Conventions.new(options).values
       return if options[:source]
       set_blueprint_root(@blueprint)
       Lono::ProjectChecker.empty_templates
