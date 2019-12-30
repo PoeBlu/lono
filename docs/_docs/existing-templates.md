@@ -117,10 +117,10 @@ Note, deploying without `--sure` will prompt you with the preview to spare you f
 
 Using existing templates with the `--source` option gives you access to all sorts of lono features. One interesting feature are [configsets]({% link _docs/configsets.md %}).  Configsets are essentially configuration management. It allows you to configure your EC2 instances automatically.  You can do all sorts of customizations. Some examples of things configsets can do: install packages, create files, run commands, ensure services are running.
 
-Let's add the httpd configset. Add the httpd gem to your Gemfile to make the configset available.
+Let's add the httpd configset. Add the `httpd` gem to your Gemfile to make the configset available.
 
 ```ruby
-gem "httpd"
+gem "httpd", git: "https://github.com/boltopspro/httpd"
 ```
 
 Create a [configs file]({% link _docs/configsets/project.md %}) with the following code to use the configset with the demo blueprint:

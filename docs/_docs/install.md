@@ -21,7 +21,7 @@ gem "lono"
 
 ## Lono Pro Addon
 
-The lono-pro addon gem provides extra commands like `lono code convert`, which converts YAML or JSON CloudFormation templates to Ruby code.  The lono-pro addon is currently free for a limited of time. For more details: [Lono Community Edition vs Pro]({% link _docs/ce-vs-pro.md %}).
+The lono-pro addon gem provides extra commands like `lono code convert`, which converts YAML or JSON CloudFormation templates to Ruby code.
 
 Add the gem to your Gemfile.
 
