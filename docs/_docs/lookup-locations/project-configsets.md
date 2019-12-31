@@ -36,6 +36,6 @@ The [lono configsets]({% link _reference/lono-configsets.md %}) command provides
     +---------+--------------------------------------------------------------------------------------------+---------+
     $
 
-{% include configsets/materialized.md %}
+{% include configsets/materialized.md header=true %}
 
 {% include prev_next.md %}

@@ -2,7 +2,7 @@
 title: 'Debugging Tips: cfn-init and configsets'
 nav_text: Debugging Tips
 categories: configsets
-order: 6
+order: 4
 nav_order: 26
 ---
 

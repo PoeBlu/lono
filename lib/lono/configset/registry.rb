@@ -17,5 +17,16 @@ class Lono::Configset
     def resource=(v)
       @options[:resource] = v
     end
+
+    def gem_options
+      options = @options.dup
+      options.delete(:resource)
+      options.delete(:vars)
+      options
+    end
+
+    def vars
+      options[:vars] || {}
+    end
   end
 end

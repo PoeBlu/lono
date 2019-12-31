@@ -64,12 +64,12 @@ EOL
 
 ## Inline configset variables
 
-You can also override the configset variables inline, when you configure the configset.  Example:
+You can also override the configset variables inline, when you configure the configset by setting the `vars` key.  Example:
 
 configs/ec2/configsets/base.rb:
 
 ```ruby
-configset("httpd", resource: "Instance", html: "<h2>html custom content</h2>", var1: "foo", var2: "bar")
+configset("httpd", resource: "Instance", vars: {html: "<h2>html custom content</h2>", var1: "foo", var2: "bar"})
 ```
 
 This makes `@var1`, `@var2`, and `@html` instance variables available in the `configset.yml` definition.

@@ -1,5 +1,5 @@
+{% if include.header %}
 ## Materialized Configsets
+{% endif %}
 
-Usually, you specify a configset in Gemfile. Then you use `bundle` to install the configset gem locally.
-
-Sometimes configsets are not specified by you though. Instead they are inferred by a blueprint or dependency of another configset.  These types of configsets are automatically downloaded. These are known as "materialized" configsets.
+Usually, you add a configset to your Gemfile to make it available for use. Sometimes configsets are not specified by you though. Instead they are inferred by a blueprint or dependency of another configset.  These types of configsets are automatically downloaded. These are known as "materialized" configsets.

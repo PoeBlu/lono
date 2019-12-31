@@ -50,7 +50,7 @@ class Lono::Configset
     def copy_instance_variables
       load_blueprint_predefined_variables
       load_project_predefined_variables
-      copy_registry_variables
+      load_inline_project_variables
     end
 
     def load_blueprint_predefined_variables
@@ -80,8 +80,8 @@ class Lono::Configset
     #
     # So these @registry varibles are copied over to instance variables.
     #
-    def copy_registry_variables
-      @registry.options.each do |k,v|
+    def load_inline_project_variables
+      @registry.vars.each do |k,v|
         instance_variable_set("@#{k}", v)
       end
     end

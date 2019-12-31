@@ -33,6 +33,6 @@ The [lono configsets BLUEPRINT]({% link _reference/lono-configsets.md %}) comman
     +-------+----------------------+---------+---------+
     $
 
-{% include configsets/materialized.md %}
+{% include configsets/materialized.md header=true %}
 
 {% include prev_next.md %}

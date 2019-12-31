@@ -20,33 +20,24 @@ module Lono::Configset::Materializer
 
     def options(jade)
       registry = jade.state
-      if registry.options.key?(:path)
-        options = {}
-        options[:path] = registry.options[:path]
+      options = registry.gem_options
+      # Direct source provided as part of configset call
+      #
+      #    configset("ssm", git: "https://github.com/owner/ssm")
+      #    configset("ssm", path: "/path/to/ssm")
+      #    configset("ssm", source: "https://rubygems.org")
+      #
+      if options.key?(:git) || options.key?(:path) || options.key?(:source)
         return(options)
       end
 
-      if registry.options.key?(:git)
-        options = git_options(registry)
-        options[:git] = registry.options[:git]
-        return(options)
-      end
-
-      if location.include?("git@") || location.include?("https")
-        options = git_options(registry) # merge original git related options from configset
-        {git: "#{location}/#{jade.name}"}.merge(options)
+      # Otherwise use the sources location settings, which does not include the repo name
+      materalized_options = if location.include?("git@") || location.include?("https")
+        {git: "#{location}/#{jade.name}"}
       else
         {path: "#{location}/#{jade.name}"}
       end
-    end
-
-    def git_options(registry)
-      o = {}
-      o[:branch] = registry.options[:branch]
-      o[:ref] = registry.options[:ref]
-      o[:tag] = registry.options[:tag]
-      o.delete_if { |k, v| v.nil? }
-      o
+      materalized_options.merge(options)
     end
 
     def location

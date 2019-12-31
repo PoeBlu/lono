@@ -1,0 +1,47 @@
+---
+title: Materialized Gem Sources
+nav_text: Materialized Sources
+categories: configsets
+order: 6
+nav_order: 26
+---
+
+{% include configsets/materialized.md header=false %}
+
+## Setting Materialized Source
+
+The source for materialized configsets can be control in a few ways.  Here they are in the order of highest to lowest precedence.
+
+1. configset option
+2. Environment Variable
+3. configs/settings.yml
+
+## configset option
+
+```ruby
+configset("cfn-hup", resource: "Instance", source: "git@github.com:boltopspro/cfn-hup")
+```
+
+## Environment
+
+Setting the `LONO_MATERIALIZED_GEMS_SOURCE` env variable will set the source. Example:
+
+    export LONO_MATERIALIZED_GEMS_SOURCE=git@github.com:boltopspro
+
+## configs/settings.yml
+
+Setting the `materialized_gems.source` settings will set the source. Example:
+
+```yaml
+base:
+  materialized_gems:
+    source: git@github.com:boltopspro
+```
+
+## Materialized source supports GitHub orgs
+
+Notice with the "configset option" technique, you specify the full source with the repo name.  With the Environment and configs/settings.yml technique, you do not specify the repo name.
+
+Materialized sources are not typical Gemfile gem sources. They support specifying the github organization or owner. And the repo name is inferred from the configset name.
+
+{% include prev_next.md %}
