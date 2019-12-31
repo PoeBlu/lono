@@ -100,7 +100,6 @@ module Lono
     desc "version", "Prints version"
     def version
       puts "Lono: #{VERSION}"
-      puts "Lono Pro Addon: #{Lono.pro_version}"
     end
 
     desc "blueprint SUBCOMMAND", "blueprint subcommands"
@@ -110,6 +109,10 @@ module Lono
     desc "cfn SUBCOMMAND", "cfn subcommands"
     long_desc Help.text(:cfn)
     subcommand "cfn", Cfn
+
+    desc "code SUBCOMMAND", "code subcommands"
+    long_desc Help.text(:code)
+    subcommand "code", Code
 
     desc "configset SUBCOMMAND", "configset subcommands"
     long_desc Help.text(:configset)

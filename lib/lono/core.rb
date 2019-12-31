@@ -50,11 +50,6 @@ module Lono
     end
     memoize :settings
 
-    def pro_version
-      installed = Gem::Specification.detect { |spec| spec.name == 'lono-pro' }
-      installed ? Lono::Pro::VERSION : "not installed"
-    end
-
   private
     def env_from_profile(aws_profile)
       return unless settings
