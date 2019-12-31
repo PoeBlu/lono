@@ -1,6 +1,6 @@
 module Lono
-  # Hodgepodge of .meta/config.yml and extra decorated methods like root and dependencies.
   class Jade
+    include Circular
     extend Memoist
     class_attribute :tracked
     self.tracked = []
@@ -32,20 +32,20 @@ module Lono
       @jadespec.root
     end
 
+    def dependencies
+      @depends_ons.map do |registry|
+        Lono::Jade.new(registry.depends_on, registry.parent.type, registry)
+      end
+    end
+
     def resource_from_parent
-      parent = registry.parent
+      parent = registry.parent # using local variable intentionally
       resource = nil
-      while parent
+      while parent # go all the way to the highest parent
         resource = parent.registry.resource
         parent = parent.registry.parent
       end
       resource
-    end
-
-    def dependencies
-      @depends_ons.map do |registry|
-        self.class.new(registry.depends_on, registry.parent.type, registry)
-      end
     end
 
     def materialize
