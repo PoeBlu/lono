@@ -4,7 +4,7 @@ module Lono
   class Jadespec
     extend Memoist
 
-    delegate :metadata, :name, to: :gemspec
+    delegate :name, to: :gemspec
 
     attr_accessor :from
     attr_reader :root, :source_type
@@ -32,5 +32,10 @@ module Lono
     def auto_camelize
       metadata[:auto_camelize] || false
     end
+
+    def metadata
+      gemspec.metadata.deep_symbolize_keys
+    end
+    memoize :metadata
   end
 end
