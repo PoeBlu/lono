@@ -51,7 +51,11 @@ module Lono::Configset::Register
       errors = []
       self.class.validations.each do |registry|
         config = finder_class.find(registry.name) # finder_class implemented in subclass
-        errors << registry unless config
+        errors << [:finder_missing, registry] unless config
+
+        if registry.depends_on.nil? && registry.resource.nil?
+          errors << [:resource_missing, registry]
+        end
       end
 
       return if errors.empty? # all good
@@ -59,10 +63,17 @@ module Lono::Configset::Register
     end
 
     def show_errors_and_exit!(errors)
-      errors.each do |registry|
+      errors.each do |error_type, registry|
         name, caller_line = registry.name, registry.caller_line
-        puts "ERROR: Configset with name #{name} not found. Please double check Gemfile and configs/#{@blueprint}/configsets files.".color(:red)
-        pretty_trace(caller_line)
+        case error_type
+        when :finder_missing
+          puts "ERROR: Configset with name #{name} not found. Please double check Gemfile and configs/#{@blueprint}/configsets files.".color(:red)
+          pretty_trace(caller_line)
+        when :resource_missing
+          puts "ERROR: Configset with name #{name} does not specify resource. The resource key is required.".color(:red)
+          pretty_trace(caller_line)
+          raise
+        end
       end
       exit 1
     end
