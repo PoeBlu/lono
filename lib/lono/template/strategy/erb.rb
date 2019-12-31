@@ -10,8 +10,11 @@ module Lono::Template::Strategy
     end
 
     def run(options={})
+      puts "Erb#run 1"
       evaluate_templates
+      puts "Erb#run 2"
       build_templates
+      puts "Erb#run 3"
       write_output
     end
 

@@ -54,7 +54,9 @@ module Lono
     end
 
     def generate_templates
+      puts "generate_templates 1"
       Lono::Template::Generator.new(@options).run
+      puts "generate_templates 2"
     end
 
     def post_process_template

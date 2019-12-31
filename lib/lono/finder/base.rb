@@ -127,11 +127,6 @@ module Lono::Finder
 
   public
     class << self
-      def one_or_all(component)
-        components = new.find_all.map { |spec| spec.name }
-        component ? [component] : components
-      end
-
       def find(name)
         new.find(name)
       end

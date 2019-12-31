@@ -3,13 +3,11 @@ module Lono
     class_option :quiet, type: :boolean, desc: "silence the output"
     class_option :noop, type: :boolean, desc: "noop mode, do nothing destructive"
 
-    desc "generate", "Generate the CloudFormation templates"
+    desc "generate BLUEPRINT", "Generate the CloudFormation templates"
     long_desc Lono::Help.text("template/generate")
     option :clean, type: :boolean, desc: "remove all output files before generating"
-    def generate(blueprint=nil)
-      Finder::Blueprint.one_or_all(blueprint).each do |b|
-        Generator.new(options.merge(blueprint: b)).run
-      end
+    def generate(blueprint)
+      Generator.new(options.merge(blueprint: blueprint)).run
     end
 
     desc "upload", "Uploads templates to configured s3 folder"

@@ -10,7 +10,7 @@ class Lono::Blueprint
       else
         puts <<~EOL.color(:red)
           ERROR: Unable to find the blueprint #{blueprint}.
-          Are you sure its in your Gemfile or in the blueprints folder with the correct blueprint name in .meta/config.yml?
+          Are you sure its in your Gemfile or in the blueprints folder with the correct name?
         EOL
         Lono::Finder::Blueprint.list
         ENV['LONO_TEST'] ? raise("Unable to find blueprint") : exit(1)

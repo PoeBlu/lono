@@ -23,20 +23,18 @@ module Lono
       Configset::List.new(options.merge(blueprint: blueprint)).run
     end
 
-    desc "generate", "Generate both CloudFormation templates and parameters files."
+    desc "generate BLUEPRINT", "Generate both CloudFormation templates and parameters files."
     long_desc Help.text(:generate)
     option :quiet, type: :boolean, desc: "silence the output"
     options.clean
     options.source
     options.stack
     options.template
-    def generate(blueprint=nil)
-      Finder::Blueprint.one_or_all(blueprint).each do |b|
-        o = options.merge(blueprint: b)
-        Script::Build.new(o).run
-        Template::Generator.new(o).run
-        Param::Generator.new(o).generate
-      end
+    def generate(blueprint)
+      o = options.merge(blueprint: blueprint)
+      Script::Build.new(o).run
+      Template::Generator.new(o).run
+      Param::Generator.new(o).generate
     end
 
     desc "user_data NAME", "Generates user_data script for debugging."
