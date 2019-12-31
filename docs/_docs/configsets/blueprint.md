@@ -4,7 +4,7 @@ nav_text: Blueprint
 nav_order: 24
 ---
 
-Blueprint configsets are configsets added by blueprints. This allows blueprint to prepackaged configsets, so you don't have to as part of your project's configsets.
+Blueprint configsets are added by blueprints. This allows blueprint to prepackaged configsets, so you don't have to worry about adding them to your project `configs/BLUEPRINT/configsets` files.
 
 ## Example
 
@@ -20,20 +20,20 @@ This means the ec2 blueprint will use the httpd configset to install and run the
 
 ## List Blueprint Configsets
 
-Use the [lono blueprint configsets](/reference/lono-blueprint-configsets/) command to see what configsets the blueprint is configured with.  The command is useful to help see the configsets path resolutions.
+Use the [lono configsets BLUEPRINT](/reference/lono-configsets/) command to see what configsets the blueprint will use.
 
-    $ lono blueprint configsets ec2
-    Final configsets being used for ec2 blueprint:
-    +-------+----------------------+---------+-----------+
-    | Name  |         Path         |  Type   |   From    |
-    +-------+----------------------+---------+-----------+
-    | httpd | app/configsets/httpd | project | blueprint |
-    +-------+----------------------+---------+-----------+
+    $ lono configsets ec2
+    Configsets used for ec2 blueprint:
+    +-------+----------------------+---------+---------+
+    | Name  |         Path         |  Type   |  From   |
+    +-------+----------------------+---------+---------+
+    | httpd | app/configsets/httpd | project | project |
+    +-------+----------------------+---------+---------+
     $
 
 ## Blueprint Configset Lookup Precedence
 
-The blueprint configset definitions themselves can be in different locations. The search order for these locations are:
+The blueprint configset code can be in different locations. It's similar to how `LOAD_PATH` works. The search order for these locations are:
 
 1. BLUEPRINT/app/configsets - prepackaged with the blueprint
 2. PROJECT/vendor/configsets - vendorized configset, provides you control over the configset

@@ -20,7 +20,7 @@ class Lono::Configset
     end
 
     def blueprint_configsets
-      Lono::Template::Generator.new(@options.merge(mute: true)).run
+      Lono::Configset::Preparer.new(@options).run # register and materialize gems
 
       @final ||= []
 
@@ -48,7 +48,7 @@ class Lono::Configset
       if table.rows.empty?
         puts "No configsets being used."
       else
-        puts "Configsets used in #{@blueprint.color(:green)} blueprint:"
+        puts "Configsets used for #{@blueprint.color(:green)} blueprint:"
         puts table
       end
     end

@@ -3,7 +3,7 @@
 When the `lono configsets` command is passed the blueprint will list the configsets for the blueprint.
 
     $ lono configsets ec2
-    Configsets used in ec2 blueprint:
+    Configsets used for ec2 blueprint:
     +-------+----------------------+---------+---------+
     | Name  |         Path         |  Type   |  From   |
     +-------+----------------------+---------+---------+

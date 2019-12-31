@@ -6,19 +6,7 @@ order: 3
 nav_order: 25
 ---
 
-When you use the `configset` method to add a configset to your blueprint, you can pass it variables.  Example:
-
-configs/ec2/configsets/base.rb:
-
-```ruby
-configset("httpd", resource: "Instance", var1: "foo", var2: "bar", html: "<h2>html content</h2>")
-```
-
-This makes `var1`, `var2`, and `html` available as instance variables in the `configset.yml` definition.
-
-## Configset ERB
-
-The `configset.yml` is processed as ERB before being loaded into the CloudFormation template.  You can ERB to refer to the variables:
+The `configset.yml` is processed as ERB before being loaded into the CloudFormation template.  This allows you to use ERB to refer to variables:
 
 Example:
 
@@ -39,11 +27,11 @@ AWS::CloudFormation::Init:
         ensureRunning: 'true'
 ```
 
-Since `configset.yml` is YAML, the `indent` method is ueful to help align the text correctly.
+The variable here is `@html`. Note, we're also using the `indent` method to align the YAML content.  We'll cover how to set variables next.
 
 ## Configset Predefined Variables
 
-Configsets can have predefined variables in their `lib/variables.rb` file.  Example:
+Normally, configsets set predefined variables in their `lib/variables.rb` file.  Example:
 
 app/configsets/httpd/lib/variables.rb:
 
@@ -54,26 +42,16 @@ app/configsets/httpd/lib/variables.rb:
 EOL
 ```
 
-## Overriding Configset Variables with configset options
-
-You can override the predefined configset variables when you configure the configset.  Example:
-
-configs/ec2/configsets/base.rb:
-
-```ruby
-configset("httpd", resource: "Instance", html: "<h2>html custom content</h2>")
-```
-
 ## Overriding Configset Variables
 
-You can also override configset variables with configs `variables.rb` files. You can override variables globally or locally. Global mean all configsets. Local means only to the specified configset.
+You can override the variables with configset `variables.rb` files in the configs folder. You can override variables globally or locally. Global overrides variables for all configsets. Local overrides variables for the specifically scoped configset.
 
 Examples:
 
 1. configs/ec2/configsets/variables.rb - global override for all configsets used in the ec2 blueprint
 2. configs/ec2/configsets/httpd/variables.rb - local override, only to the httpd configset
 
-Local overrides are generally recommended. Example:
+If both global and local variables are set, the local variable will be used. It is generally recommended to use local overrides only. Example:
 
 configs/ec2/configsets/httpd/variables.rb
 
@@ -84,9 +62,21 @@ configs/ec2/configsets/httpd/variables.rb
 EOL
 ```
 
+## Inline configset variables
+
+You can also override the configset variables inline, when you configure the configset.  Example:
+
+configs/ec2/configsets/base.rb:
+
+```ruby
+configset("httpd", resource: "Instance", html: "<h2>html custom content</h2>", var1: "foo", var2: "bar")
+```
+
+This makes `@var1`, `@var2`, and `@html` instance variables available in the `configset.yml` definition.
+
 ## Configsets Configs are Ruby
 
-Since the configs file is Ruby, you can use Ruby organize it however you wish. Example:
+Since the configs file is Ruby, you have the full power of Ruby to organize things however you wish. Example:
 
 configs/ec2/configsets/httpd/variables.rb
 

@@ -14,27 +14,28 @@ The cfn-init script is usually called by the UserData script to kick off a boots
 
 {% include configsets/cfn-init.md %}
 
-## Run manually
+## Run Manually
 
-The UserData script runs at launch time automatically.  You can invoke the `cfn-init` script directly by logging into the instance and running.  This is useful for debugging. Here's an example of running the script.
+The UserData script runs at launch time automatically.  But you can also invoke the `cfn-init` script manually. Just log into the instance and call it.  This can be especially useful for debugging. Here's an example of running the script.
 
     /opt/aws/bin/cfn-init -v --stack my-stack --resource Instance --region us-west-2
 
 The command above downloads the Configset from CloudFormation template `Instance` resource and applies it.
 
-## Where is the metadata.json?
+## Where is the metadata.json downloaded?
 
 The `cfn-init` downloads the configset metadata to:
 
     /var/lib/cfn-init/data/metadata.json
 
-Note, this path gets overwritten each time `cfn-init` runs.  It is useful to copy it to another location and modify it for quick testing and debugging.
+Note, this file gets overwritten each time `cfn-init` runs.
 
-## Run manually with a file
+## Run With a File
 
-One of the quickest way to debug configsets is to copy the generated `/var/lib/cfn-init/data/metadata.json`, modify it, and provide it directly to the `cfn-init` command. Example:
+One quick way to debug configsets is to copy the generated `/var/lib/cfn-init/data/metadata.json`, modify it, and provide it directly to the `cfn-init` command. Example:
 
-    /opt/aws/bin/cfn-init -v /path/to/configset.json
+    cp /var/lib/cfn-init/data/metadata.json /root/configset.json
+    /opt/aws/bin/cfn-init -v /root/configset.json
 
 The cfn-init script itself only supports JSON when providing a file.
 
@@ -48,7 +49,7 @@ And vice-versa:
 
 ## Where are the Logs?
 
-Knowing where the cfn-init related logs are can save a ton of time.
+Knowing where the cfn-init related logs are can also save a ton of time.
 
 Path | Description
 --- | ---

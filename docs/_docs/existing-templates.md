@@ -137,6 +137,8 @@ With that one line of configuration alone, you will install, configure, and run 
 
 You will see that lono adds the configset to the CloudFormation template for you.
 
+Note: The [boltopspro/httpd](https://github.com/boltopspro/httpd) repo is a public [BoltOps Pro](https://www.boltops.com/pro) repo.
+
 ## Summary
 
 We went through a few lono commands with an existing template. If you have existing templates that you would like to use, the `--source` option provides an excellent way to get started.
