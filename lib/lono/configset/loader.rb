@@ -29,12 +29,12 @@ class Lono::Configset
     memoize :load
 
     def load_yaml(content)
-      # Write to file so we can use the YamlValidator
+      # Write to file so can use Yamler::Validator
       path = "/tmp/lono/configset.yml"
       FileUtils.mkdir_p(File.dirname(path))
       IO.write(path, content)
-      Lono::Utils::YamlValidator.new(path).validate!
-      YAML.load_file(path)
+      Lono::Yamler::Validator.new(path).validate!
+      Lono::Yamler::Loader.new(content).load
     end
 
     def find_path

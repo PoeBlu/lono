@@ -1,5 +1,5 @@
-module Lono::Utils
-  class YamlValidator
+module Lono::Yamler
+  class Validator
     def initialize(path)
       @path = path
     end

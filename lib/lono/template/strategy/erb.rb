@@ -67,7 +67,7 @@ module Lono::Template::Strategy
         ensure_parent_dir(path)
         text = commented(text)
         IO.write(path, text) # write file first so validate method is simpler
-        Lono::Utils::YamlValidator.new(path).validate!
+        Lono::Yamler::Validator.new(path).validate!
       end
     end
 
