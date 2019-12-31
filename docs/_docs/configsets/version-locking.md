@@ -54,7 +54,7 @@ config/configsets.rb:
 configset "ruby", resource: "Instance"
 ```
 
-When the configset is not declared in your project's Gemfile, Lono materializes the gem using the latest version.
+When the configset is not declared anywhere else in the [Lookup Locations]({% link _docs/lookup-locations/blueprint-configsets.md %}), Lono materializes and uses the latest version.  If a version is has be specified and is in a Lookup location with higher precedence, then that version will be used.
 
 ## Blueprint Configsets: Advanced Locking
 
@@ -84,6 +84,6 @@ Configsets can depend on other configsets. You can specify versions in the `depe
 depends_on "amazon-linux-extras", "0.1.0"
 ```
 
-Note: Once again, you can still override the version with your own project Gemfile or defining configset with the same name in a [Blueprint Configsets Search Locations]({% link _docs/lookup-locations/blueprint-configsets.md %}) with higher precedence.
+Note: Once again, you can still override the version with your own project Gemfile or defining configset with the same name in a [Blueprint Configsets Search Locations]({% link _docs/lookup-locations/blueprint-configsets.md %}) with higher precedence. Ultimately, this means you have control over which to version to use.
 
 {% include prev_next.md %}
