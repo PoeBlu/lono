@@ -9,6 +9,8 @@ class Lono::Template
       generator_class = "Lono::Template::Strategy::#{template_type.camelize}"
       generator_class = Object.const_get(generator_class)
       generator_class.new(@options).run
+      # The generator strategy class writes template to disk. The inject_configsets reads it back from disk.
+      # Leaving as-is instead of reading all in memory in case there's a reason.
       inject_configsets
     end
 
@@ -16,7 +18,7 @@ class Lono::Template
       if @options[:source]
         "source"
       else
-        jadespec = Lono::Jadespec.new(Lono.blueprint_root, "unknown") # only using to get template_type metadata for now
+        jadespec = Lono::Jadespec.new(Lono.blueprint_root, "unknown") # only using to get template_type
         jadespec.template_type
       end
     end

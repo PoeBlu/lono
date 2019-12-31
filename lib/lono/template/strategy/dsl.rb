@@ -7,10 +7,8 @@ module Lono::Template::Strategy
 
     def run
       puts "Generating CloudFormation templates for blueprint #{@blueprint.color(:green)}:" unless @options[:quiet]
-      paths = Dir.glob("#{Lono.config.templates_path}/**/*.rb")
-      paths.select{ |e| File.file?(e) }.each do |path|
-        build_template(path)
-      end
+      template_path = "#{Lono.config.templates_path}/#{@template}.rb"
+      build_template(template_path)
     end
 
     def build_template(path)
