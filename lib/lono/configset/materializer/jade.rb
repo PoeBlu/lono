@@ -9,7 +9,7 @@ module Lono::Configset::Materializer
     end
 
     def build
-      GemfileBuilder.new(@jade).build
+      GemsBuilder.new(@jade).build
     end
   end
 end

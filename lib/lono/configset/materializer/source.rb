@@ -4,11 +4,20 @@ module Lono::Configset::Materializer
       @lono_settings = lono_settings || Lono::Setting.new.data
     end
 
-    def settings
-      @lono_settings.dig("configsets", "source") || {}
+    # String provide to gem method in Gemfile.  Example:
+    #
+    #      gem "mygem", "v0.1.0", git: "xxx"
+    #
+    def gem_args(jade)
+      args = jade.state.args
+      args = args.map { |s| %Q|"#{s}"| }.join(', ')
+
+      options = options(jade)
+      options = options.inject([]) { |r,(k,v)| r << %Q|#{k}: "#{v}"| }.join(', ')
+
+      "#{args}, #{options}"
     end
 
-    # c - configset registry item
     def options(jade)
       registry = jade.state
       if registry.options.key?(:path)
@@ -31,10 +40,6 @@ module Lono::Configset::Materializer
       end
     end
 
-    def args(jade)
-      jade.state.args
-    end
-
     def git_options(registry)
       o = {}
       o[:branch] = registry.options[:branch]
@@ -45,14 +50,14 @@ module Lono::Configset::Materializer
     end
 
     def location
-      ENV["LONO_CONFIGSET_SOURCE"] ||
+      ENV["LONO_MATERIALIZED_GEMS_SOURCE"] ||
       Lono::Configset::Register::Blueprint.source ||
-      settings["location"] ||
-      "git@github.com:boltopspro"
+      settings["source"] ||
+      "git@github.com:boltopspro" # default_location
     end
 
-    def central
-      !!settings["central"]
+    def settings
+      @lono_settings.dig("materialized_gems") || {}
     end
   end
 end

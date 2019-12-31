@@ -4,7 +4,7 @@ module Lono::Configset::Materializer
       return if jades.empty?
       list = jades.map(&:name).uniq.join(", ") # possible to have different versions. only showing names and removing duplicates
       puts "Materializing #{list}..."
-      GemfileBuilder.new(jades).build
+      GemsBuilder.new(jades).build
     end
   end
 end
