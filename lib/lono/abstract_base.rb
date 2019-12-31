@@ -12,6 +12,7 @@ module Lono
       @options = options
       Lono::ProjectChecker.check
       @stack, @blueprint, @template, @param = Conventions.new(options).values
+
       return if options[:source]
       set_blueprint_root(@blueprint)
       Lono::ProjectChecker.empty_templates

@@ -36,7 +36,7 @@ class Lono::Template::Strategy::Dsl
       ensure_parent_dir(path)
       IO.write(path, @results)
 
-      validate_yaml(path)
+      Lono::Utils::YamlValidator.new(path).validate!
 
       unless @options[:quiet]
         pretty_path = path.sub("#{Lono.root}/",'')

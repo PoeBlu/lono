@@ -21,12 +21,21 @@ class Lono::Configset
       copy_instance_variables
       content = RenderMePretty.result(path, context: self)
       if File.extname(path) == ".yml"
-        YAML.load(content)
+        load_yaml(content)
       else
         JSON.load(content)
       end
     end
     memoize :load
+
+    def load_yaml(content)
+      # Write to file so we can use the YamlValidator
+      path = "/tmp/lono/configset.yml"
+      FileUtils.mkdir_p(File.dirname(path))
+      IO.write(path, content)
+      Lono::Utils::YamlValidator.new(path).validate!
+      YAML.load_file(path)
+    end
 
     def find_path
       paths = %w[configset.yml configset.json].map { |p| "#{configset_root}/lib/#{p}" }
