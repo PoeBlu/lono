@@ -122,6 +122,10 @@ module Lono
     long_desc Help.text(:param)
     subcommand "param", Param
 
+    desc "pro SUBCOMMAND", "pro subcommands"
+    long_desc Help.text(:pro)
+    subcommand "pro", Pro
+
     desc "s3 SUBCOMMAND", "s3 subcommands"
     long_desc Help.text(:s3)
     subcommand "s3", S3

@@ -3,15 +3,12 @@ require 'json'
 require 'net/http'
 
 class Lono::Importer::Service::Coder
-  LONO_API = ENV['LONO_API'] || 'https://api.lono.cloud/v1'
-
   def initialize(template, options={})
     @template, @options = template, options
   end
 
   def translate
-    url = "#{LONO_API}/code"
-
+    url = "#{Lono::API}/code"
     http = net_http_client(url)
     req = net_http_request(url,
       template: Base64.encode64(@template), # Base64 JSON for special chars that Rack::LintWrapper cannot process
@@ -25,8 +22,7 @@ class Lono::Importer::Service::Coder
       ruby_code = print(data) # returns data["ruby_code"] / passthrough
       ruby_code
     else
-      puts "errored"
-      puts "Unable to convert template to Ruby code."
+      puts "Error: Unable to convert template to Ruby code."
       puts "The error has been reported."
       puts "Non-successful http response status code: #{res.code}"
       # puts "headers: #{res.each_header.to_h.inspect}"

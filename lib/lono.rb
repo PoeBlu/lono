@@ -21,6 +21,8 @@ require "lono/autoloader"
 Lono::Autoloader.setup
 
 module Lono
+  API = ENV['LONO_API'] || 'https://api.lono.cloud/v1'
+
   extend Core
 end
 
