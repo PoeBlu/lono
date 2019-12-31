@@ -18,4 +18,4 @@ AWS::CloudFormation::Init:
         ensureRunning: 'true'
 ```
 
-This configset installs, configures, and ensures the httpd is running, even if the server is rebooted.
+This configset will install, configure, and ensure that the httpd server is running, even if the server is rebooted.

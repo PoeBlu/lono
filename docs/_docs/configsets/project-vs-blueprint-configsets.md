@@ -6,7 +6,7 @@ order: 2
 nav_order: 22
 ---
 
-There are 2 different types of Lono configsets: Project and Blueprint configsets. Project configsets associated with the project and can be added to any bluerint. Blueprint configsets are packaged with the blueprint itself.
+There are 2 different types of Lono configsets: Project and Blueprint configsets. Project configsets are configured by you. Blueprint configsets are configured by blueprints.
 
 1. [Project Configset]({% link _docs/configsets/project.md %})
 2. [Blueprint Configset]({% link _docs/configsets/blueprint.md %})

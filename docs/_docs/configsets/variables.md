@@ -44,14 +44,14 @@ EOL
 
 ## Overriding Configset Variables
 
-You can override the variables with configset `variables.rb` files in the configs folder. You can override variables globally or locally. Global overrides variables for all configsets. Local overrides variables for the specifically scoped configset.
+You can override the variables with configset `variables.rb` files in the configs folder. You can override variables globally or locally. Global overrides apply to all configsets used by the blueprint. Local overrides apply to the specifically scoped configset only.
 
 Examples:
 
 1. configs/ec2/configsets/variables.rb - global override for all configsets used in the ec2 blueprint
 2. configs/ec2/configsets/httpd/variables.rb - local override, only to the httpd configset
 
-If both global and local variables are set, the local variable will be used. It is generally recommended to use local overrides only. Example:
+If both global and local variables are set, the local variable takes higher precedence and will be used. It is generally recommended to use local overrides only. Example:
 
 configs/ec2/configsets/httpd/variables.rb
 

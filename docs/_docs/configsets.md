@@ -17,29 +17,29 @@ There are several configuration management tools out there: [chef](https://www.c
 
 {% include configsets/example.md %}
 
-## Lono Makes Them Reusable
+## Reusable Configsets
 
-Typically, configsets are directly hardcoded into the CloudFormation template. Unfortunately, this makes them hard to reuse. With Lono, configsets are separate files. This makes configsets reusable. Lono takes these separate files and injects them into your CloudFormation templates.
+Typically, configsets are directly hardcoded into the CloudFormation template. Unfortunately, this makes them hard to reuse. With Lono, configsets are separate files. This allows them to be reusable. Lono takes the separate configset files and injects them into your CloudFormation templates.
 
 ## Usage
 
 Your project configsets are located in the `app/configsets`. Example:
 
+* app/configsets/cfn-hup/lib/configset.yml
 * app/configsets/httpd/lib/configset.yml
-* app/configsets/php/lib/configset.yml
 
 You tell lono to add them into your CloudFormation templates with configs. Example:
 
 configs/ec2/configsets/base.rb:
 
 ```ruby
+configset("cfn-hup", resource: "Instance")
 configset("httpd", resource: "Instance")
-configset("php", resource: "Instance")
 ```
 
-This installs httpd and php on the EC2 instance.
+This installs cfn-hup and httpd on the EC2 instance.
 
-More specifically, lono injects the 2 configsets to the CloudFormation template resource with the logical id `Instance`.  The httpd and php configsets are added to the `Instance.Metadata.AWS::CloudFormation::Init` attribute.
+More specifically, lono injects the 2 configsets to the CloudFormation template resource with the logical id `Instance`.  The cfn-hup and httpd configsets are added to the `Instance.Metadata.AWS::CloudFormation::Init` attribute.
 
 You have full control over which configsets to use for each template.
 

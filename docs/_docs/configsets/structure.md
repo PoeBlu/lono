@@ -16,12 +16,12 @@ Here's an example lono configset structure:
 └── httpd.gemspec
 ```
 
-File | Description
---- | ---
-configset.yml | The configset code.  The top-level key should be `AWS::CloudFormation::Init`. This is required.
-meta.rb | Additional meta info about the configset. Currently supports `depends_on`, to specify other configsets as dependencies. This is optional.
-variables.rb | Predefined variables shipped with the configset. This can be overridden when you configure the configset. More info: [Configset Variables]({% link _docs/configsets/variables.md %}). This is optional.
-httpd.gemspec | A standard gemspec definition, allows configsets to be packaged as gems.  This is required.
+File | Description | Required?
+--- | --- | ---
+configset.yml | The configset code.  The top-level key should be `AWS::CloudFormation::Init`. | required
+meta.rb | Additional meta info about the configset. Supports `depends_on`, to specify other configsets as dependencies. | optional
+variables.rb | Predefined variables shipped with the configset. Predefined variables can be overridden with [Configset Variables]({% link _docs/configsets/variables.md %}). | optional
+httpd.gemspec | A standard gemspec definition, allows configsets to be packaged as gems.  | required
 
 ## lono configset new
 
