@@ -68,7 +68,7 @@ Lono will then materialize the specific version.
 
 Note: You can still override the version to use by specifying their own version in their project's Gemfile. You can also create a configset with the same name in a [Blueprint Configsets Search Locations]({% link _docs/lookup-locations/blueprint-configsets.md %}) with higher precedence.
 
-The bundler Gemfile options are supported in the `configset` method. Examples:
+The [bundler Gemfile](https://bundler.io/man/gemfile.5.html) options are supported in the `configset` method. Examples:
 
 ```ruby
 configset "ruby", resource: "Instance", branch: "master"

@@ -20,6 +20,8 @@ class Lono::Configset
 
     def gem_options
       options = @options.dup
+      # Delete special options that is not supported by bundler Gemfile
+      options.delete(:repo)
       options.delete(:resource)
       options.delete(:vars)
       options

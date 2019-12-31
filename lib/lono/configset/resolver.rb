@@ -27,7 +27,7 @@ class Lono::Configset
       @@dependencies.each do |jade|
         # dependency jades have minimal registry info. For additional info is pulled from stored reference data in
         # jade like jade.resource_from_parent.
-        registry = jade.state
+        registry = jade.registry
         registry.resource = jade.resource_from_parent
         if jade.type == "blueprint/configset"
           Register::Blueprint.prepend(registry)

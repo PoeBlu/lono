@@ -9,7 +9,7 @@ module Lono::Configset::Materializer
     #      gem "mygem", "v0.1.0", git: "xxx"
     #
     def gem_args(jade)
-      args = jade.state.args
+      args = jade.registry.args
       args = args.map { |s| %Q|"#{s}"| }.join(', ')
 
       options = options(jade)
@@ -19,7 +19,7 @@ module Lono::Configset::Materializer
     end
 
     def options(jade)
-      registry = jade.state
+      registry = jade.registry
       options = registry.gem_options
       # Direct source provided as part of configset call
       #
@@ -33,9 +33,9 @@ module Lono::Configset::Materializer
 
       # Otherwise use the sources location settings, which does not include the repo name
       materalized_options = if location.include?("git@") || location.include?("https")
-        {git: "#{location}/#{jade.name}"}
+        {git: "#{location}/#{jade.repo}"}
       else
-        {path: "#{location}/#{jade.name}"}
+        {path: "#{location}/#{jade.repo}"}
       end
       materalized_options.merge(options)
     end

@@ -38,10 +38,16 @@ base:
     source: git@github.com:boltopspro
 ```
 
-## Materialized source supports GitHub orgs
+## Materialized source GitHub orgs support
 
-Notice with the "configset option" technique, you specify the full source with the repo name.  With the Environment and configs/settings.yml technique, you do not specify the repo name.
+Notice with the "configset option", you specify the full source **with** the repo name.  With the Environment and configs/settings.yml technique, you do **not** specify the repo name.
 
-Materialized sources are not typical Gemfile gem sources. They support specifying the github organization or owner. And the repo name is inferred from the configset name.
+Materialized sources are not typical Gemfile gem sources. They infer the repo name from the configset name.  If the repo name is different from configset, then you can explicitly specify `repo` in the `configset` definition.  Example:
+
+app/blueprints/ec2/config/configsets.rb:
+
+```ruby
+configset "cfn-hup", resource: "Instance", repo: "cfn-hup-repo"
+```
 
 {% include prev_next.md %}

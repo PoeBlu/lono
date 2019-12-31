@@ -10,15 +10,19 @@ module Lono
     delegate :template_type, :auto_camelize, :source_type, to: :jadespec
 
     attr_accessor :dependencies, :from, :depends_ons
-    attr_reader :name, :type, :state, :jadespec
-    def initialize(name, type, state={})
+    attr_reader :name, :type, :registry, :jadespec
+    def initialize(name, type, registry={})
       # type: one of blueprint, configset, blueprint/configset
-      # state holds either original registry from configset definition or parent jade which can be used to get the original configset defintion
-      @name, @type, @state = name, type, state
+      # registry holds either original registry from configset definition or parent jade which can be used to get the original configset defintion
+      @name, @type, @registry = name, type, registry
       @materialized = false
       @resolved = false
       @depends_ons = []
       self.class.tracked << self
+    end
+
+    def repo
+      @registry.options[:repo] || @name
     end
 
     # root is kind of special. root is needed for materialization but can accidentally get called too early
@@ -29,11 +33,11 @@ module Lono
     end
 
     def resource_from_parent
-      parent = state.parent
+      parent = registry.parent
       resource = nil
       while parent
-        resource = parent.state.resource
-        parent = parent.state.parent
+        resource = parent.registry.resource
+        parent = parent.registry.parent
       end
       resource
     end
@@ -71,7 +75,7 @@ module Lono
       # 2b) configset depends_on - download
       return unless %w[blueprint/configset configset].include?(@type) # TODO: support materializing nested blueprints later
       # only download jades that came from depends_on
-      return unless @state.parent || @type == "blueprint/configset"
+      return unless @registry.parent || @type == "blueprint/configset"
       jade = Lono::Configset::Materializer::Jade.new(self)
       jade.build
     end
