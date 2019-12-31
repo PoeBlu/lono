@@ -72,6 +72,7 @@ class Lono::Configset
         @configSets["default"] ||= []
         @configSets["default"] << {"ConfigSet" => name}
 
+        validate_structure!(name, metadata)
         init = metadata["AWS::CloudFormation::Init"]
 
         if init.key?("configSets")
@@ -89,6 +90,14 @@ class Lono::Configset
         @map[resource] = @metadata
       end
       @map
+    end
+
+    def validate_structure!(name, metadata)
+      return if metadata.is_a?(Hash) && metadata.key?("AWS::CloudFormation::Init")
+
+      puts "ERROR: The #{name} configset does not appear to have a AWS::CloudFormation::Init key".color(:red)
+      puts "Please double check the #{name} configset.yml structure"
+      exit 1
     end
 
     def validate_simple!(registry, cs)
