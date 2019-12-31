@@ -48,7 +48,7 @@ class Lono::Configset
       if table.rows.empty?
         puts "No configsets being used."
       else
-        puts "Configsets used for #{@blueprint.color(:green)} blueprint:"
+        puts "Configsets used by #{@blueprint.color(:green)} blueprint:"
         puts table
       end
     end

@@ -23,7 +23,7 @@ This means the ec2 blueprint will use the httpd configset to install and run the
 Use the [lono configsets BLUEPRINT](/reference/lono-configsets/) command to see what configsets the blueprint will use.
 
     $ lono configsets ec2
-    Configsets used for ec2 blueprint:
+    Configsets used by ec2 blueprint:
     +-------+----------------------+---------+---------+
     | Name  |         Path         |  Type   |  From   |
     +-------+----------------------+---------+---------+
