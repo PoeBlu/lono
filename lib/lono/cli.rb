@@ -17,18 +17,19 @@ module Lono
 
     desc "configsets [BLUEPRINT]", "Lists configsets"
     long_desc Help.text(:configsets)
-    options.stack
     options.source
+    options.stack
     def configsets(blueprint=nil)
       Configset::List.new(options.merge(blueprint: blueprint)).run
     end
 
     desc "generate", "Generate both CloudFormation templates and parameters files."
     long_desc Help.text(:generate)
-    option :clean, type: :boolean, default: false, desc: "remove all output files before generating"
     option :quiet, type: :boolean, desc: "silence the output"
-    options.stack
+    options.clean
     options.source
+    options.stack
+    options.template
     def generate(blueprint=nil)
       Finder::Blueprint.one_or_all(blueprint).each do |b|
         o = options.merge(blueprint: b)
@@ -40,7 +41,7 @@ module Lono
 
     desc "user_data NAME", "Generates user_data script for debugging."
     long_desc Help.text(:user_data)
-    option :clean, type: :boolean, default: true, desc: "remove all output/user_data files before generating"
+    options.clean
     def user_data(blueprint, name)
       Script::Build.new(blueprint, options).run
       UserData.new(blueprint, options.merge(name: name)).generate
@@ -48,8 +49,8 @@ module Lono
 
     desc "summary BLUEPRINT", "Prints summary of CloudFormation templates."
     long_desc Help.text("summary")
-    options.template
     options.source
+    options.template
     def summary(blueprint)
       Lono::Inspector::Summary.new(options.merge(blueprint: blueprint)).run
     end
@@ -58,8 +59,8 @@ module Lono
     long_desc Help.text("xgraph")
     option :display, type: :string, desc: "graph or text", default: "graph"
     option :noop, type: :boolean, desc: "noop mode"
-    options.template
     options.source
+    options.template
     def xgraph(blueprint)
       Lono::Inspector::Graph.new(options.merge(blueprint: blueprint)).run
     end
@@ -67,8 +68,8 @@ module Lono
     desc "seed BLUEPRINT", "Generates starter configs for a blueprint."
     long_desc Help.text("seed")
     option :param, desc: "override convention and specify the param file to use"
-    options.template
     options.source
+    options.template
     add_runtime_options! # Thor::Action options like --force
     def seed(blueprint)
       Seed.new(options.merge(blueprint: blueprint)).create
