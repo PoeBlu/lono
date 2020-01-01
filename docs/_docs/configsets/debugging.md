@@ -3,7 +3,7 @@ title: 'Debugging Tips: cfn-init and configsets'
 nav_text: Debugging Tips
 categories: configsets
 order: 4
-nav_order: 27
+nav_order: 28
 ---
 
 Here are some debugging tips that will help when working with cfn-init.

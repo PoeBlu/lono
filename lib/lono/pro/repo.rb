@@ -4,12 +4,17 @@ class Lono::Pro
       data = api.repos(@options[:type])
       header = ["Name", "Docs Repo", "Description"]
       rows = data.map do |d|
-        [d[:name], d[:docs_url], d[:description]]
+        desc = truncate(d[:description])
+        [d[:name], d[:docs_url], desc]
       end
       show_table(header, rows)
     end
 
   private
+    def truncate(string, max=36)
+      string.length > max ? "#{string[0...max]}..." : string
+    end
+
     def show_table(header, data)
       table = Text::Table.new
       table.head = header
@@ -17,7 +22,6 @@ class Lono::Pro
         table.rows << item
       end
       puts table
-      # puts "Total #{table.rows.size}"
     end
   end
 end

@@ -19,18 +19,4 @@ You can also it to your Gemfile and run `bundle` to install it.
 gem "lono"
 ```
 
-## Lono Pro Addon
-
-The lono-pro addon gem provides extra commands like `lono code convert`, which converts YAML or JSON CloudFormation templates to Ruby code.
-
-Add the gem to your Gemfile.
-
-```ruby
-gem "lono-pro"
-```
-
-And then use bundler:
-
-    bundle install
-
 {% include prev_next.md %}

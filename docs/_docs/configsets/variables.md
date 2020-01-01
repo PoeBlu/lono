@@ -3,7 +3,7 @@ title: Configset Variables
 nav_text: Variables
 categories: configsets
 order: 3
-nav_order: 26
+nav_order: 27
 ---
 
 The `configset.yml` is processed as ERB before being loaded into the CloudFormation template.  This allows you to use ERB to refer to variables:

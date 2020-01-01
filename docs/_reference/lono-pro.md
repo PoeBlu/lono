@@ -1,19 +1,20 @@
 ---
-title: lono configset
+title: lono pro
 reference: true
 ---
 
 ## Usage
 
-    lono configset SUBCOMMAND
+    lono pro SUBCOMMAND
 
 ## Description
 
-configset subcommands
+pro subcommands
 
 ## Subcommands
 
-* [lono configset new]({% link _reference/lono-configset-new.md %}) - Generates new lono configset.
+* [lono pro blueprints]({% link _reference/lono-pro-blueprints.md %}) - Lists available BoltOps Pro blueprints
+* [lono pro configsets]({% link _reference/lono-pro-configsets.md %}) - Lists available BoltOps Pro configsets
 
 ## Options
 

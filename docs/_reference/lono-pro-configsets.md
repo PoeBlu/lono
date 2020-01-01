@@ -1,15 +1,15 @@
 ---
-title: lono configsets
+title: lono pro configsets
 reference: true
 ---
 
 ## Usage
 
-    lono configsets [BLUEPRINT]
+    lono pro configsets
 
 ## Description
 
-Lists configsets
+Lists available BoltOps Pro configsets
 
 ## Examples
 
@@ -37,16 +37,4 @@ When there are no arguments passed to the `lono configsets` command it will list
     $
 
 
-## Options
-
-```
-[--source=SOURCE]  # url or path to file with template
-[--stack=STACK]    # stack name. defaults to blueprint name.
-
-Runtime options:
--f, [--force]                    # Overwrite files that already exist
--p, [--pretend], [--no-pretend]  # Run but do not make any changes
--q, [--quiet], [--no-quiet]      # Suppress status output
--s, [--skip], [--no-skip]        # Skip files that already exist
-```
 

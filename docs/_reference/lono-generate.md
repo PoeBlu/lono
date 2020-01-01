@@ -5,7 +5,7 @@ reference: true
 
 ## Usage
 
-    lono generate
+    lono generate BLUEPRINT
 
 ## Description
 
@@ -33,10 +33,12 @@ Generates CloudFormation template, parameter files, and scripts in lono project 
 ## Options
 
 ```
-[--clean], [--no-clean]  # remove all output files before generating
 [--quiet], [--no-quiet]  # silence the output
-[--stack=STACK]          # stack name. defaults to blueprint name.
+[--clean], [--no-clean]  # remove all output files before generating
+                         # Default: true
 [--source=SOURCE]        # url or path to file with template
+[--stack=STACK]          # stack name. defaults to blueprint name.
+[--template=TEMPLATE]    # override convention and specify the template file to use
 
 Runtime options:
 -f, [--force]                    # Overwrite files that already exist

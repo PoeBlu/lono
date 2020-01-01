@@ -26,6 +26,7 @@ Imports CloudFormation template and converts it to Ruby code.
           create  blueprints/ec2
           create  blueprints/ec2/ec2.gemspec
           create  blueprints/ec2/.gitignore
+          create  blueprints/ec2/.meta/config.yml
           create  blueprints/ec2/CHANGELOG.md
           create  blueprints/ec2/Gemfile
           create  blueprints/ec2/README.md
@@ -40,10 +41,6 @@ Imports CloudFormation template and converts it to Ruby code.
 
     More info: https://lono.cloud/docs/core/blueprints
     $
-
-## Lono Pro
-
-This is a lono-pro addon command.
 
 
 ## Options

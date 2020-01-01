@@ -1,6 +1,6 @@
 ---
 title: Configsets
-nav_order: 21
+nav_order: 22
 ---
 
 Configsets are a way to configure your EC2 instances. Configsets are essentially configuration management.

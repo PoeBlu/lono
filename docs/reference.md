@@ -16,6 +16,7 @@ title: CLI Reference
 * [lono generate]({% link _reference/lono-generate.md %})
 * [lono new]({% link _reference/lono-new.md %})
 * [lono param]({% link _reference/lono-param.md %})
+* [lono pro]({% link _reference/lono-pro.md %})
 * [lono s3]({% link _reference/lono-s3.md %})
 * [lono script]({% link _reference/lono-script.md %})
 * [lono seed]({% link _reference/lono-seed.md %})
