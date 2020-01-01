@@ -13,6 +13,7 @@ module Lono::Api
         lono_version: Lono::VERSION,
         lono_command: lono_command,
       )
+
       http.request(req) # send request
     end
 
@@ -27,9 +28,11 @@ module Lono::Api
 
     def request(klass, url, data)
       req = klass.new(url) # url includes query string and uri.path does not, must used url
-      text = JSON.dump(data)
-      req.body = text
-      req.content_length = text.bytesize
+      if [Net::HTTP::Post, Net::HTTP::Put].include?(klass)
+        text = JSON.dump(data)
+        req.body = text
+        req.content_length = text.bytesize
+      end
       req
     end
 

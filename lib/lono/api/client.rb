@@ -12,8 +12,7 @@ module Lono::Api
       if res.code == "200"
         JSON.load(res.body).map(&:deep_symbolize_keys)
       else
-        puts "Error: "
-        puts "Non-successful http response status code: #{res.code}"
+        puts "Error: Non-successful http response status code: #{res.code}"
         puts "headers: #{res.each_header.to_h.inspect}"
         exit 1
       end
