@@ -31,5 +31,3 @@ configs/demo/user-data/bootstrap.sh
     #!/bin/bash
     /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource Instance --region ${AWS::Region}
     uptime
-
-{% include prev_next.md %}

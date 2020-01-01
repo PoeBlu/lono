@@ -1,7 +1,7 @@
 ---
 title: Cidr
 categories: intrinsic-function
-nav_order: 50
+nav_order: 52
 ---
 
 The `cidr` method is the CloudFormation [Fn::Cidr](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-cidr.html) equivalent.

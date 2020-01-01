@@ -1,5 +1,6 @@
 ---
 title: Use Existing Templates
+nav_order: 2
 ---
 
 If you already have existing CloudFormation templates, you can use the `--source` option to reuse them.  This allows you to take advantage of lono features. The source can be a file or an url.

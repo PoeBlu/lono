@@ -1,7 +1,7 @@
 ---
 title: Base64
 categories: intrinsic-function
-nav_order: 49
+nav_order: 51
 ---
 
 The `base64` method is the CloudFormation [Fn::Base64](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-base64.html) equivalent.

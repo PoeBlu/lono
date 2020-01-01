@@ -1,6 +1,6 @@
 ---
-title: Community Edition vs Pro
-nav_order: 7
+title: BoltOps Pro
+nav_order: 10
 ---
 
 Lono Community Edition is the core of lono.  It is available for free under a [Source Available license](https://www.boltops.com/boltops-community-license).

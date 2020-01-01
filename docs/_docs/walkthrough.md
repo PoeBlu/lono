@@ -1,6 +1,6 @@
 ---
 title: Walkthrough
-nav_order: 3
+nav_order: 4
 ---
 
 Here's a thorough walkthrough of how lono works than the [Quick Start]({% link quick-start.md %}).

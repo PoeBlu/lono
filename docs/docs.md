@@ -1,6 +1,6 @@
 ---
 title: Docs
-nav_order: 2
+nav_order: 3
 ---
 
 Lono is a CloudFormation framework tool that helps you manage your templates.  Lono handles the entire CloudFormation lifecycle. It starts with helping you develop your templates and helps you all the way to the infrastructure provisioning step.

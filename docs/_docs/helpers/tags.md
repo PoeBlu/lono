@@ -74,5 +74,3 @@ Tags:
 - Key: Env
   Value: development
 ```
-
-{% include prev_next.md %}

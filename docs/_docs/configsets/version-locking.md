@@ -3,7 +3,7 @@ title: Version Locking
 nav_text: Version Locking
 categories: configsets
 order: 5
-nav_order: 27
+nav_order: 28
 ---
 
 You have a lot of control over which configset version to use.

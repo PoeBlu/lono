@@ -3,7 +3,7 @@ title: Configset Structure
 nav_text: Structure
 categories: configsets
 order: 1
-nav_order: 21
+nav_order: 22
 ---
 
 Here's an example lono configset structure:
