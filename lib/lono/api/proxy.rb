@@ -1,8 +1,13 @@
+# To allow a pretty interface:
+#
+#     res = http.get("/blueprints")
+#
 module Lono::Api
   class Proxy
     extend Memoist
 
-    def get(url)
+    def get(path)
+      url = url(path)
       http = http(url)
       req = request(Net::HTTP::Get, url,
         lono_version: Lono::VERSION,
@@ -26,6 +31,12 @@ module Lono::Api
       req.body = text
       req.content_length = text.bytesize
       req
+    end
+
+    # Lono::API does not include the /. IE: localhost:8888
+    # path includes the /. IE: "/blueprints"
+    def url(path)
+      "#{Lono::API}#{path}"
     end
 
   private

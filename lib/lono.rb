@@ -27,8 +27,3 @@ module Lono
 end
 
 Lono.set_aws_profile!
-
-begin
-  require "lono-pro" # optional
-rescue LoadError
-end
