@@ -8,7 +8,6 @@ class Lono::Template
       #   Dsl.new(b, options.dup).run
       generator_class = "Lono::Template::Strategy::#{template_type.camelize}"
       generator_class = Object.const_get(generator_class)
-      puts "hi1 generator_class #{generator_class}"
       generator_class.new(@options).run
       # The generator strategy class writes template to disk. The inject_configsets reads it back from disk.
       # Leaving as-is instead of reading all in memory in case there's a reason.
